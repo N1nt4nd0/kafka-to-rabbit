@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: KafkaToRabbit
+  kafka:
+    bootstrap-servers: 10.20.4.135:9092
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.StringSerializer
+    consumer:
+      group-id: command-group
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.StringDeserializer
+      properties:
+        spring.json.trusted.packages: by.syntegrico.study.kafkarabbit.message
+  rabbitmq:
+    host: 10.20.5.73
+    port: 5672
+    username: guest
+    password: guest
+
+server:
+  port: 8080
+
+messaging:
+  rabbitmq:
+    queue-name: syntegrico-rabbit-message-queue
+    exchange-name: syntegrico-rabbit-message-exchange
+    routing-name: syntegrico
+  kafka:
+    topic-name: syntegrico-kafka-message-topic
