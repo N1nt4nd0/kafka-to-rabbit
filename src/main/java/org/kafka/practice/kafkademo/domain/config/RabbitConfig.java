@@ -26,12 +26,12 @@ public class RabbitConfig {
     }
 
     @Bean
-    public String redirectExchangeName() {
+    public String rabbitRedirectExchangeName() {
         return redirectExchangeName;
     }
 
     @Bean
-    public String responseExchangeName() {
+    public String rabbitResponseExchangeName() {
         return responseExchangeName;
     }
 

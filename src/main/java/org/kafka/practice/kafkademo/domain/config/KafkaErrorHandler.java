@@ -1,9 +1,10 @@
 package org.kafka.practice.kafkademo.domain.config;
 
-import org.kafka.practice.kafkademo.domain.entities.value.PersonDTO;
-import org.kafka.practice.kafkademo.domain.service.RedirectService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kafka.practice.kafkademo.domain.entities.value.PersonDTO;
+import org.kafka.practice.kafkademo.domain.exception.CustomKafkaException;
+import org.kafka.practice.kafkademo.domain.service.RedirectService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.stereotype.Component;
@@ -20,14 +21,14 @@ public class KafkaErrorHandler {
     public DefaultErrorHandler errorHandler() {
         return new DefaultErrorHandler((record, exception) -> {
             final var cause = exception.getCause() != null ? exception.getCause() : exception;
+            final var value = record.value();
             log.error("Kafka error occurred: {}", cause.getMessage());
             log.trace("Error details:", cause);
-            final var value = record.value();
-            if (value instanceof PersonDTO personDTO) {
-                personDTO.setFail(true);
-                redirectService.sendPersonDtoKafkaResponse(personDTO);
-            } else {
-                redirectService.sendPersonDtoKafkaResponse(PersonDTO.builder().fail(true).build());
+            if (cause instanceof CustomKafkaException &&
+                    value instanceof PersonDTO personDto) {
+                personDto.setFail(true);
+                log.debug("PersonDto is failed. Sending fail response to kafka");
+                redirectService.sendPersonDtoKafkaResponse(personDto);
             }
         }, new FixedBackOff(0L, 0L));
     }

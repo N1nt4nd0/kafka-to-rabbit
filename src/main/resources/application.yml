@@ -3,6 +3,18 @@ spring:
     name: KafkaToRabbit
   profiles:
     active: full-cycle-dev #full-cycle-dev, prod
+  datasource:
+    url: jdbc:postgresql://localhost:5432/syntegrico_kafka_rabbit
+    username: syntegrico
+    password: syntegrico
+  jpa:
+    show-sql: false
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: false
+    hibernate:
+      ddl-auto: validate
   kafka:
     bootstrap-servers: 25.3.230.68:9092
     producer:
@@ -32,7 +44,17 @@ messaging:
 
 logging:
   level:
-    org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: TRACE
+    org.kafka.practice.kafkademo.domain.service.RedirectService: DEBUG
+    org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
+    org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG
+    org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
+    # Transaction logging
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.transaction: TRACE
+    org.hibernate.transaction: TRACE
 
 random-error-generator:
-  error-probability: 25
+  error-probability: 30
+
+dev:
+  kafka-producer-delay-ms: 10000

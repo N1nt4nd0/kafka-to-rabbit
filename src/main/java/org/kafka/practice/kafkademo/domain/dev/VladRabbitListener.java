@@ -18,17 +18,17 @@ import org.springframework.stereotype.Service;
 public class VladRabbitListener {
 
     private final RabbitTemplate rabbitTemplate;
-    private final String responseExchangeName;
+    private final String rabbitResponseExchangeName;
     private final String rabbitRoutingKey;
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = ""),
-            exchange = @Exchange(value = "#{@redirectExchangeName}", type = "topic"),
+            exchange = @Exchange(value = "#{@rabbitRedirectExchangeName}", type = "topic"),
             key = "#{@rabbitRoutingKey}"
     ))
-    public void rabbitPersonDtoReceive(final PersonDTO personDTO) {
-        log.info("Receive rabbit PersonDTO as Vlad: {}", personDTO);
-        rabbitTemplate.convertAndSend(responseExchangeName, rabbitRoutingKey, personDTO);
+    public void receiveRabbitPersonDto(final PersonDTO personDTO) {
+        log.debug("Received rabbit PersonDTO as Vlad: {}", personDTO);
+        rabbitTemplate.convertAndSend(rabbitResponseExchangeName, rabbitRoutingKey, personDTO);
     }
 
 }

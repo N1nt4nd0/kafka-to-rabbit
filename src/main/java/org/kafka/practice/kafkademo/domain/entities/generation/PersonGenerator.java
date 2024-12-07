@@ -2,6 +2,7 @@ package org.kafka.practice.kafkademo.domain.entities.generation;
 
 import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.entities.value.Person;
+import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Scope;
@@ -22,6 +23,11 @@ public class PersonGenerator {
                 .firstName(name.firstName())
                 .lastName(name.lastName())
                 .build();
+    }
+
+    @Bean
+    public ObjectFactory<Person> randomPersonGenerator() {
+        return this::fakeRandomPerson;
     }
 
 }

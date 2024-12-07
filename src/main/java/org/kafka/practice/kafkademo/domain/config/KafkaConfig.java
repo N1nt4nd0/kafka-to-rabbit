@@ -40,12 +40,12 @@ public class KafkaConfig {
     }
 
     @Bean
-    public String receiveTopicName() {
+    public String kafkaReceiveTopicName() {
         return receiveTopicName;
     }
 
     @Bean
-    public String responseTopicName() {
+    public String kafkaResponseTopicName() {
         return responseTopicName;
     }
 

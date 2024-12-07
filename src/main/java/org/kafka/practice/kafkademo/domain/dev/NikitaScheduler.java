@@ -16,19 +16,20 @@ import org.springframework.stereotype.Service;
 @Service
 @EnableScheduling
 @RequiredArgsConstructor
-public class DevScheduleService {
+public class NikitaScheduler {
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final String receiveTopicName;
+    private final String kafkaReceiveTopicName;
 
-    private final ObjectFactory<Person> fakeRandomPerson;
+    private final ObjectFactory<Person> randomPersonGenerator;
     private final PersonMapper personMapper;
 
-    @Scheduled(fixedDelay = 3000)
+    @Scheduled(fixedDelayString = "#{@kafkaProducerDelayMs}")
     public void kafkaSendAsNikita() {
-        final var randomPerson = fakeRandomPerson.getObject();
+        final var randomPerson = randomPersonGenerator.getObject();
         final var personDto = personMapper.toPersonDto(randomPerson);
-        kafkaTemplate.send(receiveTopicName, personDto);
+        personDto.setFail(true);
+        kafkaTemplate.send(kafkaReceiveTopicName, personDto);
     }
 
 }
