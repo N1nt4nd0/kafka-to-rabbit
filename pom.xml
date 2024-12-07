@@ -8,10 +8,10 @@
         <version>3.4.0</version>
         <relativePath/>
     </parent>
-    <groupId>by.syntegrico.study</groupId>
-    <artifactId>kafkarabbit</artifactId>
+    <groupId>org.kafka.practice.kafkademo</groupId>
+    <artifactId>domain</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>KafkaToRabbit</name>
+    <name>SyntegricoKafkaToRabbit</name>
 
     <properties>
         <java.version>17</java.version>
@@ -87,6 +87,7 @@
             <artifactId>spring-kafka-test</artifactId>
             <scope>test</scope>
         </dependency>
+
     </dependencies>
 
     <build>

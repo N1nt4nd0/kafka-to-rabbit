@@ -1,8 +1,8 @@
 spring:
   application:
-    name: KafkaToRabbit
+    name: SyntegricoKafkaToRabbit
   profiles:
-    active: full-cycle-dev #full-cycle-dev, prod
+    active: prod #full-cycle-dev, prod
   datasource:
     url: jdbc:postgresql://localhost:5432/syntegrico_kafka_rabbit
     username: syntegrico
@@ -48,10 +48,10 @@ logging:
     org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
     org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG
     org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
-    # Transaction logging
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.transaction: TRACE
-    org.hibernate.transaction: TRACE
+    # Transaction logging (TRACE for more info)
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.transaction: DEBUG
 
 random-error-generator:
   error-probability: 30

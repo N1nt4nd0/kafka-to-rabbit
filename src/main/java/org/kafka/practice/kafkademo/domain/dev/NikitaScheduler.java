@@ -28,7 +28,6 @@ public class NikitaScheduler {
     public void kafkaSendAsNikita() {
         final var randomPerson = randomPersonGenerator.getObject();
         final var personDto = personMapper.toPersonDto(randomPerson);
-        personDto.setFail(true);
         kafkaTemplate.send(kafkaReceiveTopicName, personDto);
     }
 
