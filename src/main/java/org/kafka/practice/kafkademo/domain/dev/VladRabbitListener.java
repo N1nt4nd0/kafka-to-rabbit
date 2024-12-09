@@ -11,7 +11,7 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Service;
 
-@Profile("full-cycle-dev")
+@Profile({"full-cycle-dev", "vlad-dev"})
 @Slf4j
 @Service
 @RequiredArgsConstructor

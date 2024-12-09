@@ -2,7 +2,7 @@ spring:
   application:
     name: SyntegricoKafkaToRabbit
   profiles:
-    active: prod #full-cycle-dev, prod
+    active: prod #full-cycle-dev, vlad-dev, prod
   datasource:
     url: jdbc:postgresql://localhost:5432/syntegrico_kafka_rabbit
     username: syntegrico
