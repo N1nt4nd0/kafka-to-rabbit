@@ -12,7 +12,7 @@ public class KafkaListenerService {
     private final RedirectService redirectService;
 
     @KafkaListener(topics = "#{@kafkaReceiveTopicName}", groupId = "#{@kafkaGroupId}")
-    public void receiveKafkaPersonDto(final PersonDTO personDto) {
+    public void receiveKafkaPersonDto(final PersonDTO personDto) { //TODO Listeners to listeners package but not in service
         redirectService.receivePersonDtoFromKafka(personDto);
     }
 

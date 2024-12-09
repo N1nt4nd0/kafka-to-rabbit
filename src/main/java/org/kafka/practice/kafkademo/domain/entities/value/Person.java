@@ -11,6 +11,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.UUID;
 
+// TODO Make @Getter, without @Setter, but with protected setters
+
 @Entity
 @Table(name = "persons", schema = "public")
 @Data

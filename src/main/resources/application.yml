@@ -49,9 +49,9 @@ logging:
     org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG
     org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
     # Transaction logging (TRACE for more info)
-    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
-    org.springframework.transaction: DEBUG
-    org.hibernate.transaction: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.springframework.transaction: TRACE
+    org.hibernate.transaction: TRACE
 
 random-error-generator:
   error-probability: 20

@@ -15,7 +15,7 @@ public class RabbitListenerService {
     private final RedirectService redirectService;
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = ""),
+            value = @Queue(value = ""), //TODO make named queue
             exchange = @Exchange(value = "#{@rabbitResponseExchangeName}", type = "topic"),
             key = "#{@rabbitRoutingKey}"
     ))

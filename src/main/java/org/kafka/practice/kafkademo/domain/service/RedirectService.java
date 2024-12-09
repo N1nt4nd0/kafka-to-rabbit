@@ -32,21 +32,21 @@ public class RedirectService {
 
     @Transactional
     public void receivePersonDtoFromKafka(@NonNull final PersonDTO personDto) {
-        log.debug("============================================================");
         log.debug("Received personDto from kafka {}", personDto);
-        if (personDto.isFail())
+        if (personDto.isFail()) {
             throw new RuntimeException("The operation has already failed");
+        }
         final var person = personMapper.fromPersonDto(personDto);
         log.debug("Start saving person to database");
         personService.savePerson(person);
         errorGenerator.process();
         log.debug("Person saved to database");
-        log.debug("Redirecting personDto to rabbit");
-        redirectPersonDtoToRabbit(personDto);
+        redirectPersonDtoToRabbit(personDto); // TODO send DTO copy
     }
 
     public void redirectPersonDtoToRabbit(@NonNull final PersonDTO personDto) {
         rabbitTemplate.convertAndSend(rabbitRedirectExchangeName, rabbitRoutingKey, personDto);
+        log.debug("Redirecting personDto to rabbit {}", personDto);
     }
 
     public void receivePersonDtoFromRabbit(@NonNull final PersonDTO personDto) {
@@ -56,12 +56,12 @@ public class RedirectService {
             personService.deletePerson(person);
             log.debug("PersonDto is failed. Person removed from database");
         }
-        log.debug("Sending PersonDto to kafka response");
         sendPersonDtoKafkaResponse(personDto);
     }
 
     public void sendPersonDtoKafkaResponse(@NonNull final PersonDTO personDto) {
         kafkaTemplate.send(kafkaResponseTopicName, personDto);
+        log.debug("Sending PersonDto to kafka response: {}", personDto);
     }
 
 }

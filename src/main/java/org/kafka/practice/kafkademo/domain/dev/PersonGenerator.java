@@ -1,15 +1,17 @@
-package org.kafka.practice.kafkademo.domain.entities.generation;
+package org.kafka.practice.kafkademo.domain.dev;
 
 import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.entities.value.Person;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Profile;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
 
+@Profile("full-cycle-dev")
 @Component
 public class PersonGenerator {
 
