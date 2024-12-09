@@ -16,6 +16,7 @@ public class PersonDTO {
     private boolean fail;
 
     private UUID id;
+    private String email;
     private String firstName;
     private String lastName;
 
