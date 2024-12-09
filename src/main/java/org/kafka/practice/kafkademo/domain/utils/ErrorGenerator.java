@@ -16,7 +16,7 @@ public class ErrorGenerator {
 
     public void process() {
         if (random.nextInt(100) < errorProbability) {
-            throw new RandomGeneratorException("Random error occurred");
+            throw new RandomGeneratorException();
         }
     }
 

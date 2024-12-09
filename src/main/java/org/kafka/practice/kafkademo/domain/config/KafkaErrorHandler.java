@@ -3,7 +3,6 @@ package org.kafka.practice.kafkademo.domain.config;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTO;
-import org.kafka.practice.kafkademo.domain.exception.CustomKafkaException;
 import org.kafka.practice.kafkademo.domain.service.RedirectService;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.DefaultErrorHandler;
@@ -24,8 +23,7 @@ public class KafkaErrorHandler {
             final var value = record.value();
             log.error("Kafka error occurred: {}", cause.getMessage());
             log.trace("Error details:", cause);
-            if (cause instanceof CustomKafkaException &&
-                    value instanceof PersonDTO personDto) {
+            if (value instanceof PersonDTO personDto) {
                 personDto.setFail(true);
                 log.debug("PersonDto is failed. Sending fail response to kafka");
                 redirectService.sendPersonDtoKafkaResponse(personDto);
