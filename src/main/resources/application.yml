@@ -2,11 +2,13 @@ spring:
   application:
     name: SyntegricoKafkaToRabbit
   profiles:
-    active: vlad-dev #full-cycle-dev, vlad-dev, prod
+    active: full-cycle-dev #full-cycle-dev, vlad-dev, prod
   datasource:
     url: jdbc:postgresql://localhost:5432/syntegrico_kafka_rabbit
     username: syntegrico
     password: syntegrico
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.xml
   jpa:
     show-sql: false
     properties:
@@ -16,7 +18,7 @@ spring:
     hibernate:
       ddl-auto: validate
   kafka:
-    bootstrap-servers: 10.20.4.135:9092 # 10.20.4.135, localhost
+    bootstrap-servers: localhost:9092 # 10.20.4.135, localhost
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
