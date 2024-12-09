@@ -64,4 +64,5 @@ random-exception-generator:
   exception-probability-percent: 20
 
 dev:
+  vlad-exception-generator-probability-percent: 10
   nikita-kafka-producer-delay-ms: 4000

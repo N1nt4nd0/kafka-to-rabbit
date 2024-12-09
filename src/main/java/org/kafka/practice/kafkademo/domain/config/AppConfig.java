@@ -12,7 +12,7 @@ public class AppConfig {
     private int exceptionProbability;
 
     @Bean
-    public ExceptionGenerator errorGenerator() {
+    public ExceptionGenerator exceptionGenerator() {
         return new ExceptionGenerator(exceptionProbability);
     }
 
