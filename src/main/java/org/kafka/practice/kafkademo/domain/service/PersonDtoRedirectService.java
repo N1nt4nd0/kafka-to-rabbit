@@ -16,7 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class PersonDTORedirectService {
+public class PersonDtoRedirectService {
 
     private final ExceptionGenerator exceptionGenerator;
     private final PersonDtoMapper personDtoMapper;
@@ -35,7 +35,7 @@ public class PersonDTORedirectService {
         final var person = personDtoMapper.fromPersonDtoRequest(request);
         log.debug("Start saving person to database. Person: {}", person);
         final var savedPerson = personService.savePerson(person);
-        exceptionGenerator.generateRandomGeneratorException();
+        exceptionGenerator.generateRandomException();
         log.debug("Person saved to database. Saved person: {}", savedPerson);
         final var clonedRequest = personDtoMapper.clonePersonDtoRequest(request);
         redirectPersonDtoRequestToRabbit(clonedRequest);
@@ -43,13 +43,13 @@ public class PersonDTORedirectService {
 
     public void redirectPersonDtoRequestToRabbit(@NonNull final PersonDTORequest request) {
         rabbitTemplate.convertAndSend(personDtoRedirectRabbitExchange, personDtoRabbitRoutingKey, request);
-        log.debug("PersonDTORequest redirected to rabbit: {}", request);
+        log.debug("PersonDtoRequest redirected to rabbit: {}", request);
     }
 
     public void receivePersonDtoResponseFromRabbit(@NonNull final PersonDTOResponse response) {
         if (response.isFail()) {
             final var person = personDtoMapper.fromPersonDtoResponse(response);
-            log.debug("PersonDTOResponse failed. Deleting person from database");
+            log.debug("PersonDtoResponse failed. Deleting person from database");
             personService.deletePerson(person);
             log.debug("Person deleted. Person: {}", person);
         }
@@ -59,7 +59,7 @@ public class PersonDTORedirectService {
 
     public void sendPersonDtoResponseToKafka(@NonNull final PersonDTOResponse response) {
         kafkaTemplate.send(personDtoKafkaResponseTopic, response);
-        log.debug("PersonDTOResponse sent to kafka: {}", response);
+        log.debug("PersonDtoResponse sent to kafka: {}", response);
     }
 
 }

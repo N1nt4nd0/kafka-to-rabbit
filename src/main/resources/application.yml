@@ -59,8 +59,8 @@ logging:
     org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
     org.kafka.practice.kafkademo.domain.dev.NikitaScheduler: DEBUG
 
-random-error-generator:
-  error-probability: 20
+random-exception-generator:
+  exception-probability-percent: 20
 
 dev:
   nikita-kafka-producer-delay-ms: 4000

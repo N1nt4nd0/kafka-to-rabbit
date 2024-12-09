@@ -8,12 +8,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    @Value("${random-error-generator.error-probability}")
-    private int errorProbability;
+    @Value("${random-error-generator.exception-probability-percent}")
+    private int exceptionProbability;
 
     @Bean
     public ExceptionGenerator errorGenerator() {
-        return new ExceptionGenerator(errorProbability);
+        return new ExceptionGenerator(exceptionProbability);
     }
 
 }

@@ -6,16 +6,16 @@ import java.util.Random;
 
 public class ExceptionGenerator {
 
-    private final int errorProbability;
+    private final int exceptionProbability;
     private final Random random;
 
-    public ExceptionGenerator(final int errorProbability) {
-        this.errorProbability = errorProbability;
+    public ExceptionGenerator(final int exceptionProbability) {
+        this.exceptionProbability = exceptionProbability;
         this.random = new Random();
     }
 
-    public void generateRandomGeneratorException() {
-        if (random.nextInt(100) < errorProbability) {
+    public void generateRandomException() {
+        if (random.nextInt(100) < exceptionProbability) {
             throw new RandomGeneratorException();
         }
     }

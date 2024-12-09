@@ -29,7 +29,7 @@ public class NikitaScheduler {
         final var randomPerson = randomPersonGenerator.getObject();
         final var request = personDtoMapper.toPersonDtoRequest(randomPerson);
         kafkaTemplate.send(personDtoKafkaReceiveTopic, request);
-        log.debug("[DEV] PersonDTORequest sent to kafka by Nikita: {}", request);
+        log.debug("[DEV] PersonDtoRequest sent to kafka by Nikita: {}", request);
     }
 
 }

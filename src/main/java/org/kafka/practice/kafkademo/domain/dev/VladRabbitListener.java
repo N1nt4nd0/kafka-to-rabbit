@@ -29,10 +29,10 @@ public class VladRabbitListener {
             key = "#{@personDtoRabbitRoutingKey}"
     ))
     public void receivePersonDtoRequest(final PersonDTORequest request) {
-        log.debug("[DEV] Received rabbit PersonDTORequest as Vlad: {}", request);
+        log.debug("[DEV] Received rabbit PersonDtoRequest as Vlad: {}", request);
         final var response = personDtoMapper.personDtoRequestToPersonDtoResponse(request);
         rabbitTemplate.convertAndSend(personDtoResponseRabbitExchange, personDtoRabbitRoutingKey, response);
-        log.debug("[DEV] PersonDTOResponse sent as Vlad: {}", response);
+        log.debug("[DEV] PersonDtoResponse sent as Vlad: {}", response);
     }
 
 }

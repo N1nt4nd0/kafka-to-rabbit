@@ -3,7 +3,7 @@ package org.kafka.practice.kafkademo.domain.listeners;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
-import org.kafka.practice.kafkademo.domain.service.PersonDTORedirectService;
+import org.kafka.practice.kafkademo.domain.service.PersonDtoRedirectService;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -13,9 +13,9 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RabbitPersonDTOResponseListener {
+public class RabbitPersonDtoResponseListener {
 
-    private final PersonDTORedirectService personDtoRedirectService;
+    private final PersonDtoRedirectService personDtoRedirectService;
 
     @RabbitListener(bindings = @QueueBinding(
             value = @Queue(value = ""), // TODO make named queue
@@ -23,7 +23,7 @@ public class RabbitPersonDTOResponseListener {
             key = "#{@personDtoRabbitRoutingKey}"
     ))
     public void receivePersonDtoResponse(final PersonDTOResponse response) {
-        log.debug("Received PersonDTOResponse from rabbit: {}", response);
+        log.debug("Received PersonDtoResponse from rabbit: {}", response);
         personDtoRedirectService.receivePersonDtoResponseFromRabbit(response);
     }
 
