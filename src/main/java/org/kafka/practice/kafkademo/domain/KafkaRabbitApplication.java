@@ -5,7 +5,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 // TODO passwords, environment variables to .env file
-// TODO connect LiquidBase
 // TODO global error handler for rabbit
 
 @SpringBootApplication

@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    @Value("${random-error-generator.exception-probability-percent}")
+    @Value("${random-exception-generator.exception-probability-percent}")
     private int exceptionProbability;
 
     @Bean

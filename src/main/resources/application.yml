@@ -2,11 +2,11 @@ spring:
   application:
     name: SyntegricoKafkaToRabbit
   profiles:
-    active: full-cycle-dev #full-cycle-dev, vlad-dev, prod
+    active: ${K2R_ACTIVE_PROFILE}
   datasource:
-    url: jdbc:postgresql://localhost:5432/syntegrico_kafka_rabbit
-    username: syntegrico
-    password: syntegrico
+    url: ${K2R_DB_URL}
+    username: ${K2R_DB_USERNAME}
+    password: ${K2R_DB_PASSWORD}
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.xml
   jpa:
@@ -18,7 +18,7 @@ spring:
     hibernate:
       ddl-auto: validate
   kafka:
-    bootstrap-servers: localhost:9092 # 10.20.4.135, localhost
+    bootstrap-servers: ${K2R_KAFKA_BOOTSTRAP_SERVERS}
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -29,10 +29,10 @@ spring:
         spring.json.trusted.packages: org.kafka.practice.kafkademo.domain.entities.value
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
   rabbitmq:
-    host: localhost # 10.20.5.73, localhost
-    port: 5672
-    username: guest
-    password: guest
+    host: ${K2R_RABBIT_HOST}
+    port: ${K2R_RABBIT_PORT}
+    username: ${K2R_RABBIT_USERNAME}
+    password: ${K2R_RABBIT_PASSWORD}
 
 messaging:
   rabbit:
@@ -46,18 +46,19 @@ messaging:
 
 logging:
   level:
-    org.kafka.practice.kafkademo.domain.listeners.RabbitPersonDTOResponseListener: DEBUG
-    org.kafka.practice.kafkademo.domain.listeners.KafkaPersonDTORequestListener: DEBUG
-    org.kafka.practice.kafkademo.domain.service.PersonDTORedirectService: DEBUG
-    org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
+    # Services log level
+    org.kafka.practice.kafkademo.domain.listeners.RabbitPersonDtoResponseListener: ${K2R_SERVICES_LOG_LEVEL}
+    org.kafka.practice.kafkademo.domain.listeners.KafkaPersonDtoRequestListener: ${K2R_SERVICES_LOG_LEVEL}
+    org.kafka.practice.kafkademo.domain.service.PersonDtoRedirectService: ${K2R_SERVICES_LOG_LEVEL}
+    org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: ${K2R_SERVICES_LOG_LEVEL}
     # Transaction logging (TRACE for more info)
-    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
-    org.springframework.transaction: DEBUG
-    org.hibernate.transaction: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: ${K2R_TRANSACTIONS_LOG_LEVEL}
+    org.springframework.transaction: ${K2R_TRANSACTIONS_LOG_LEVEL}
+    org.hibernate.transaction: ${K2R_TRANSACTIONS_LOG_LEVEL}
     # Dev profiles logging
-    org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG
-    org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
-    org.kafka.practice.kafkademo.domain.dev.NikitaScheduler: DEBUG
+    org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: ${K2R_DEV_LOG_LEVEL}
+    org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: ${K2R_DEV_LOG_LEVEL}
+    org.kafka.practice.kafkademo.domain.dev.NikitaScheduler: ${K2R_DEV_LOG_LEVEL}
 
 random-exception-generator:
   exception-probability-percent: 20
