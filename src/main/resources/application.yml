@@ -44,6 +44,8 @@ messaging:
 
 logging:
   level:
+    org.kafka.practice.kafkademo.domain.listeners.RabbitPersonDTOResponseListener: DEBUG
+    org.kafka.practice.kafkademo.domain.listeners.KafkaPersonDTORequestListener: DEBUG
     org.kafka.practice.kafkademo.domain.service.RedirectService: DEBUG
     org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
     org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG

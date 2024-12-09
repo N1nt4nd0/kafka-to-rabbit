@@ -1,6 +1,6 @@
 package org.kafka.practice.kafkademo.domain.config;
 
-import org.kafka.practice.kafkademo.domain.utils.ErrorGenerator;
+import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -12,8 +12,8 @@ public class AppConfig {
     private int errorProbability;
 
     @Bean
-    public ErrorGenerator errorGenerator() {
-        return new ErrorGenerator(errorProbability);
+    public ExceptionGenerator errorGenerator() {
+        return new ExceptionGenerator(errorProbability);
     }
 
 }

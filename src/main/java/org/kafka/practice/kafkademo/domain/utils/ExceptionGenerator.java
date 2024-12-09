@@ -4,17 +4,17 @@ import org.kafka.practice.kafkademo.domain.exception.RandomGeneratorException;
 
 import java.util.Random;
 
-public class ErrorGenerator {
+public class ExceptionGenerator {
 
     private final int errorProbability;
     private final Random random;
 
-    public ErrorGenerator(final int errorProbability) {
+    public ExceptionGenerator(final int errorProbability) {
         this.errorProbability = errorProbability;
         this.random = new Random();
     }
 
-    public void process() {
+    public void generateRandomGeneratorException() {
         if (random.nextInt(100) < errorProbability) {
             throw new RandomGeneratorException();
         }

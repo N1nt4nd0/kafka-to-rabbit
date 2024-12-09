@@ -7,7 +7,7 @@ import org.kafka.practice.kafkademo.domain.entities.mappers.PersonDtoMapper;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 import org.kafka.practice.kafkademo.domain.service.entities.PersonService;
-import org.kafka.practice.kafkademo.domain.utils.ErrorGenerator;
+import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -24,7 +24,7 @@ public class RedirectService {
     private final PersonDtoMapper personDtoMapper;
     private final PersonService personService;
 
-    private final ErrorGenerator errorGenerator;
+    private final ExceptionGenerator exceptionGenerator;
 
     private final String rabbitRedirectExchangeName;
     private final String rabbitRoutingKey;
@@ -33,12 +33,10 @@ public class RedirectService {
 
     @Transactional
     public void receivePersonDtoRequestFromKafka(@NonNull final PersonDTORequest request) {
-        log.debug("=======================================================================");
-        log.debug("Received PersonDTORequest from kafka {}", request);
         final var person = personDtoMapper.fromPersonDtoRequest(request);
         log.debug("Start saving person to database. Person: {}", person);
         final var savedPerson = personService.savePerson(person);
-        errorGenerator.process();
+        exceptionGenerator.generateRandomGeneratorException();
         log.debug("Person saved to database. Saved person: {}", savedPerson);
         final var clonedRequest = personDtoMapper.clonePersonDtoRequest(request);
         redirectPersonDtoRequestToRabbit(clonedRequest);
@@ -50,7 +48,6 @@ public class RedirectService {
     }
 
     public void receivePersonDtoResponseFromRabbit(@NonNull final PersonDTOResponse response) {
-        log.debug("Received PersonDTOResponse from rabbit: {}", response);
         if (response.isFail()) {
             final var person = personDtoMapper.fromPersonDtoResponse(response);
             log.debug("PersonDTOResponse failed. Deleting person from database");
