@@ -32,7 +32,7 @@ public class RedirectService {
 
     @Transactional
     public void receivePersonDtoFromKafka(@NonNull final PersonDTO personDto) {
-        log.debug("====================================================");
+        log.debug("+++++++++++++++++++++++++++++++++++++++++++++++++++++++");
         log.debug("Received personDto from kafka {}", personDto);
         if (personDto.isFail())
             throw new RuntimeException("The operation has already failed");
@@ -50,6 +50,7 @@ public class RedirectService {
     }
 
     public void receivePersonDtoFromRabbit(@NonNull final PersonDTO personDto) {
+        log.debug("-------------------------------------------------------");
         log.debug("Received PersonDto from rabbit: {}", personDto);
         if (personDto.isFail()) {
             final var person = personMapper.fromPersonDto(personDto);

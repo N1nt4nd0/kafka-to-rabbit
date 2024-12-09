@@ -17,9 +17,11 @@ public class PersonGenerator {
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
     public Person fakeRandomPerson() {
         final var faker = new Faker();
+        final var email = faker.internet().emailAddress();
         final var name = faker.name();
         return Person.builder()
                 .id(UUID.randomUUID())
+                .email(email)
                 .firstName(name.firstName())
                 .lastName(name.lastName())
                 .build();
