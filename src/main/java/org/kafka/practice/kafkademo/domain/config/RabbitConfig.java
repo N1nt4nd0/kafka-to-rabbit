@@ -11,38 +11,38 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class RabbitConfig {
 
-    @Value("${messaging.rabbit.redirect-exchange-name}")
-    private String redirectExchangeName;
+    @Value("${messaging.rabbit.person-dto-redirect-exchange-name}")
+    private String personDtoRedirectExchangeName;
 
-    @Value("${messaging.rabbit.response-exchange-name}")
-    private String responseExchangeName;
+    @Value("${messaging.rabbit.person-dto-response-exchange-name}")
+    private String personDtoResponseExchangeName;
 
-    @Value("${messaging.rabbit.routing-key}")
-    private String routingKey;
+    @Value("${messaging.rabbit.person-dto-routing-key}")
+    private String personDtoRoutingKey;
 
     @Bean
-    public String rabbitRoutingKey() {
-        return routingKey;
+    public String personDtoRabbitRoutingKey() {
+        return personDtoRoutingKey;
     }
 
     @Bean
-    public String rabbitRedirectExchangeName() {
-        return redirectExchangeName;
+    public String personDtoRedirectRabbitExchange() {
+        return personDtoRedirectExchangeName;
     }
 
     @Bean
-    public String rabbitResponseExchangeName() {
-        return responseExchangeName;
+    public String personDtoResponseRabbitExchange() {
+        return personDtoResponseExchangeName;
     }
 
     @Bean
-    public TopicExchange redirectTopicExchange() {
-        return new TopicExchange(redirectExchangeName, true, false);
+    public TopicExchange personDtoRedirectTopicExchange() {
+        return new TopicExchange(personDtoRedirectExchangeName, true, false);
     }
 
     @Bean
-    public TopicExchange responseTopicExchange() {
-        return new TopicExchange(responseExchangeName, true, false);
+    public TopicExchange personDtoResponseTopicExchange() {
+        return new TopicExchange(personDtoResponseExchangeName, true, false);
     }
 
     @Bean

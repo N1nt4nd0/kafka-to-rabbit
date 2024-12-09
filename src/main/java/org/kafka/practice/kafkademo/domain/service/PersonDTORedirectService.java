@@ -16,20 +16,19 @@ import org.springframework.transaction.annotation.Transactional;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class RedirectService {
+public class PersonDTORedirectService {
 
-    private final KafkaTemplate<String, Object> kafkaTemplate;
-    private final RabbitTemplate rabbitTemplate;
-
+    private final ExceptionGenerator exceptionGenerator;
     private final PersonDtoMapper personDtoMapper;
     private final PersonService personService;
 
-    private final ExceptionGenerator exceptionGenerator;
+    private final String personDtoRedirectRabbitExchange;
+    private final String personDtoRabbitRoutingKey;
 
-    private final String rabbitRedirectExchangeName;
-    private final String rabbitRoutingKey;
+    private final String personDtoKafkaResponseTopic;
 
-    private final String kafkaResponseTopicName;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final RabbitTemplate rabbitTemplate;
 
     @Transactional
     public void receivePersonDtoRequestFromKafka(@NonNull final PersonDTORequest request) {
@@ -43,8 +42,8 @@ public class RedirectService {
     }
 
     public void redirectPersonDtoRequestToRabbit(@NonNull final PersonDTORequest request) {
-        rabbitTemplate.convertAndSend(rabbitRedirectExchangeName, rabbitRoutingKey, request);
-        log.debug("PersonDTORequest redirected to rabbit {}", request);
+        rabbitTemplate.convertAndSend(personDtoRedirectRabbitExchange, personDtoRabbitRoutingKey, request);
+        log.debug("PersonDTORequest redirected to rabbit: {}", request);
     }
 
     public void receivePersonDtoResponseFromRabbit(@NonNull final PersonDTOResponse response) {
@@ -59,7 +58,7 @@ public class RedirectService {
     }
 
     public void sendPersonDtoResponseToKafka(@NonNull final PersonDTOResponse response) {
-        kafkaTemplate.send(kafkaResponseTopicName, response);
+        kafkaTemplate.send(personDtoKafkaResponseTopic, response);
         log.debug("PersonDTOResponse sent to kafka: {}", response);
     }
 

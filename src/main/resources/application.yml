@@ -36,26 +36,28 @@ spring:
 
 messaging:
   rabbit:
-    routing-key: syntegrico
-    redirect-exchange-name: syntegrico-rabbit-message-queue
-    response-exchange-name: syntegrico-rabbit-message-response-queue
+    person-dto-routing-key: syntegrico
+    person-dto-redirect-exchange-name: syntegrico-rabbit-message-queue
+    person-dto-response-exchange-name: syntegrico-rabbit-message-response-queue
   kafka:
-    group-id: syntegrico-kafka-group
-    receive-topic-name: syntegrico-kafka-message-topic
-    response-topic-name: syntegrico-kafka-message-topic-response
+    person-dto-group-id: syntegrico-kafka-group
+    person-dto-receive-topic-name: syntegrico-kafka-message-topic
+    person-dto-response-topic-name: syntegrico-kafka-message-topic-response
 
 logging:
   level:
     org.kafka.practice.kafkademo.domain.listeners.RabbitPersonDTOResponseListener: DEBUG
     org.kafka.practice.kafkademo.domain.listeners.KafkaPersonDTORequestListener: DEBUG
-    org.kafka.practice.kafkademo.domain.service.RedirectService: DEBUG
+    org.kafka.practice.kafkademo.domain.service.PersonDTORedirectService: DEBUG
     org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
-    org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG
-    org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
     # Transaction logging (TRACE for more info)
     org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
     org.springframework.transaction: DEBUG
     org.hibernate.transaction: DEBUG
+    # Dev profiles logging
+    org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG
+    org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
+    org.kafka.practice.kafkademo.domain.dev.NikitaScheduler: DEBUG
 
 random-error-generator:
   error-probability: 20

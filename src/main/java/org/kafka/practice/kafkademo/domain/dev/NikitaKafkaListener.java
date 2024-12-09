@@ -11,9 +11,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class NikitaKafkaListener {
 
-    @KafkaListener(topics = "#{@kafkaResponseTopicName}", groupId = "#{@kafkaGroupId}")
-    public void receiveKafkaPersonDtoResponse(final PersonDTOResponse response) {
-        log.debug("Received kafka PersonDTOResponse as Nikita: {}", response);
+    @KafkaListener(topics = "#{@personDtoKafkaResponseTopic}", groupId = "#{@personDtoKafkaGroupId}")
+    public void receiveKafkaPersonDtoResponse(final PersonDTOResponse response) { // TODO More logs here
+        log.debug("[DEV] Received kafka PersonDTOResponse as Nikita: {}", response);
     }
 
 }

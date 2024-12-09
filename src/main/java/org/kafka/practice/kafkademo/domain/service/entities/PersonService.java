@@ -3,7 +3,7 @@ package org.kafka.practice.kafkademo.domain.service.entities;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import org.kafka.practice.kafkademo.domain.entities.Person;
-import org.kafka.practice.kafkademo.domain.repo.PersonRepository;
+import org.kafka.practice.kafkademo.domain.repository.PersonRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +14,7 @@ public class PersonService {
     private final PersonRepository personRepository;
 
     @Transactional
-    public Person savePerson(@NonNull final Person person) { //TODO do return
+    public Person savePerson(@NonNull final Person person) {
         return personRepository.save(person);
     }
 

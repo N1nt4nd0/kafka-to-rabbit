@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.repo;
+package org.kafka.practice.kafkademo.domain.repository;
 
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
