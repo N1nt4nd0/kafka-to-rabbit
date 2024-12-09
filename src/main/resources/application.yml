@@ -16,7 +16,7 @@ spring:
     hibernate:
       ddl-auto: validate
   kafka:
-    bootstrap-servers: 25.3.230.68:9092
+    bootstrap-servers: 10.20.4.135:9092
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -27,7 +27,7 @@ spring:
         spring.json.trusted.packages: org.kafka.practice.kafkademo.domain.entities.value
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
   rabbitmq:
-    host: localhost
+    host: 10.20.5.73
     port: 5672
     username: guest
     password: guest

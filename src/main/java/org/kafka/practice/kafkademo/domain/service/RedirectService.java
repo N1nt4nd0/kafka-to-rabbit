@@ -1,5 +1,6 @@
 package org.kafka.practice.kafkademo.domain.service;
 
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.generation.PersonMapper;
@@ -10,7 +11,6 @@ import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
 
 @Slf4j
 @Service
@@ -31,10 +31,9 @@ public class RedirectService {
     private final String kafkaResponseTopicName;
 
     @Transactional
-    public void receivePersonDtoFromKafka(final PersonDTO personDto) {
+    public void receivePersonDtoFromKafka(@NonNull final PersonDTO personDto) {
         log.debug("====================================================");
         log.debug("Received personDto from kafka {}", personDto);
-        Assert.notNull(personDto, "PersonDto can't be null");
         if (personDto.isFail())
             throw new RuntimeException("The operation has already failed");
         final var person = personMapper.fromPersonDto(personDto);
@@ -46,21 +45,22 @@ public class RedirectService {
         redirectPersonDtoToRabbit(personDto);
     }
 
-    public void redirectPersonDtoToRabbit(final PersonDTO personDto) {
+    public void redirectPersonDtoToRabbit(@NonNull final PersonDTO personDto) {
         rabbitTemplate.convertAndSend(rabbitRedirectExchangeName, rabbitRoutingKey, personDto);
     }
 
-    public void receivePersonDtoFromRabbit(final PersonDTO personDto) {
+    public void receivePersonDtoFromRabbit(@NonNull final PersonDTO personDto) {
         log.debug("Received PersonDto from rabbit: {}", personDto);
         if (personDto.isFail()) {
             final var person = personMapper.fromPersonDto(personDto);
             personService.deletePerson(person);
             log.debug("PersonDto is failed. Person removed from database");
         }
+        log.debug("Sending PersonDto to kafka response");
         sendPersonDtoKafkaResponse(personDto);
     }
 
-    public void sendPersonDtoKafkaResponse(final PersonDTO personDto) {
+    public void sendPersonDtoKafkaResponse(@NonNull final PersonDTO personDto) {
         kafkaTemplate.send(kafkaResponseTopicName, personDto);
     }
 
