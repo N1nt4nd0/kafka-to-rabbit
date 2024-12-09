@@ -5,6 +5,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.mappers.PersonDtoMapper;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.service.PersonDtoRedirectService;
+import org.kafka.practice.kafkademo.domain.utils.LogHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.DefaultErrorHandler;
 import org.springframework.stereotype.Component;
@@ -19,17 +20,10 @@ public class KafkaErrorHandler {
     private final PersonDtoMapper personDtoMapper;
 
     @Bean
-    public DefaultErrorHandler errorHandler() {
+    public DefaultErrorHandler globalKafkaErrorHandler() {
         return new DefaultErrorHandler((record, exception) -> {
-            final Throwable cause;
-            if (exception.getCause() == null) {
-                cause = exception;
-            } else {
-                cause = exception.getCause();
-            }
             final var value = record.value();
-            log.debug("Kafka error occurred: {}", cause.toString());
-            log.trace("Error details:", cause);
+            LogHelper.logError("Kafka", exception, log);
             if (value instanceof PersonDTORequest request) {
                 log.debug("PersonDtoRequest processing failed: {}", request);
                 final var response = personDtoMapper.personDtoRequestToPersonDtoResponse(request);

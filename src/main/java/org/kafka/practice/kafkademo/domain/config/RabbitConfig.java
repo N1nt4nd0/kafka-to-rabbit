@@ -1,12 +1,14 @@
 package org.kafka.practice.kafkademo.domain.config;
 
 import org.springframework.amqp.core.*;
+import org.springframework.amqp.rabbit.config.SimpleRabbitListenerContainerFactory;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.util.ErrorHandler;
 
 @Configuration
 public class RabbitConfig {
@@ -44,14 +46,15 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Jackson2JsonMessageConverter jsonMessageConverter() {
+    public Jackson2JsonMessageConverter rabbitMessageConverter() {
         return new Jackson2JsonMessageConverter();
     }
 
     @Bean
-    public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory) {
+    public RabbitTemplate rabbitTemplate(final ConnectionFactory connectionFactory,
+                                         final Jackson2JsonMessageConverter messageConverter) {
         final var rabbitTemplate = new RabbitTemplate(connectionFactory);
-        rabbitTemplate.setMessageConverter(jsonMessageConverter());
+        rabbitTemplate.setMessageConverter(messageConverter);
         return rabbitTemplate;
     }
 
@@ -71,15 +74,26 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Binding bindQueueToPersonDtoRedirectExchange(Queue personDtoQueue,
-                                                        TopicExchange personDtoRedirectTopicExchange) {
+    public Binding bindQueueToPersonDtoRedirectExchange(final Queue personDtoQueue,
+                                                        final TopicExchange personDtoRedirectTopicExchange) {
         return BindingBuilder.bind(personDtoQueue).to(personDtoRedirectTopicExchange).with(personDtoRoutingKey);
     }
 
     @Bean
-    public Binding bindQueueToPersonDtoResponseExchange(Queue personDtoQueue,
-                                                        TopicExchange personDtoResponseTopicExchange) {
+    public Binding bindQueueToPersonDtoResponseExchange(final Queue personDtoQueue,
+                                                        final TopicExchange personDtoResponseTopicExchange) {
         return BindingBuilder.bind(personDtoQueue).to(personDtoResponseTopicExchange).with(personDtoRoutingKey);
+    }
+
+    @Bean
+    public SimpleRabbitListenerContainerFactory rabbitListenerFactory(final ConnectionFactory connectionFactory,
+                                                                      final Jackson2JsonMessageConverter rabbitMessageConverter,
+                                                                      final ErrorHandler globalRabbitErrorHandler) {
+        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+        factory.setMessageConverter(rabbitMessageConverter);
+        factory.setErrorHandler(globalRabbitErrorHandler);
+        factory.setConnectionFactory(connectionFactory);
+        return factory;
     }
 
 }
