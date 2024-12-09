@@ -4,9 +4,9 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
-// TODO пароли, важные переменные прописывать в .env файле и подключить его к запуску
-// TODO подключить LiquidBase
-// TODO делать DtoRequest и DtoResponse а не гонять один Dto в разные стороны
+// TODO passwords, environment variables to .env file
+// TODO connect LiquidBase
+// TODO global error handler for rabbit
 
 @SpringBootApplication
 @EnableTransactionManagement

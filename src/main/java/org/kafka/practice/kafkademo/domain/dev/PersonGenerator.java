@@ -1,7 +1,7 @@
 package org.kafka.practice.kafkademo.domain.dev;
 
 import net.datafaker.Faker;
-import org.kafka.practice.kafkademo.domain.entities.value.Person;
+import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;

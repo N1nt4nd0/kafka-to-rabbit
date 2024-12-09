@@ -1,7 +1,7 @@
 package org.kafka.practice.kafkademo.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import org.kafka.practice.kafkademo.domain.entities.value.PersonDTO;
+import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
-public class RabbitListenerService {
+public class RabbitListenerService { //TODO make more logs in listeners
 
     private final RedirectService redirectService;
 
@@ -19,8 +19,8 @@ public class RabbitListenerService {
             exchange = @Exchange(value = "#{@rabbitResponseExchangeName}", type = "topic"),
             key = "#{@rabbitRoutingKey}"
     ))
-    public void receiveRabbitPersonDto(final PersonDTO personDto) {
-        redirectService.receivePersonDtoFromRabbit(personDto);
+    public void receiveRabbitPersonDtoResponse(final PersonDTOResponse response) {
+        redirectService.receivePersonDtoResponseFromRabbit(response);
     }
 
 }

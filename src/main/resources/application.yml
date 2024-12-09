@@ -2,7 +2,7 @@ spring:
   application:
     name: SyntegricoKafkaToRabbit
   profiles:
-    active: prod #full-cycle-dev, vlad-dev, prod
+    active: vlad-dev #full-cycle-dev, vlad-dev, prod
   datasource:
     url: jdbc:postgresql://localhost:5432/syntegrico_kafka_rabbit
     username: syntegrico
@@ -16,7 +16,7 @@ spring:
     hibernate:
       ddl-auto: validate
   kafka:
-    bootstrap-servers: 10.20.4.135:9092
+    bootstrap-servers: 10.20.4.135:9092 # 10.20.4.135, localhost
     producer:
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
@@ -27,7 +27,7 @@ spring:
         spring.json.trusted.packages: org.kafka.practice.kafkademo.domain.entities.value
         spring.deserializer.value.delegate.class: org.springframework.kafka.support.serializer.JsonDeserializer
   rabbitmq:
-    host: 10.20.5.73
+    host: localhost # 10.20.5.73, localhost
     port: 5672
     username: guest
     password: guest
@@ -49,12 +49,12 @@ logging:
     org.kafka.practice.kafkademo.domain.dev.NikitaKafkaListener: DEBUG
     org.kafka.practice.kafkademo.domain.dev.VladRabbitListener: DEBUG
     # Transaction logging (TRACE for more info)
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.transaction: TRACE
-    org.hibernate.transaction: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.transaction: DEBUG
 
 random-error-generator:
   error-probability: 20
 
 dev:
-  nikita-kafka-producer-delay-ms: 10000
+  nikita-kafka-producer-delay-ms: 4000

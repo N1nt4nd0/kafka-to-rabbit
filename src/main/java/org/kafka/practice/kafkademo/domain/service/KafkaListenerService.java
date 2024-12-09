@@ -1,7 +1,7 @@
 package org.kafka.practice.kafkademo.domain.service;
 
 import lombok.RequiredArgsConstructor;
-import org.kafka.practice.kafkademo.domain.entities.value.PersonDTO;
+import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
@@ -12,8 +12,8 @@ public class KafkaListenerService {
     private final RedirectService redirectService;
 
     @KafkaListener(topics = "#{@kafkaReceiveTopicName}", groupId = "#{@kafkaGroupId}")
-    public void receiveKafkaPersonDto(final PersonDTO personDto) { //TODO Listeners to listeners package but not in service
-        redirectService.receivePersonDtoFromKafka(personDto);
+    public void receiveKafkaPersonDtoRequest(final PersonDTORequest request) { //TODO Listeners to listeners package but not in service
+        redirectService.receivePersonDtoRequestFromKafka(request);
     }
 
 }

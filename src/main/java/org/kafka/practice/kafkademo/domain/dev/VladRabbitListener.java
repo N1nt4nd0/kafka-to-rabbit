@@ -2,7 +2,7 @@ package org.kafka.practice.kafkademo.domain.dev;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kafka.practice.kafkademo.domain.entities.value.PersonDTO;
+import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.springframework.amqp.rabbit.annotation.Exchange;
 import org.springframework.amqp.rabbit.annotation.Queue;
 import org.springframework.amqp.rabbit.annotation.QueueBinding;
@@ -27,9 +27,9 @@ public class VladRabbitListener {
             exchange = @Exchange(value = "#{@rabbitRedirectExchangeName}", type = "topic"),
             key = "#{@rabbitRoutingKey}"
     ))
-    public void receiveRabbitPersonDto(final PersonDTO personDTO) {
-        log.debug("Received rabbit PersonDTO as Vlad: {}", personDTO);
-        rabbitTemplate.convertAndSend(rabbitResponseExchangeName, rabbitRoutingKey, personDTO);
+    public void receiveRabbitPersonDtoRequest(final PersonDTORequest request) {
+        log.debug("Received rabbit PersonDTORequest as Vlad: {}", request);
+        rabbitTemplate.convertAndSend(rabbitResponseExchangeName, rabbitRoutingKey, request);
     }
 
 }

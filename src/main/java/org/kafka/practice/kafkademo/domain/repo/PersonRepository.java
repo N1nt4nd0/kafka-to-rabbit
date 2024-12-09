@@ -1,6 +1,6 @@
 package org.kafka.practice.kafkademo.domain.repo;
 
-import org.kafka.practice.kafkademo.domain.entities.value.Person;
+import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
