@@ -9,12 +9,12 @@ import org.springframework.context.annotation.Profile;
 @Configuration
 public class DevConfig {
 
-    @Value("${dev.kafka-producer-delay-ms}")
-    private int kafkaProducerDelayMs;
+    @Value("${dev.nikita-kafka-producer-delay-ms}")
+    private int producerDelayMs;
 
     @Bean
-    public int kafkaProducerDelayMs() {
-        return kafkaProducerDelayMs;
+    public int nikitaKafkaProducerDelayMs() {
+        return producerDelayMs;
     }
 
 }

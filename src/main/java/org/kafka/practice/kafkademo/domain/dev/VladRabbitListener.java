@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 public class VladRabbitListener {
 
     private final RabbitTemplate rabbitTemplate;
+
     private final String rabbitResponseExchangeName;
     private final String rabbitRoutingKey;
 

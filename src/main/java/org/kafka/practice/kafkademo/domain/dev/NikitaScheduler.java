@@ -24,7 +24,7 @@ public class NikitaScheduler {
     private final ObjectFactory<Person> randomPersonGenerator;
     private final PersonMapper personMapper;
 
-    @Scheduled(fixedDelayString = "#{@kafkaProducerDelayMs}")
+    @Scheduled(fixedDelayString = "#{@nikitaKafkaProducerDelayMs}")
     public void kafkaSendAsNikita() {
         final var randomPerson = randomPersonGenerator.getObject();
         final var personDto = personMapper.toPersonDto(randomPerson);
