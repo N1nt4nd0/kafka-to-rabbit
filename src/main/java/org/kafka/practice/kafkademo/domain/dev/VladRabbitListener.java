@@ -28,7 +28,7 @@ public class VladRabbitListener {
     private final RabbitTemplate rabbitTemplate;
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = ""),
+            value = @Queue(value = "#{@personDtoRabbitQueue}", durable = "true", autoDelete = "false"),
             exchange = @Exchange(value = "#{@personDtoRedirectRabbitExchange}", type = "topic"),
             key = "#{@personDtoRabbitRoutingKey}"
     ))

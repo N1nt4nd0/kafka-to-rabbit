@@ -1,6 +1,6 @@
 package org.kafka.practice.kafkademo.domain.config;
 
-import org.springframework.amqp.core.TopicExchange;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.support.converter.Jackson2JsonMessageConverter;
@@ -17,13 +17,11 @@ public class RabbitConfig {
     @Value("${messaging.rabbit.person-dto-response-exchange-name}")
     private String personDtoResponseExchangeName;
 
+    @Value("${messaging.rabbit.person-dto-queue-name}")
+    private String personDtoQueueName;
+
     @Value("${messaging.rabbit.person-dto-routing-key}")
     private String personDtoRoutingKey;
-
-    @Bean
-    public String personDtoRabbitRoutingKey() {
-        return personDtoRoutingKey;
-    }
 
     @Bean
     public String personDtoRedirectRabbitExchange() {
@@ -36,13 +34,13 @@ public class RabbitConfig {
     }
 
     @Bean
-    public TopicExchange personDtoRedirectTopicExchange() {
-        return new TopicExchange(personDtoRedirectExchangeName, true, false);
+    public String personDtoRabbitQueue() {
+        return personDtoQueueName;
     }
 
     @Bean
-    public TopicExchange personDtoResponseTopicExchange() {
-        return new TopicExchange(personDtoResponseExchangeName, true, false);
+    public String personDtoRabbitRoutingKey() {
+        return personDtoRoutingKey;
     }
 
     @Bean
@@ -55,6 +53,33 @@ public class RabbitConfig {
         final var rabbitTemplate = new RabbitTemplate(connectionFactory);
         rabbitTemplate.setMessageConverter(jsonMessageConverter());
         return rabbitTemplate;
+    }
+
+    @Bean
+    public Queue personDtoQueue() {
+        return QueueBuilder.durable(personDtoQueueName).build();
+    }
+
+    @Bean
+    public TopicExchange personDtoRedirectTopicExchange() {
+        return ExchangeBuilder.topicExchange(personDtoRedirectExchangeName).durable(true).build();
+    }
+
+    @Bean
+    public TopicExchange personDtoResponseTopicExchange() {
+        return ExchangeBuilder.topicExchange(personDtoResponseExchangeName).durable(true).build();
+    }
+
+    @Bean
+    public Binding bindQueueToPersonDtoRedirectExchange(Queue personDtoQueue,
+                                                        TopicExchange personDtoRedirectTopicExchange) {
+        return BindingBuilder.bind(personDtoQueue).to(personDtoRedirectTopicExchange).with(personDtoRoutingKey);
+    }
+
+    @Bean
+    public Binding bindQueueToPersonDtoResponseExchange(Queue personDtoQueue,
+                                                        TopicExchange personDtoResponseTopicExchange) {
+        return BindingBuilder.bind(personDtoQueue).to(personDtoResponseTopicExchange).with(personDtoRoutingKey);
     }
 
 }

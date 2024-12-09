@@ -36,9 +36,10 @@ spring:
 
 messaging:
   rabbit:
-    person-dto-routing-key: syntegrico
     person-dto-redirect-exchange-name: syntegrico-rabbit-message-queue
     person-dto-response-exchange-name: syntegrico-rabbit-message-response-queue
+    person-dto-queue-name: person-dto-queue
+    person-dto-routing-key: syntegrico
   kafka:
     person-dto-group-id: syntegrico-kafka-group
     person-dto-receive-topic-name: syntegrico-kafka-message-topic
