@@ -33,10 +33,10 @@ public class PersonDtoRedirectService {
     @Transactional
     public void receivePersonDtoRequestFromKafka(@NonNull final PersonDTORequest request) {
         final var person = personDtoMapper.fromPersonDtoRequest(request);
-        log.debug("Start saving person to database. Person: {}", person);
+        log.debug("Starting to save person at database");
         final var savedPerson = personService.savePerson(person);
         exceptionGenerator.generateRandomException();
-        log.debug("Person saved to database. Saved person: {}", savedPerson);
+        log.debug("Person saved successfully. Person: {}", savedPerson);
         final var clonedRequest = personDtoMapper.clonePersonDtoRequest(request);
         redirectPersonDtoRequestToRabbit(clonedRequest);
     }

@@ -31,11 +31,10 @@ public class KafkaErrorHandler {
             log.debug("Kafka error occurred: {}", cause.toString());
             log.trace("Error details:", cause);
             if (value instanceof PersonDTORequest request) {
-                log.debug("PersonDtoRequest failed by {}. Request: {}", cause, request);
+                log.debug("PersonDtoRequest processing failed: {}", request);
                 final var response = personDtoMapper.personDtoRequestToPersonDtoResponse(request);
                 response.setFail(true);
                 personDtoRedirectService.sendPersonDtoResponseToKafka(response);
-                log.debug("Sent fail PersonDtoResponse to kafka");
             }
         }, new FixedBackOff(0L, 0L));
     }
