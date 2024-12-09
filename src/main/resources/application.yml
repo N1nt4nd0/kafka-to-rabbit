@@ -51,6 +51,7 @@ logging:
     org.kafka.practice.kafkademo.domain.listeners.RabbitPersonDtoResponseListener: DEBUG
     org.kafka.practice.kafkademo.domain.listeners.KafkaPersonDtoRequestListener: DEBUG
     org.kafka.practice.kafkademo.domain.service.PersonDtoRedirectService: DEBUG
+    # Error handlers log level (TRACE for more info)
     org.kafka.practice.kafkademo.domain.config.RabbitErrorHandler: DEBUG
     org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
     # Transaction logging (TRACE for more info)
