@@ -2,7 +2,7 @@ spring:
   application:
     name: SyntegricoKafkaToRabbit
   profiles:
-    active: full-cycle-dev # full-cycle-dev, vlad-dev, prod
+    active: ${K2R_ACTIVE_PROFILE}
   datasource:
     url: ${K2R_DB_URL}
     username: ${K2R_DB_USERNAME}
