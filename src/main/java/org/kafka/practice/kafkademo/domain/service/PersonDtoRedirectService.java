@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class PersonDtoRedirectService {
 
-    private final ExceptionGenerator exceptionGenerator;
+    private final ExceptionGenerator personDtoReceiveExceptionGenerator;
     private final PersonDtoMapper personDtoMapper;
     private final PersonService personService;
 
@@ -35,7 +35,7 @@ public class PersonDtoRedirectService {
         final var person = personDtoMapper.fromPersonDtoRequest(request);
         log.debug("Starting to save person at database");
         final var savedPerson = personService.savePerson(person);
-        exceptionGenerator.generateRandomException();
+        personDtoReceiveExceptionGenerator.generateRandomException();
         log.debug("Person saved successfully. Person: {}", savedPerson);
         final var clonedRequest = personDtoMapper.clonePersonDtoRequest(request);
         redirectPersonDtoRequestToRabbit(clonedRequest);

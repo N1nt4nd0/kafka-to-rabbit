@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="EN">
+<head>
+    <title>Persons</title>
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+
+#set($prevPage = $contentPage.number)
+#set($nextPage = $contentPage.number)
+#set($lastPage = $contentPage.totalPages - 1)
+#set($currentPage = $contentPage.number)
+#set($pageSize = $contentPage.size)
+
+#if ($contentPage.hasPrevious())
+    #set($prevPage = $contentPage.number - 1)
+#end
+
+#if ($contentPage.hasNext())
+    #set($nextPage = $contentPage.number + 1)
+#end
+
+<div class="pagination-container">
+    <div id="page-buttons">
+        <button onclick="window.location='${contentPath}?page=0&size=${pageSize}'">First page</button>
+        <button onclick="window.location='${contentPath}?page=${prevPage}&size=${pageSize}'">Prev page</button>
+        <span>|</span>
+        <button onclick="window.location='${contentPath}?page=${nextPage}&size=${pageSize}'">Next page</button>
+        <button onclick="window.location='${contentPath}?page=${lastPage}&size=${pageSize}'">Last page</button>
+    </div>
+    <span>|</span>
+    <div id="page-input-form">
+        <form action="${contentPath}" method="get">
+            <input id="page-input-field" type="number" name="page" min="0" max="${lastPage}" placeholder="Page num" required class="page-input-field">
+            <input type="hidden" name="size" value="${pageSize}">
+            <button type="submit">Go to page</button>
+        </form>
+    </div>
+    <span>|</span>
+    <div id="page-info-label">
+        <span>Page: ${currentPage} / ${lastPage}. Total elements: ${contentPage.totalElements}</span>
+    </div>
+</div>
+
+<div id="content-table" class="content-table">
+    <table>
+        <thead>
+            <tr>
+                <th></th>
+                <th>Email</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Id</th>
+            </tr>
+        </thead>
+        <tbody>
+            #set($index = 1)
+            #foreach ($person in $contentPage.content)
+            <tr>
+                <td>${index}</td>
+                <td>${person.email}</td>
+                <td>${person.firstName}</td>
+                <td>${person.lastName}</td>
+                <td>${person.id}</td>
+            </tr>
+            #set($index = $index + 1)
+            #end
+        </tbody>
+    </table>
+</div>
+
+<script>
+    function updateData() {
+        fetch('${contentPath}?page=' + ${currentPage} + '&size=' + ${pageSize})
+            .then(response => response.text())
+            .then(html => {
+                const newDoc = new DOMParser().parseFromString(html, 'text/html');
+                document.getElementById('page-buttons').innerHTML = newDoc.getElementById('page-buttons').innerHTML;
+                document.getElementById('page-info-label').innerHTML = newDoc.getElementById('page-info-label').innerHTML;
+                document.getElementById('content-table').innerHTML = newDoc.getElementById('content-table').innerHTML;
+                document.getElementById('page-input-field').max = newDoc.getElementById('page-input-field').max
+            })
+            .catch(error => {
+                console.error('Error by updating content:', error);
+            });
+    }
+    setInterval(updateData, ${updateInterval});
+</script>
+
+</body>
+</html>

@@ -22,11 +22,6 @@ public class DevConfig {
     }
 
     @Bean
-    public ExceptionGenerator fiftyExceptionGenerator() {
-        return new ExceptionGenerator(50);
-    }
-
-    @Bean
     public ExceptionGenerator vladExceptionGenerator() {
         return new ExceptionGenerator(exceptionGeneratorProbability);
     }

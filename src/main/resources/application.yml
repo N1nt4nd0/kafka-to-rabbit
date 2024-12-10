@@ -2,7 +2,7 @@ spring:
   application:
     name: SyntegricoKafkaToRabbit
   profiles:
-    active: ${K2R_ACTIVE_PROFILE}
+    active: full-cycle-dev # full-cycle-dev, vlad-dev, prod
   datasource:
     url: ${K2R_DB_URL}
     username: ${K2R_DB_USERNAME}
@@ -34,6 +34,21 @@ spring:
     username: ${K2R_RABBIT_USERNAME}
     password: ${K2R_RABBIT_PASSWORD}
 
+endpoints:
+  root-path: /kafkarabbit
+  persons-path: ${endpoints.root-path}/persons
+  persons-list-path: ${endpoints.persons-path}/list
+
+server:
+  port: 8080
+  servlet:
+    encoding:
+      force-response: true
+      charset: UTF-8
+  error:
+    whitelabel:
+      enabled: false
+
 messaging:
   rabbit:
     person-dto-redirect-exchange-name: syntegrico-rabbit-message-queue
@@ -47,6 +62,8 @@ messaging:
 
 logging:
   level:
+    # Controllers exception handler log level
+    org.kafka.practice.kafkademo.domain.config.ControllerExceptionHandler: DEBUG
     # Services log level
     org.kafka.practice.kafkademo.domain.listeners.RabbitPersonDtoResponseListener: DEBUG
     org.kafka.practice.kafkademo.domain.listeners.KafkaPersonDtoRequestListener: DEBUG
@@ -64,8 +81,11 @@ logging:
     org.kafka.practice.kafkademo.domain.dev.NikitaScheduler: DEBUG
 
 random-exception-generator:
-  exception-probability-percent: 20
+  person-dto-receive-exception-probability-percent: 20
+
+web-pages:
+  content-update-interval-ms: 3000
 
 dev:
-  vlad-exception-generator-probability-percent: 10
-  nikita-kafka-producer-delay-ms: 4000
+  vlad-exception-generator-probability-percent: 0
+  nikita-kafka-producer-delay-ms: 2000
