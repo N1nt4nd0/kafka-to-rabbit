@@ -28,3 +28,12 @@
     background-color: #f2f2f2;
     color: black;
 }
+
+.content-table tbody {
+    counter-reset: row-number;
+}
+
+.content-table tbody tr td:nth-child(1)::before {
+    counter-increment: row-number;
+    content: counter(row-number);
+}

@@ -6,77 +6,72 @@
 </head>
 <body>
 
-#set($totalElements = $contentPage.totalElements)
 #set($lastPage = $contentPage.totalPages - 1)
-#set($currentPage = $contentPage.number)
 #set($prevPage = $contentPage.number)
 #set($nextPage = $contentPage.number)
-#set($pageSize = $contentPage.size)
 
 #if ($lastPage < 0)
-    #set($lastPage = 0)
+#set($lastPage = 0)
 #end
 
 #if ($contentPage.hasPrevious())
-    #set($prevPage = $contentPage.number - 1)
+#set($prevPage = $contentPage.number - 1)
 #end
 
 #if ($contentPage.hasNext())
-    #set($nextPage = $contentPage.number + 1)
+#set($nextPage = $contentPage.number + 1)
 #end
 
 <div class="pagination-container">
     <div id="page-buttons">
-        <button onclick="window.location='${contentPath}?page=0&size=${pageSize}'">First page</button>
-        <button onclick="window.location='${contentPath}?page=${prevPage}&size=${pageSize}'">Prev page</button>
+        <button onclick="window.location='${contentPath}?page=0&size=${contentPage.size}'">First page</button>
+        <button onclick="window.location='${contentPath}?page=${lastPage}&size=${contentPage.size}'">Last page</button>
         <span>|</span>
-        <button onclick="window.location='${contentPath}?page=${nextPage}&size=${pageSize}'">Next page</button>
-        <button onclick="window.location='${contentPath}?page=${lastPage}&size=${pageSize}'">Last page</button>
+        <button onclick="window.location='${contentPath}?page=${prevPage}&size=${contentPage.size}'">Prev page</button>
+        <button onclick="window.location='${contentPath}?page=${nextPage}&size=${contentPage.size}'">Next page</button>
     </div>
     <span>|</span>
     <div id="page-input-form">
         <form action="${contentPath}" method="get">
             <input type="number" name="page" min="0" placeholder="Page num" required class="page-input-field">
-            <input type="hidden" name="size" value="${pageSize}">
+            <input type="hidden" name="size" value="${contentPage.size}">
             <button type="submit">Go to page</button>
         </form>
     </div>
     <span>|</span>
     <div id="page-info-label">
-        <span>Page: ${currentPage} / ${lastPage}. Total elements: ${totalElements}</span>
+        <span>Page: ${contentPage.number} / ${lastPage}. Total elements: ${contentPage.totalElements}</span>
     </div>
 </div>
 
 <div id="content-table" class="content-table">
     <table>
         <thead>
-            <tr>
-                <th></th>
-                <th>Email</th>
-                <th>First Name</th>
-                <th>Last Name</th>
-                <th>Id</th>
-            </tr>
+        <tr>
+            <th></th>
+            <th>Email</th>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Id</th>
+        </tr>
         </thead>
         <tbody>
-            #set($index = 1)
-            #foreach ($person in $contentPage.content)
-            <tr>
-                <td>${index}</td>
-                <td>${person.email}</td>
-                <td>${person.firstName}</td>
-                <td>${person.lastName}</td>
-                <td>${person.id}</td>
-            </tr>
-            #set($index = $index + 1)
-            #end
+        #foreach ($person in $contentPage.content)
+        <tr>
+            <td></td>
+            <td>${person.email}</td>
+            <td>${person.firstName}</td>
+            <td>${person.lastName}</td>
+            <td>${person.id}</td>
+        </tr>
+        #end
         </tbody>
     </table>
 </div>
 
 <script>
     function updateData() {
-        fetch('${contentPath}?page=' + ${currentPage} + '&size=' + ${pageSize})
+        fetch('${contentPath}?page=' + ${contentPage.number} + '&size=' + ${contentPage.size})
             .then(response => response.text())
             .then(html => {
                 const newDoc = new DOMParser().parseFromString(html, 'text/html');

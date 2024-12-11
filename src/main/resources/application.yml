@@ -39,9 +39,7 @@ web:
     update-interval-ms: 3000
     max-elements-size: 300
   endpoints:
-    root-path: /kafkarabbit
-    persons-path: ${web.endpoints.root-path}/persons
-    persons-list-path: ${web.endpoints.persons-path}/list
+    persons-list-path: /persons/list
 
 server:
   port: 8080
