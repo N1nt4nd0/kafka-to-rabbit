@@ -34,10 +34,12 @@ spring:
     username: ${K2R_RABBIT_USERNAME}
     password: ${K2R_RABBIT_PASSWORD}
 
-endpoints:
-  root-path: /kafkarabbit
-  persons-path: ${endpoints.root-path}/persons
-  persons-list-path: ${endpoints.persons-path}/list
+web:
+  page-update-interval-ms: 3000
+  endpoints:
+    root-path: /kafkarabbit
+    persons-path: ${web.endpoints.root-path}/persons
+    persons-list-path: ${web.endpoints.persons-path}/list
 
 server:
   port: 8080
@@ -82,9 +84,6 @@ logging:
 
 random-exception-generator:
   person-dto-receive-exception-probability-percent: 20
-
-web-pages:
-  content-update-interval-ms: 3000
 
 dev:
   vlad-exception-generator-probability-percent: 0

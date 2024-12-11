@@ -7,12 +7,12 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class WebPagesConfig {
 
-    @Value("${web-pages.content-update-interval-ms}")
-    private int contentUpdateIntervalMs;
+    @Value("${web.page-update-interval-ms}")
+    private int pageUpdateIntervalMs;
 
     @Bean
-    public int contentUpdateIntervalMs() {
-        return contentUpdateIntervalMs;
+    public int pageUpdateIntervalMs() {
+        return pageUpdateIntervalMs;
     }
 
 }

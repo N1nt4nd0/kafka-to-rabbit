@@ -13,16 +13,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PersonsController {
 
     private final String personsListEndpointPath;
-    private final int contentUpdateIntervalMs;
     private final PersonService personService;
+    private final int pageUpdateIntervalMs;
 
-    @GetMapping("${endpoints.persons-list-path}")
+    @GetMapping("${web.endpoints.persons-list-path}")
     public String personsList(@RequestParam(defaultValue = "0") final int page,
                               @RequestParam(defaultValue = "30") final int size,
                               final Model model) {
         final var pageable = PageRequest.of(page, size);
         final var personsPage = personService.getPersons(pageable);
-        model.addAttribute("updateInterval", contentUpdateIntervalMs);
+        model.addAttribute("updateInterval", pageUpdateIntervalMs);
         model.addAttribute("contentPath", personsListEndpointPath);
         model.addAttribute("contentPage", personsPage);
         return "persons_list";

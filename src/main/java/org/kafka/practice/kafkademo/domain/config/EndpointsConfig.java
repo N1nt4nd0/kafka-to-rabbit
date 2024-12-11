@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EndpointsConfig {
 
-    @Value("${endpoints.persons-list-path}")
+    @Value("${web.endpoints.persons-list-path}")
     private String personsListEndpointPath;
 
     @Bean
