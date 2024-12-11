@@ -65,9 +65,9 @@ logging:
     # Controllers exception handler log level
     org.kafka.practice.kafkademo.domain.config.ControllerExceptionHandler: DEBUG
     # Services log level
-    org.kafka.practice.kafkademo.domain.listeners.RabbitPersonDtoResponseListener: DEBUG
-    org.kafka.practice.kafkademo.domain.listeners.KafkaPersonDtoRequestListener: DEBUG
     org.kafka.practice.kafkademo.domain.service.PersonDtoRedirectService: DEBUG
+    org.kafka.practice.kafkademo.domain.listeners.RabbitDataListener: DEBUG
+    org.kafka.practice.kafkademo.domain.listeners.KafkaDataListener: DEBUG
     # Error handlers log level (TRACE for more info)
     org.kafka.practice.kafkademo.domain.config.RabbitErrorHandler: DEBUG
     org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
@@ -88,4 +88,4 @@ web-pages:
 
 dev:
   vlad-exception-generator-probability-percent: 0
-  nikita-kafka-producer-delay-ms: 2000
+  nikita-kafka-producer-delay-ms: 3000

@@ -11,12 +11,12 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KafkaPersonDtoRequestListener {
+public class KafkaDataListener {
 
     private final PersonDtoRedirectService personDtoRedirectService;
 
     @KafkaListener(topics = "#{@personDtoKafkaReceiveTopic}", groupId = "#{@personDtoKafkaGroupId}")
-    public void receiveKafkaPersonDtoRequest(final PersonDTORequest request) {
+    public void kafkaPersonDtoRequestListener(final PersonDTORequest request) {
         log.debug(StringUnit.equalsRepeat());
         log.debug("Received PersonDtoRequest from kafka: {}", request);
         personDtoRedirectService.receivePersonDtoRequestFromKafka(request);

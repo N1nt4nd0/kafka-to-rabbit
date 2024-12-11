@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RabbitPersonDtoResponseListener {
+public class RabbitDataListener {
 
     private final PersonDtoRedirectService personDtoRedirectService;
 
@@ -22,7 +22,7 @@ public class RabbitPersonDtoResponseListener {
             exchange = @Exchange(value = "#{@personDtoResponseRabbitExchange}", type = "topic"),
             key = "#{@personDtoRabbitRoutingKey}"
     ))
-    public void receivePersonDtoResponse(final PersonDTOResponse response) {
+    public void rabbitPersonDtoResponseListener(final PersonDTOResponse response) {
         log.debug("Received PersonDtoResponse from rabbit: {}", response);
         personDtoRedirectService.receivePersonDtoResponseFromRabbit(response);
     }
