@@ -12,7 +12,7 @@ public class LogHelper {
         if (cause == null) {
             cause = root;
         }
-        logger.error("{} error occurred: {}({})", prefix, cause.getClass().getName(), cause.getMessage());
+        logger.error("{} error occurred: {}. Message: {}", prefix, cause.getClass().getName(), cause.getMessage());
         logger.trace("Error details:", cause);
     }
 
