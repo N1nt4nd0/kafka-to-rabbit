@@ -25,7 +25,7 @@ public class PersonsController {
         model.addAttribute("updateInterval", pageUpdateIntervalMs);
         model.addAttribute("contentPath", personsListEndpointPath);
         model.addAttribute("contentPage", personsPage);
-        return "persons_list";
+        return "personsList";
     }
 
 }
