@@ -6,11 +6,15 @@
 </head>
 <body>
 
-#set($prevPage = $contentPage.number)
-#set($nextPage = $contentPage.number)
 #set($lastPage = $contentPage.totalPages - 1)
 #set($currentPage = $contentPage.number)
+#set($prevPage = $contentPage.number)
+#set($nextPage = $contentPage.number)
 #set($pageSize = $contentPage.size)
+
+#if ($lastPage < 0)
+    #set($lastPage = 0)
+#end
 
 #if ($contentPage.hasPrevious())
     #set($prevPage = $contentPage.number - 1)
