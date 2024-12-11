@@ -26,7 +26,7 @@ public class VelocityConfig {
     public static final String INPUT_ENCODING = "input.encoding";
     public static final String ENCODING_UTF8 = "UTF-8";
     public static final String CLASSPATH = "classpath";
-    public static final String PAGES_TYPE = ".vm";
+    public static final String PAGES_TYPE = ".html";
 
     @Bean
     public VelocityEngine velocityEngine() {
