@@ -12,7 +12,7 @@ public class RabbitErrorHandler {
 
     @Bean
     public ErrorHandler globalRabbitErrorHandler() {
-        return throwable -> LogHelper.logError("Rabbit", throwable, log);
+        return throwable -> LogHelper.logError("Rabbit error occurred", throwable, log);
     }
 
 }

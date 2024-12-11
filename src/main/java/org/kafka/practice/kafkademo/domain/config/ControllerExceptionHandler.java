@@ -13,7 +13,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(Exception.class)
     public String handleControllerGlobalException(final Exception exception, final Model model) {
         model.addAttribute("error", String.valueOf(exception));
-        LogHelper.logError("Controller", exception, log);
+        LogHelper.logError("Controller error occurred", exception, log);
         return "error";
     }
 

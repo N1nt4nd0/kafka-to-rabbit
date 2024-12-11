@@ -23,7 +23,7 @@ public class KafkaErrorHandler {
     public DefaultErrorHandler globalKafkaErrorHandler() {
         return new DefaultErrorHandler((record, exception) -> {
             final var value = record.value();
-            LogHelper.logError("Kafka", exception, log);
+            LogHelper.logError("Kafka error occurred", exception, log);
             if (value instanceof PersonDTORequest request) {
                 log.debug("PersonDtoRequest processing failed: {}", request);
                 final var response = personDtoMapper.personDtoRequestToPersonDtoResponse(request);

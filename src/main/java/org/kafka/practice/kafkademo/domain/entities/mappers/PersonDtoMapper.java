@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
-public interface PersonDtoMapper {
+public interface PersonDtoMapper { //TODO remove
 
     PersonDTORequest toPersonDtoRequest(Person person);
 
