@@ -3,6 +3,7 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 das
+.env
 
 ### STS ###
 .apt_generated
