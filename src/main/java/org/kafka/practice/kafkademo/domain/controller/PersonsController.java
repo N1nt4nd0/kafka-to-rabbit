@@ -20,7 +20,7 @@ public class PersonsController {
 
     @GetMapping("${web.endpoints.persons-list-path}")
     public String personsList(@RequestParam(defaultValue = "0") final int page,
-                              @RequestParam(defaultValue = "30") final int size,
+                              @RequestParam(defaultValue = "15") final int size,
                               final Model model) {
         if (size > pageMaxElementsSize) {
             throw new PageSizeLimitException(pageMaxElementsSize);
