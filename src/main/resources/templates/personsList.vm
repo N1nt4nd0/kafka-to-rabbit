@@ -6,7 +6,10 @@
 </head>
 <body>
 
+#set($totalElements = $contentPage.totalElements)
+#set($viewLastPageNum = $contentPage.totalPages)
 #set($lastPage = $contentPage.totalPages - 1)
+#set($viewPageNum = $contentPage.number + 1)
 #set($currentPage = $contentPage.number)
 #set($prevPage = $contentPage.number)
 #set($nextPage = $contentPage.number)
@@ -42,7 +45,7 @@
     </div>
     <span>|</span>
     <div id="page-info-label">
-        <span>Page: ${currentPage} / ${lastPage}. Total elements: ${contentPage.totalElements}</span>
+        <span>Page: ${viewPageNum} / ${viewLastPageNum}. Total elements: ${totalElements}</span>
     </div>
 </div>
 
