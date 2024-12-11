@@ -13,36 +13,36 @@ import org.springframework.util.ErrorHandler;
 @Configuration
 public class RabbitConfig {
 
-    @Value("${messaging.rabbit.person-dto-redirect-exchange-name}")
-    private String personDtoRedirectExchangeName;
-
-    @Value("${messaging.rabbit.person-dto-response-exchange-name}")
-    private String personDtoResponseExchangeName;
+    @Value("${messaging.rabbit.person-dto-exchange-name}")
+    private String personDtoExchangeName;
 
     @Value("${messaging.rabbit.person-dto-queue-name}")
     private String personDtoQueueName;
 
-    @Value("${messaging.rabbit.person-dto-routing-key}")
-    private String personDtoRoutingKey;
+    @Value("${messaging.rabbit.person-dto-redirect-routing-key}")
+    private String personDtoRedirectKey;
+
+    @Value("${messaging.rabbit.person-dto-response-routing-key}")
+    private String personDtoResponseKey;
 
     @Bean
-    public String personDtoRedirectRabbitExchange() {
-        return personDtoRedirectExchangeName;
+    public String personDtoRabbitExchangeName() {
+        return personDtoExchangeName;
     }
 
     @Bean
-    public String personDtoResponseRabbitExchange() {
-        return personDtoResponseExchangeName;
-    }
-
-    @Bean
-    public String personDtoRabbitQueue() {
+    public String personDtoRabbitQueueName() {
         return personDtoQueueName;
     }
 
     @Bean
-    public String personDtoRabbitRoutingKey() {
-        return personDtoRoutingKey;
+    public String personDtoRabbitRedirectKey() {
+        return personDtoRedirectKey;
+    }
+
+    @Bean
+    public String personDtoRabbitResponseKey() {
+        return personDtoResponseKey;
     }
 
     @Bean
@@ -59,37 +59,38 @@ public class RabbitConfig {
     }
 
     @Bean
+    public DirectExchange personDtoExchange() {
+        return ExchangeBuilder.directExchange(personDtoExchangeName).durable(true).build();
+    }
+
+    @Bean
     public Queue personDtoQueue() {
         return QueueBuilder.durable(personDtoQueueName).build();
     }
 
     @Bean
-    public TopicExchange personDtoRedirectTopicExchange() {
-        return ExchangeBuilder.topicExchange(personDtoRedirectExchangeName).durable(true).build();
+    public Binding bindPersonDtoRedirectQueue(final Queue personDtoQueue,
+                                              final DirectExchange personDtoExchange) {
+        return BindingBuilder
+                .bind(personDtoQueue)
+                .to(personDtoExchange)
+                .with(personDtoRedirectKey);
     }
 
     @Bean
-    public TopicExchange personDtoResponseTopicExchange() {
-        return ExchangeBuilder.topicExchange(personDtoResponseExchangeName).durable(true).build();
+    public Binding bindPersonDtoResponseQueue(final Queue personDtoQueue,
+                                              final DirectExchange personDtoExchange) {
+        return BindingBuilder
+                .bind(personDtoQueue)
+                .to(personDtoExchange)
+                .with(personDtoResponseKey);
     }
 
     @Bean
-    public Binding bindQueueToPersonDtoRedirectExchange(final Queue personDtoQueue,
-                                                        final TopicExchange personDtoRedirectTopicExchange) {
-        return BindingBuilder.bind(personDtoQueue).to(personDtoRedirectTopicExchange).with(personDtoRoutingKey);
-    }
-
-    @Bean
-    public Binding bindQueueToPersonDtoResponseExchange(final Queue personDtoQueue,
-                                                        final TopicExchange personDtoResponseTopicExchange) {
-        return BindingBuilder.bind(personDtoQueue).to(personDtoResponseTopicExchange).with(personDtoRoutingKey);
-    }
-
-    @Bean
-    public SimpleRabbitListenerContainerFactory rabbitListenerFactory(final ConnectionFactory connectionFactory,
-                                                                      final Jackson2JsonMessageConverter rabbitMessageConverter,
-                                                                      final ErrorHandler globalRabbitErrorHandler) {
-        SimpleRabbitListenerContainerFactory factory = new SimpleRabbitListenerContainerFactory();
+    public SimpleRabbitListenerContainerFactory rabbitFactory(final ConnectionFactory connectionFactory,
+                                                              final Jackson2JsonMessageConverter rabbitMessageConverter,
+                                                              final ErrorHandler globalRabbitErrorHandler) {
+        final var factory = new SimpleRabbitListenerContainerFactory();
         factory.setMessageConverter(rabbitMessageConverter);
         factory.setErrorHandler(globalRabbitErrorHandler);
         factory.setConnectionFactory(connectionFactory);

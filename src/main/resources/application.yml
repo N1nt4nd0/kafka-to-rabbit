@@ -53,10 +53,10 @@ server:
 
 messaging:
   rabbit:
-    person-dto-redirect-exchange-name: syntegrico-rabbit-message-queue
-    person-dto-response-exchange-name: syntegrico-rabbit-message-response-queue
+    person-dto-exchange-name: person-dto-exchange
     person-dto-queue-name: person-dto-queue
-    person-dto-routing-key: syntegrico
+    person-dto-redirect-routing-key: person-dto-redirect-key
+    person-dto-response-routing-key: person-dto-response-key
   kafka:
     person-dto-group-id: syntegrico-kafka-group
     person-dto-receive-topic-name: syntegrico-kafka-message-topic

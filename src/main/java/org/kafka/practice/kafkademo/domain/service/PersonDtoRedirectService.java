@@ -22,8 +22,8 @@ public class PersonDtoRedirectService {
     private final PersonDtoMapper personDtoMapper;
     private final PersonService personService;
 
-    private final String personDtoRedirectRabbitExchange;
-    private final String personDtoRabbitRoutingKey;
+    private final String personDtoRabbitExchangeName;
+    private final String personDtoRabbitRedirectKey;
 
     private final String personDtoKafkaResponseTopic;
 
@@ -42,7 +42,7 @@ public class PersonDtoRedirectService {
     }
 
     public void redirectPersonDtoRequestToRabbit(@NonNull final PersonDTORequest request) {
-        rabbitTemplate.convertAndSend(personDtoRedirectRabbitExchange, personDtoRabbitRoutingKey, request);
+        rabbitTemplate.convertAndSend(personDtoRabbitExchangeName, personDtoRabbitRedirectKey, request);
         log.debug("PersonDtoRequest redirected to rabbit: {}", request);
     }
 

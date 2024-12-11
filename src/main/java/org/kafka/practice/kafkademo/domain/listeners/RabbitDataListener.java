@@ -18,9 +18,9 @@ public class RabbitDataListener {
     private final PersonDtoRedirectService personDtoRedirectService;
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "#{@personDtoRabbitQueue}", durable = "true", autoDelete = "false"),
-            exchange = @Exchange(value = "#{@personDtoResponseRabbitExchange}", type = "topic"),
-            key = "#{@personDtoRabbitRoutingKey}"
+            value = @Queue(value = "#{@personDtoRabbitQueueName}"),
+            exchange = @Exchange(value = "#{@personDtoRabbitExchangeName}"),
+            key = "#{@personDtoRabbitResponseKey}"
     ))
     public void rabbitPersonDtoResponseListener(final PersonDTOResponse response) {
         log.debug("Received PersonDtoResponse from rabbit: {}", response);

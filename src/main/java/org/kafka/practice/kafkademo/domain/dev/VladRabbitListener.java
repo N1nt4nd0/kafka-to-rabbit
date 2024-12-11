@@ -20,17 +20,17 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class VladRabbitListener {
 
-    private final String personDtoResponseRabbitExchange;
-    private final String personDtoRabbitRoutingKey;
+    private final String personDtoRabbitExchangeName;
+    private final String personDtoRabbitResponseKey;
 
     private final ExceptionGenerator vladExceptionGenerator;
     private final PersonDtoMapper personDtoMapper;
     private final RabbitTemplate rabbitTemplate;
 
     @RabbitListener(bindings = @QueueBinding(
-            value = @Queue(value = "#{@personDtoRabbitQueue}", durable = "true", autoDelete = "false"),
-            exchange = @Exchange(value = "#{@personDtoRedirectRabbitExchange}", type = "topic"),
-            key = "#{@personDtoRabbitRoutingKey}"
+            value = @Queue(value = "#{@personDtoRabbitQueueName}"),
+            exchange = @Exchange(value = "#{@personDtoRabbitExchangeName}"),
+            key = "#{@personDtoRabbitRedirectKey}"
     ))
     public void receivePersonDtoRequest(final PersonDTORequest request) {
         log.debug("[DEV] Received rabbit PersonDtoRequest as Vlad: {}", request);
@@ -41,7 +41,7 @@ public class VladRabbitListener {
             response.setFail(true);
             log.debug("[DEV] Random exception occurred at Vlad side");
         }
-        rabbitTemplate.convertAndSend(personDtoResponseRabbitExchange, personDtoRabbitRoutingKey, response);
+        rabbitTemplate.convertAndSend(personDtoRabbitExchangeName, personDtoRabbitResponseKey, response);
         log.debug("[DEV] PersonDtoResponse sent as Vlad: {}", response);
     }
 
