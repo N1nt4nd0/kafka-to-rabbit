@@ -35,7 +35,9 @@ spring:
     password: ${K2R_RABBIT_PASSWORD}
 
 web:
-  page-update-interval-ms: 3000
+  pages:
+    update-interval-ms: 3000
+    max-elements-size: 300
   endpoints:
     root-path: /kafkarabbit
     persons-path: ${web.endpoints.root-path}/persons

@@ -7,9 +7,7 @@
 <body>
 
 #set($totalElements = $contentPage.totalElements)
-#set($viewLastPageNum = $contentPage.totalPages)
 #set($lastPage = $contentPage.totalPages - 1)
-#set($viewPageNum = $contentPage.number + 1)
 #set($currentPage = $contentPage.number)
 #set($prevPage = $contentPage.number)
 #set($nextPage = $contentPage.number)
@@ -38,14 +36,14 @@
     <span>|</span>
     <div id="page-input-form">
         <form action="${contentPath}" method="get">
-            <input id="page-input-field" type="number" name="page" min="0" max="${lastPage}" placeholder="Page num" required class="page-input-field">
+            <input type="number" name="page" min="0" placeholder="Page num" required class="page-input-field">
             <input type="hidden" name="size" value="${pageSize}">
             <button type="submit">Go to page</button>
         </form>
     </div>
     <span>|</span>
     <div id="page-info-label">
-        <span>Page: ${viewPageNum} / ${viewLastPageNum}. Total elements: ${totalElements}</span>
+        <span>Page: ${currentPage} / ${lastPage}. Total elements: ${totalElements}</span>
     </div>
 </div>
 
@@ -85,7 +83,6 @@
                 document.getElementById('page-buttons').innerHTML = newDoc.getElementById('page-buttons').innerHTML;
                 document.getElementById('page-info-label').innerHTML = newDoc.getElementById('page-info-label').innerHTML;
                 document.getElementById('content-table').innerHTML = newDoc.getElementById('content-table').innerHTML;
-                document.getElementById('page-input-field').max = newDoc.getElementById('page-input-field').max
             })
             .catch(error => {
                 console.error('Error by updating content:', error);
