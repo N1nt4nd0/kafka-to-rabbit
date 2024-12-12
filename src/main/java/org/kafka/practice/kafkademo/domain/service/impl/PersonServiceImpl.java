@@ -44,6 +44,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    @Transactional
     public void deleteByEmail(@NonNull final String email) {
         log.debug("Starting to delete person by email: {}", email);
         var personByEmailOptional = getByEmail(email);
@@ -63,7 +64,6 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    @Transactional
     public Person createPerson(@NonNull final Person person) {
         return personRepository.save(person);
     }
