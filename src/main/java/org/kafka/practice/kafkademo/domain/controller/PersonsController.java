@@ -2,7 +2,7 @@ package org.kafka.practice.kafkademo.domain.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.kafka.practice.kafkademo.domain.exception.PageSizeLimitException;
-import org.kafka.practice.kafkademo.domain.service.entities.PersonService;
+import org.kafka.practice.kafkademo.domain.service.impl.PersonServiceImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PersonsController {
 
     private final String personsListEndpointPath;
-    private final PersonService personService;
+    private final PersonServiceImpl personService;
     private final int pageUpdateIntervalMs;
     private final int pageMaxElementsSize;
 

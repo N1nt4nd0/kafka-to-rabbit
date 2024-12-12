@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
-import org.kafka.practice.kafkademo.domain.service.PersonDtoRedirectService;
+import org.kafka.practice.kafkademo.domain.service.impl.PersonDtoRedirectServiceImpl;
 import org.kafka.practice.kafkademo.domain.utils.LogHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.DefaultErrorHandler;
@@ -16,7 +16,7 @@ import org.springframework.util.backoff.FixedBackOff;
 @RequiredArgsConstructor
 public class KafkaErrorHandler {
 
-    private final PersonDtoRedirectService personDtoRedirectService;
+    private final PersonDtoRedirectServiceImpl personDtoRedirectService;
     private final PersonMapper personMapper;
 
     @Bean

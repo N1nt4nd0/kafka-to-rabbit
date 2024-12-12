@@ -3,7 +3,7 @@ package org.kafka.practice.kafkademo.domain.listeners;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
-import org.kafka.practice.kafkademo.domain.service.PersonDtoRedirectService;
+import org.kafka.practice.kafkademo.domain.service.impl.PersonDtoRedirectServiceImpl;
 import org.kafka.practice.kafkademo.domain.utils.StringUnit;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 @RequiredArgsConstructor
 public class KafkaDataListener {
 
-    private final PersonDtoRedirectService personDtoRedirectService;
+    private final PersonDtoRedirectServiceImpl personDtoRedirectService;
 
     @KafkaListener(topics = "#{@personDtoKafkaReceiveTopic}", groupId = "#{@personDtoKafkaGroupId}")
     public void kafkaPersonDtoRequestListener(final PersonDTORequest request) {
