@@ -30,10 +30,10 @@ public class PersonServiceImpl implements PersonService {
         if (personByEmailOptional.isPresent()) {
             final var personByEmail = personByEmailOptional.get();
             personToProcess = new Person(personByEmail.getId(), personByEmail.getEmail(), firstName, lastName);
-            log.debug("Person already exist. Try to update person from {} to {}", personByEmail, personToProcess);
+            log.debug("Person already exist, try to update person from {} to {}", personByEmail, personToProcess);
         } else {
             personToProcess = new Person(null, email, firstName, lastName);
-            log.debug("It's a new person. Try to create: {}", personToProcess);
+            log.debug("It's a new person, try to create: {}", personToProcess);
         }
         return createPerson(personToProcess);
     }
