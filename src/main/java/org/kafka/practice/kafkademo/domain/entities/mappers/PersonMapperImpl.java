@@ -1,5 +1,6 @@
 package org.kafka.practice.kafkademo.domain.entities.mappers;
 
+import lombok.NonNull;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
@@ -9,38 +10,44 @@ import org.springframework.stereotype.Component;
 public class PersonMapperImpl implements PersonMapper {
 
     @Override
-    public PersonDTORequest toPersonDtoRequest(Person person) {
-        return new PersonDTORequest(person.getId(), person.getEmail(), person.getFirstName(), person.getLastName());
+    public PersonDTORequest toPersonDtoRequest(@NonNull final Person person) {
+        return new PersonDTORequest(person.getEmail(), person.getFirstName(), person.getLastName());
     }
 
     @Override
-    public Person fromPersonDtoRequest(PersonDTORequest request) {
-        return new Person(request.getId(), request.getEmail(), request.getFirstName(), request.getLastName());
+    public Person fromPersonDtoRequest(@NonNull final PersonDTORequest request) {
+        return new Person(null, request.getEmail(), request.getFirstName(), request.getLastName());
     }
 
     @Override
-    public PersonDTOResponse toPersonDtoResponse(Person person) {
-        return new PersonDTOResponse(person.getId(), person.getEmail(), person.getFirstName(), person.getLastName());
+    public PersonDTOResponse toPersonDtoResponse(@NonNull final Person person) {
+        return new PersonDTOResponse(person.getEmail(), person.getFirstName(), person.getLastName());
     }
 
     @Override
-    public Person fromPersonDtoResponse(PersonDTOResponse response) {
-        return new Person(response.getId(), response.getEmail(), response.getFirstName(), response.getLastName());
+    public Person fromPersonDtoResponse(@NonNull final PersonDTOResponse response) {
+        return new Person(null, response.getEmail(), response.getFirstName(), response.getLastName());
     }
 
     @Override
-    public PersonDTOResponse personDtoRequestToPersonDtoResponse(PersonDTORequest request) {
-        return new PersonDTOResponse(request.getId(), request.getEmail(), request.getFirstName(), request.getLastName());
+    public PersonDTOResponse personDtoRequestToPersonDtoResponse(@NonNull final PersonDTORequest request) {
+        return new PersonDTOResponse(request.getEmail(), request.getFirstName(), request.getLastName());
     }
 
     @Override
-    public PersonDTORequest clonePersonDtoRequest(PersonDTORequest request) {
-        return new PersonDTORequest(request.getId(), request.getEmail(), request.getFirstName(), request.getLastName());
+    public PersonDTORequest clonePersonDtoRequest(@NonNull final PersonDTORequest request) {
+        return new PersonDTORequest(request.getEmail(), request.getFirstName(), request.getLastName());
     }
 
     @Override
-    public PersonDTOResponse clonePersonDtoResponse(PersonDTOResponse response) {
-        return new PersonDTOResponse(response.getId(), response.getEmail(), response.getFirstName(), response.getLastName());
+    public PersonDTOResponse clonePersonDtoResponse(@NonNull final PersonDTOResponse response) {
+        return new PersonDTOResponse(response.getEmail(), response.getFirstName(), response.getLastName());
     }
+
+    @Override
+    public Person clonePerson(@NonNull final Person person) {
+        return new Person(person.getId(), person.getEmail(), person.getFirstName(), person.getLastName());
+    }
+
 
 }

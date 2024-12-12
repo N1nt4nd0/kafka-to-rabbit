@@ -33,11 +33,10 @@ public class PersonDtoRedirectServiceImpl implements PersonDtoRedirectService {
     @Override
     @Transactional
     public void receivePersonDtoRequestFromKafka(@NonNull final PersonDTORequest request) {
-        final var person = personMapper.fromPersonDtoRequest(request);
-        log.debug("Starting to save person at database");
-        final var savedPerson = personService.savePerson(person);
+        final var createdPerson = personService.updateOrCreate(request.getEmail(),
+                request.getFirstName(), request.getLastName());
         personDtoReceiveExceptionGenerator.generateRandomException();
-        log.debug("Person saved successfully. Person: {}", savedPerson);
+        log.debug("Person successfully created: {}", createdPerson);
         final var clonedRequest = personMapper.clonePersonDtoRequest(request);
         redirectPersonDtoRequestToRabbit(clonedRequest);
     }
@@ -51,10 +50,8 @@ public class PersonDtoRedirectServiceImpl implements PersonDtoRedirectService {
     @Override
     public void receivePersonDtoResponseFromRabbit(@NonNull final PersonDTOResponse response) {
         if (response.isFail()) {
-            final var person = personMapper.fromPersonDtoResponse(response);
             log.debug("PersonDtoResponse failed. Deleting person from database");
-            personService.deletePerson(person);
-            log.debug("Person deleted. Person: {}", person);
+            personService.deleteByEmail(response.getEmail());
         }
         final var clonedResponse = personMapper.clonePersonDtoResponse(response);
         sendPersonDtoResponseToKafka(clonedResponse);

@@ -8,8 +8,6 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class KafkaRabbitApplication {
 
-    // TODO make DtoFields final
-    // TODO remove @Setter data from entities, make setters protected
     // TODO make json rest controller request for updating persons data
     // TODO Person: OneToMany (hobbie), ManyToOne (work)
 
