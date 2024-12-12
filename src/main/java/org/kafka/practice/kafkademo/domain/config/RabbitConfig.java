@@ -16,8 +16,11 @@ public class RabbitConfig {
     @Value("${messaging.rabbit.person-dto-exchange-name}")
     private String personDtoExchangeName;
 
-    @Value("${messaging.rabbit.person-dto-queue-name}")
-    private String personDtoQueueName;
+    @Value("${messaging.rabbit.person-dto-redirect-queue-name}")
+    private String personDtoRedirectQueueName;
+
+    @Value("${messaging.rabbit.person-dto-response-queue-name}")
+    private String personDtoResponseQueueName;
 
     @Value("${messaging.rabbit.person-dto-redirect-routing-key}")
     private String personDtoRedirectKey;
@@ -31,8 +34,13 @@ public class RabbitConfig {
     }
 
     @Bean
-    public String personDtoRabbitQueueName() {
-        return personDtoQueueName;
+    public String personDtoRabbitRedirectQueueName() {
+        return personDtoRedirectQueueName;
+    }
+
+    @Bean
+    public String personDtoRabbitResponseQueueName() {
+        return personDtoResponseQueueName;
     }
 
     @Bean
@@ -64,24 +72,29 @@ public class RabbitConfig {
     }
 
     @Bean
-    public Queue personDtoQueue() {
-        return QueueBuilder.durable(personDtoQueueName).build();
+    public Queue personDtoRedirectQueue() {
+        return QueueBuilder.durable(personDtoRedirectQueueName).build();
     }
 
     @Bean
-    public Binding bindPersonDtoRedirectQueue(final Queue personDtoQueue,
+    public Queue personDtoResponseQueue() {
+        return QueueBuilder.durable(personDtoResponseQueueName).build();
+    }
+
+    @Bean
+    public Binding bindPersonDtoRedirectQueue(final Queue personDtoRedirectQueue,
                                               final DirectExchange personDtoExchange) {
         return BindingBuilder
-                .bind(personDtoQueue)
+                .bind(personDtoRedirectQueue)
                 .to(personDtoExchange)
                 .with(personDtoRedirectKey);
     }
 
     @Bean
-    public Binding bindPersonDtoResponseQueue(final Queue personDtoQueue,
+    public Binding bindPersonDtoResponseQueue(final Queue personDtoResponseQueue,
                                               final DirectExchange personDtoExchange) {
         return BindingBuilder
-                .bind(personDtoQueue)
+                .bind(personDtoResponseQueue)
                 .to(personDtoExchange)
                 .with(personDtoResponseKey);
     }

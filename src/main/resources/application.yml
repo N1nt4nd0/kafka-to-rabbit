@@ -8,7 +8,7 @@ spring:
     username: ${K2R_DB_USERNAME}
     password: ${K2R_DB_PASSWORD}
   liquibase:
-    change-log: classpath:db/changelog/db.changelog-master.xml
+    change-log: classpath:db/changelog/changelog.sql
   jpa:
     show-sql: false
     properties:
@@ -54,7 +54,8 @@ server:
 messaging:
   rabbit:
     person-dto-exchange-name: person-dto-exchange
-    person-dto-queue-name: person-dto-queue
+    person-dto-redirect-queue-name: person-dto-redirect-queue
+    person-dto-response-queue-name: person-dto-response-queue
     person-dto-redirect-routing-key: person-dto-redirect-key
     person-dto-response-routing-key: person-dto-response-key
   kafka:
@@ -86,5 +87,5 @@ random-exception-generator:
   person-dto-receive-exception-probability-percent: 20
 
 dev:
-  vlad-exception-generator-probability-percent: 0
+  vlad-exception-generator-probability-percent: 10
   nikita-kafka-producer-delay-ms: 3000
