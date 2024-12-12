@@ -3,7 +3,7 @@ package org.kafka.practice.kafkademo.domain.dev;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.Person;
-import org.kafka.practice.kafkademo.domain.entities.mappers.PersonDtoMapper;
+import org.kafka.practice.kafkademo.domain.entities.mappers.PersonMapper;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -19,7 +19,7 @@ import org.springframework.stereotype.Service;
 public class NikitaScheduler {
 
     private final ObjectFactory<Person> randomPersonGenerator;
-    private final PersonDtoMapper personDtoMapper;
+    private final PersonMapper personMapper;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String personDtoKafkaReceiveTopic;
@@ -27,7 +27,7 @@ public class NikitaScheduler {
     @Scheduled(fixedDelayString = "#{@nikitaKafkaProducerDelayMs}")
     public void sendPersonDtoKafkaRequestAsNikita() {
         final var randomPerson = randomPersonGenerator.getObject();
-        final var request = personDtoMapper.toPersonDtoRequest(randomPerson);
+        final var request = personMapper.toPersonDtoRequest(randomPerson);
         kafkaTemplate.send(personDtoKafkaReceiveTopic, request);
         log.debug("[DEV] PersonDtoRequest sent to kafka by Nikita: {}", request);
     }

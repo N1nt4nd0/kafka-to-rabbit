@@ -1,21 +1,30 @@
 package org.kafka.practice.kafkademo.domain.entities.value;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
+import lombok.ToString;
 
 import java.util.UUID;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@ToString
 public class PersonDTORequest {
 
-    private UUID id;
-    private String email;
-    private String firstName;
-    private String lastName;
+    private final UUID id;
+    private final String email;
+    private final String firstName;
+    private final String lastName;
+
+    @JsonCreator
+    public PersonDTORequest(@JsonProperty("id") final UUID id,
+                            @JsonProperty("email") final String email,
+                            @JsonProperty("firstName") final String firstName,
+                            @JsonProperty("lastName") final String lastName) {
+        this.id = id;
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
 
 }

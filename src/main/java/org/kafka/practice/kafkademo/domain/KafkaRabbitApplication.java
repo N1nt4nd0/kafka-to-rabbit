@@ -10,7 +10,6 @@ public class KafkaRabbitApplication {
 
     // TODO make DtoFields final
     // TODO remove @Setter data from entities, make setters protected
-    // TODO liquidBase changelog in sql files
     // TODO make json rest controller request for updating persons data
     // TODO Person: OneToMany (hobbie), ManyToOne (work)
 

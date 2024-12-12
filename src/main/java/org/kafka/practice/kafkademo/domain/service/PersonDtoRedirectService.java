@@ -3,7 +3,7 @@ package org.kafka.practice.kafkademo.domain.service;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kafka.practice.kafkademo.domain.entities.mappers.PersonDtoMapper;
+import org.kafka.practice.kafkademo.domain.entities.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 import org.kafka.practice.kafkademo.domain.service.entities.PersonService;
@@ -19,8 +19,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class PersonDtoRedirectService {
 
     private final ExceptionGenerator personDtoReceiveExceptionGenerator;
-    private final PersonDtoMapper personDtoMapper;
     private final PersonService personService;
+    private final PersonMapper personMapper;
 
     private final String personDtoRabbitExchangeName;
     private final String personDtoRabbitRedirectKey;
@@ -32,12 +32,12 @@ public class PersonDtoRedirectService {
 
     @Transactional
     public void receivePersonDtoRequestFromKafka(@NonNull final PersonDTORequest request) {
-        final var person = personDtoMapper.fromPersonDtoRequest(request);
+        final var person = personMapper.fromPersonDtoRequest(request);
         log.debug("Starting to save person at database");
         final var savedPerson = personService.savePerson(person);
         personDtoReceiveExceptionGenerator.generateRandomException();
         log.debug("Person saved successfully. Person: {}", savedPerson);
-        final var clonedRequest = personDtoMapper.clonePersonDtoRequest(request);
+        final var clonedRequest = personMapper.clonePersonDtoRequest(request);
         redirectPersonDtoRequestToRabbit(clonedRequest);
     }
 
@@ -48,12 +48,12 @@ public class PersonDtoRedirectService {
 
     public void receivePersonDtoResponseFromRabbit(@NonNull final PersonDTOResponse response) {
         if (response.isFail()) {
-            final var person = personDtoMapper.fromPersonDtoResponse(response);
+            final var person = personMapper.fromPersonDtoResponse(response);
             log.debug("PersonDtoResponse failed. Deleting person from database");
             personService.deletePerson(person);
             log.debug("Person deleted. Person: {}", person);
         }
-        final var clonedResponse = personDtoMapper.clonePersonDtoResponse(response);
+        final var clonedResponse = personMapper.clonePersonDtoResponse(response);
         sendPersonDtoResponseToKafka(clonedResponse);
     }
 

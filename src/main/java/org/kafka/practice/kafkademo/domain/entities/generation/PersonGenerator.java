@@ -19,12 +19,7 @@ public class PersonGenerator {
         final var faker = new Faker();
         final var email = faker.internet().emailAddress();
         final var name = faker.name();
-        return Person.builder()
-                .id(UUID.randomUUID())
-                .email(email)
-                .firstName(name.firstName())
-                .lastName(name.lastName())
-                .build();
+        return new Person(UUID.randomUUID(), email, name.firstName(), name.lastName());
     }
 
     @Bean
