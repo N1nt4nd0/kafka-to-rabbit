@@ -14,7 +14,7 @@ import org.springframework.util.backoff.FixedBackOff;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class KafkaErrorHandler {
+public class KafkaExceptionHandler {
 
     private final PersonDtoRedirectServiceImpl personDtoRedirectService;
     private final PersonMapper personMapper;

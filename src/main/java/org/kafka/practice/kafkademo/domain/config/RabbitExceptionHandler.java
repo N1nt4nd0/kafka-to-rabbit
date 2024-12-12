@@ -8,7 +8,7 @@ import org.springframework.util.ErrorHandler;
 
 @Slf4j
 @Component
-public class RabbitErrorHandler {
+public class RabbitExceptionHandler {
 
     @Bean
     public ErrorHandler globalRabbitErrorHandler() {

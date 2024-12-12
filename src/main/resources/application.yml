@@ -67,8 +67,8 @@ logging:
   level:
     # Exception handlers log level
     org.kafka.practice.kafkademo.domain.config.ControllerExceptionHandler: DEBUG
-    org.kafka.practice.kafkademo.domain.config.RabbitErrorHandler: DEBUG
-    org.kafka.practice.kafkademo.domain.config.KafkaErrorHandler: DEBUG
+    org.kafka.practice.kafkademo.domain.config.RabbitExceptionHandler: DEBUG
+    org.kafka.practice.kafkademo.domain.config.KafkaExceptionHandler: DEBUG
     # Services log level
     org.kafka.practice.kafkademo.domain.service.impl.PersonDtoRedirectServiceImpl: DEBUG
     org.kafka.practice.kafkademo.domain.service.impl.PersonServiceImpl: DEBUG
