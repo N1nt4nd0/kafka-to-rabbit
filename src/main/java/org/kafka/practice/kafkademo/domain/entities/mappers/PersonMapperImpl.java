@@ -16,7 +16,7 @@ public class PersonMapperImpl implements PersonMapper {
 
     @Override
     public Person fromPersonDtoRequest(@NonNull final PersonDTORequest request) {
-        return new Person(null, request.getEmail(), request.getFirstName(), request.getLastName());
+        return new Person(request.getEmail(), request.getFirstName(), request.getLastName());
     }
 
     @Override
@@ -26,7 +26,7 @@ public class PersonMapperImpl implements PersonMapper {
 
     @Override
     public Person fromPersonDtoResponse(@NonNull final PersonDTOResponse response) {
-        return new Person(null, response.getEmail(), response.getFirstName(), response.getLastName());
+        return new Person(response.getEmail(), response.getFirstName(), response.getLastName());
     }
 
     @Override
@@ -43,11 +43,5 @@ public class PersonMapperImpl implements PersonMapper {
     public PersonDTOResponse clonePersonDtoResponse(@NonNull final PersonDTOResponse response) {
         return new PersonDTOResponse(response.getEmail(), response.getFirstName(), response.getLastName());
     }
-
-    @Override
-    public Person clonePerson(@NonNull final Person person) {
-        return new Person(person.getId(), person.getEmail(), person.getFirstName(), person.getLastName());
-    }
-
 
 }

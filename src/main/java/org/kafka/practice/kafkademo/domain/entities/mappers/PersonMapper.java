@@ -20,6 +20,4 @@ public interface PersonMapper {
 
     PersonDTOResponse clonePersonDtoResponse(PersonDTOResponse request);
 
-    Person clonePerson(Person person);
-
 }

@@ -16,7 +16,7 @@ public interface PersonService {
 
     Page<Person> getPersons(Pageable pageable);
 
-    Person createPerson(Person person);
+    Person savePerson(Person person);
 
     void deletePerson(Person person);
 

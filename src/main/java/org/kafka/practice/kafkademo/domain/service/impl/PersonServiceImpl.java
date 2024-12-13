@@ -15,13 +15,13 @@ import java.util.Optional;
 
 @Slf4j
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
 
     @Override
-    @Transactional
     public Person updateOrCreate(@NonNull final String email, @NonNull final String firstName,
                                  @NonNull final String lastName) {
         log.debug("Starting to create or update person at database");
@@ -32,10 +32,10 @@ public class PersonServiceImpl implements PersonService {
             personToProcess = new Person(personByEmail.getId(), personByEmail.getEmail(), firstName, lastName);
             log.debug("Person already exist, try to update person from {} to {}", personByEmail, personToProcess);
         } else {
-            personToProcess = new Person(null, email, firstName, lastName);
+            personToProcess = new Person(email, firstName, lastName);
             log.debug("It's a new person, try to create: {}", personToProcess);
         }
-        return createPerson(personToProcess);
+        return savePerson(personToProcess);
     }
 
     @Override
@@ -44,7 +44,6 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    @Transactional
     public void deleteByEmail(@NonNull final String email) {
         log.debug("Starting to delete person by email: {}", email);
         var personByEmailOptional = getByEmail(email);
@@ -64,7 +63,7 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public Person createPerson(@NonNull final Person person) {
+    public Person savePerson(@NonNull final Person person) {
         return personRepository.save(person);
     }
 

@@ -1,17 +1,17 @@
 package org.kafka.practice.kafkademo.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
-import lombok.ToString;
+import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 
 @Entity
 @Table(name = "persons", schema = "public")
 @Getter
-@ToString //TODO exclude for OneToMany, ManyToOne fields
+@ToString
+@EqualsAndHashCode
 @NoArgsConstructor
 public class Person {
 
@@ -29,7 +29,25 @@ public class Person {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    public Person(final UUID id, @NonNull final String email, @NonNull final String firstName,
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "job_id")
+    private Job job;
+
+    @EqualsAndHashCode.Exclude
+    @ToString.Exclude
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Hobby> hobbies = new ArrayList<>();
+
+    public Person(@NonNull final String email, @NonNull final String firstName,
+                  @NonNull final String lastName) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+    }
+
+    public Person(@NonNull final UUID id, @NonNull final String email, @NonNull final String firstName,
                   @NonNull final String lastName) {
         this.id = id;
         this.email = email;
@@ -51,6 +69,19 @@ public class Person {
 
     protected void setLastName(@NonNull final String lastName) {
         this.lastName = lastName;
+    }
+
+    public void setJob(@NonNull final Job job) {
+        this.job = job;
+    }
+
+    public void addHobby(@NonNull final Hobby hobby) {
+        hobbies.add(hobby);
+        hobby.setPerson(this);
+    }
+
+    public void removeHobby(@NonNull final Hobby hobby) {
+        hobbies.remove(hobby);
     }
 
 }
