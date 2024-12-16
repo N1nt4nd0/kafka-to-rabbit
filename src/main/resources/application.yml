@@ -38,9 +38,13 @@ web:
   pages:
     update-interval-ms: 3000
     page-max-elements-size: 300
-  endpoints:
-    persons-list-path: /persons/list
-    companies-list-path: /companies/list
+    endpoints:
+      persons-list-path: /persons/list
+      companies-list-path: /companies/list
+  rest-api:
+    endpoints:
+      persons-list-api: api/persons/list
+      companies-list-api: api/companies/list
 
 server:
   port: 8080
