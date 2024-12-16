@@ -57,7 +57,7 @@ public class Company {
         person.setCompany(this);
     }
 
-    public void fireEmployee(@NonNull final Person person) {
+    public void dismissEmployee(@NonNull final Person person) {
         employees.remove(person);
         person.removeJob();
     }

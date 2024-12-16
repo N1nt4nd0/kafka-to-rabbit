@@ -33,12 +33,12 @@ public class CompanyBusinessServiceImpl implements CompanyBusinessService {
         final var person = personService.getByEmail(employeeManagementDtoIn.getPersonEmail());
         final var company = companyService.getByCompanyName(employeeManagementDtoIn.getCompanyName());
         String message;
-        if (employeeManagementDtoIn.getHireType() == EmployeeManagementDtoIn.HireType.HIRE) {
+        if (employeeManagementDtoIn.getManagementType() == EmployeeManagementDtoIn.ManagementType.HIRE) {
             company.hireEmployee(person);
             message = "Employee was hired successfully";
         } else {
-            company.fireEmployee(person);
-            message = "Employee was fired successfully";
+            company.dismissEmployee(person);
+            message = "Employee was dismissed successfully";
         }
         final var savedPerson = personService.savePerson(person);
         return new EmployeeManagementDtoOut(savedPerson.getEmail(), company.getCompanyName(), message);

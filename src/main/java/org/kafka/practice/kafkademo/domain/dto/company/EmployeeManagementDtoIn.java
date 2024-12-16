@@ -10,9 +10,9 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class EmployeeManagementDtoIn {
 
-    public enum HireType {
+    public enum ManagementType {
 
-        HIRE, FIRE
+        HIRE, DISMISS
 
     }
 
@@ -21,6 +21,6 @@ public class EmployeeManagementDtoIn {
     @NonNull
     private final String personEmail;
     @NonNull
-    private final HireType hireType;
+    private final ManagementType managementType;
 
 }
