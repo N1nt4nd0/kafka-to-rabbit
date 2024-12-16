@@ -70,8 +70,13 @@ logging:
     org.kafka.practice.kafkademo.domain.config.RabbitExceptionHandler: DEBUG
     org.kafka.practice.kafkademo.domain.config.KafkaExceptionHandler: DEBUG
     # Services log level
-    org.kafka.practice.kafkademo.domain.service.impl.PersonDtoRedirectServiceImpl: DEBUG
-    org.kafka.practice.kafkademo.domain.service.impl.PersonServiceImpl: DEBUG
+    org.kafka.practice.kafkademo.domain.business.service.PersonDtoRedirectBusinessServiceImpl: DEBUG
+    org.kafka.practice.kafkademo.domain.business.service.PersonBusinessServiceImpl: DEBUG
+    org.kafka.practice.kafkademo.domain.business.service.HobbyBusinessServiceImpl: DEBUG
+    org.kafka.practice.kafkademo.domain.business.service.JobBusinessServiceImpl: DEBUG
+    org.kafka.practice.kafkademo.domain.service.PersonServiceImpl: DEBUG
+    org.kafka.practice.kafkademo.domain.service.HobbyServiceImpl: DEBUG
+    org.kafka.practice.kafkademo.domain.service.JobServiceImpl: DEBUG
     # Listeners log level
     org.kafka.practice.kafkademo.domain.listeners.RabbitDataListener: DEBUG
     org.kafka.practice.kafkademo.domain.listeners.KafkaDataListener: DEBUG

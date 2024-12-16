@@ -2,8 +2,8 @@ package org.kafka.practice.kafkademo.domain.dev;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kafka.practice.kafkademo.domain.entities.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
+import org.kafka.practice.kafkademo.domain.dto.mappers.message.PersonDTOMessageMapper;
 import org.kafka.practice.kafkademo.domain.exception.RandomGeneratorException;
 import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
@@ -20,15 +20,15 @@ public class VladRabbitListener {
     private final String personDtoRabbitExchangeName;
     private final String personDtoRabbitResponseKey;
 
+    private final PersonDTOMessageMapper personDTOMessageMapper;
     private final ExceptionGenerator vladExceptionGenerator;
-    private final PersonMapper personMapper;
-    
+
     private final RabbitTemplate rabbitTemplate;
 
     @RabbitListener(queues = "#{@personDtoRabbitRedirectQueueName}")
     public void receivePersonDtoRequest(final PersonDTORequest request) {
         log.debug("[DEV] Received rabbit PersonDtoRequest as Vlad: {}", request);
-        final var response = personMapper.personDtoRequestToPersonDtoResponse(request);
+        final var response = personDTOMessageMapper.personDtoRequestToPersonDtoResponse(request);
         try {
             vladExceptionGenerator.generateRandomException();
         } catch (RandomGeneratorException randomGeneratorException) {

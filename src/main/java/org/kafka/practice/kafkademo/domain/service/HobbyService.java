@@ -1,15 +1,13 @@
 package org.kafka.practice.kafkademo.domain.service;
 
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
-
-import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 public interface HobbyService {
 
-    Optional<Hobby> getByName(String hobbyName);
+    Page<Hobby> getHobbies(Pageable pageable);
 
-    Hobby saveHobby(Hobby hobby);
-
-    void deleteHobby(Hobby hobby);
+    Hobby createHobby(String hobbyName);
 
 }

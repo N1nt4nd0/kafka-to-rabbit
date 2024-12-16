@@ -1,15 +1,14 @@
-package org.kafka.practice.kafkademo.domain.service.impl;
+package org.kafka.practice.kafkademo.domain.service;
 
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
 import org.kafka.practice.kafkademo.domain.repository.HobbyRepository;
-import org.kafka.practice.kafkademo.domain.service.HobbyService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Slf4j
 @Service
@@ -20,18 +19,14 @@ public class HobbyServiceImpl implements HobbyService {
     private final HobbyRepository hobbyRepository;
 
     @Override
-    public Optional<Hobby> getByName(@NonNull final String hobbyName) {
-        return hobbyRepository.findByHobbyName(hobbyName);
+    public Page<Hobby> getHobbies(@NonNull final Pageable pageable) {
+        return hobbyRepository.findAll(pageable);
     }
 
     @Override
-    public Hobby saveHobby(@NonNull final Hobby hobby) {
+    public Hobby createHobby(@NonNull final String hobbyName) {
+        final var hobby = new Hobby(hobbyName);
         return hobbyRepository.save(hobby);
-    }
-
-    @Override
-    public void deleteHobby(@NonNull final Hobby hobby) {
-        hobbyRepository.delete(hobby);
     }
 
 }

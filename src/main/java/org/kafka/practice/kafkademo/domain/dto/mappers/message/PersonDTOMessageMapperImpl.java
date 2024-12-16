@@ -1,32 +1,18 @@
-package org.kafka.practice.kafkademo.domain.entities.mappers;
+package org.kafka.practice.kafkademo.domain.dto.mappers.message;
 
 import lombok.NonNull;
+import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 import org.springframework.stereotype.Component;
 
 @Component
-public class PersonMapperImpl implements PersonMapper {
+public class PersonDTOMessageMapperImpl implements PersonDTOMessageMapper {
 
     @Override
     public PersonDTORequest toPersonDtoRequest(@NonNull final Person person) {
         return new PersonDTORequest(person.getEmail(), person.getFirstName(), person.getLastName());
-    }
-
-    @Override
-    public Person fromPersonDtoRequest(@NonNull final PersonDTORequest request) {
-        return new Person(request.getEmail(), request.getFirstName(), request.getLastName());
-    }
-
-    @Override
-    public PersonDTOResponse toPersonDtoResponse(@NonNull final Person person) {
-        return new PersonDTOResponse(person.getEmail(), person.getFirstName(), person.getLastName());
-    }
-
-    @Override
-    public Person fromPersonDtoResponse(@NonNull final PersonDTOResponse response) {
-        return new Person(response.getEmail(), response.getFirstName(), response.getLastName());
     }
 
     @Override
@@ -42,6 +28,12 @@ public class PersonMapperImpl implements PersonMapper {
     @Override
     public PersonDTOResponse clonePersonDtoResponse(@NonNull final PersonDTOResponse response) {
         return new PersonDTOResponse(response.getEmail(), response.getFirstName(), response.getLastName());
+    }
+
+    @Override
+    public PersonDtoIn personDtoRequestToPersonDtoIn(@NonNull final PersonDTORequest personDTORequest) {
+        return new PersonDtoIn(personDTORequest.getEmail(), personDTORequest.getFirstName(),
+                personDTORequest.getLastName());
     }
 
 }

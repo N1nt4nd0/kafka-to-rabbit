@@ -1,28 +1,34 @@
 package org.kafka.practice.kafkademo.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 
 @Entity
 @Table(name = "hobbies", schema = "public")
 @Getter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 public class Hobby {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "hobby_name", nullable = false)
     private String hobbyName;
 
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = false)
     private Person person;
+
+    public Hobby() {
+    }
 
     public Hobby(@NonNull final String hobbyName) {
         this.hobbyName = hobbyName;
@@ -43,6 +49,10 @@ public class Hobby {
 
     public void setPerson(@NonNull final Person person) {
         this.person = person;
+    }
+
+    public void removePerson() {
+        person = null;
     }
 
 }

@@ -2,9 +2,9 @@ package org.kafka.practice.kafkademo.domain.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kafka.practice.kafkademo.domain.entities.mappers.PersonMapper;
+import org.kafka.practice.kafkademo.domain.business.service.PersonDtoRedirectBusinessServiceImpl;
+import org.kafka.practice.kafkademo.domain.dto.mappers.message.PersonDTOMessageMapper;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
-import org.kafka.practice.kafkademo.domain.service.impl.PersonDtoRedirectServiceImpl;
 import org.kafka.practice.kafkademo.domain.utils.LogHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.DefaultErrorHandler;
@@ -16,8 +16,8 @@ import org.springframework.util.backoff.FixedBackOff;
 @RequiredArgsConstructor
 public class KafkaExceptionHandler {
 
-    private final PersonDtoRedirectServiceImpl personDtoRedirectService;
-    private final PersonMapper personMapper;
+    private final PersonDtoRedirectBusinessServiceImpl personDtoRedirectBusinessService;
+    private final PersonDTOMessageMapper personDTOMessageMapper;
 
     @Bean
     public DefaultErrorHandler globalKafkaErrorHandler() {
@@ -26,9 +26,9 @@ public class KafkaExceptionHandler {
             LogHelper.logError("Kafka error occurred", exception, log);
             if (value instanceof PersonDTORequest request) {
                 log.debug("PersonDtoRequest processing failed: {}", request);
-                final var response = personMapper.personDtoRequestToPersonDtoResponse(request);
+                final var response = personDTOMessageMapper.personDtoRequestToPersonDtoResponse(request);
                 response.setFail(true);
-                personDtoRedirectService.sendPersonDtoResponseToKafka(response);
+                personDtoRedirectBusinessService.sendPersonDtoResponseToKafka(response);
             }
         }, new FixedBackOff(0L, 0L));
     }

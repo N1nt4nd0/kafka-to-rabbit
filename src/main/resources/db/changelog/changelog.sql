@@ -6,7 +6,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 --changeset viacheslav.fedorov@syntegrico.by:create_jobs_table
 CREATE TABLE jobs (
     id BIGSERIAL PRIMARY KEY,
-    job_title VARCHAR(255) NOT NULL
+    job_title VARCHAR(255) NOT NULL UNIQUE
 );
 
 --changeset viacheslav.fedorov@syntegrico.by:create_persons_table

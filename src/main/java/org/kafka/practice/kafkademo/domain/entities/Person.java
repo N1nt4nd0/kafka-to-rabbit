@@ -1,7 +1,10 @@
 package org.kafka.practice.kafkademo.domain.entities;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.NonNull;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,12 +15,11 @@ import java.util.UUID;
 @Getter
 @ToString
 @EqualsAndHashCode
-@NoArgsConstructor
 public class Person {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "id")
     private UUID id;
 
     @Column(name = "email", nullable = false, unique = true)
@@ -29,19 +31,24 @@ public class Person {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
+    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "job_id")
     private Job job;
 
-    @EqualsAndHashCode.Exclude
     @ToString.Exclude
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private final List<Hobby> hobbies = new ArrayList<>();
+    @EqualsAndHashCode.Exclude
+    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    private final List<Hobby> hobbies;
+
+    public Person() {
+        this.hobbies = new ArrayList<>();
+    }
 
     public Person(@NonNull final String email, @NonNull final String firstName,
                   @NonNull final String lastName) {
+        this();
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -49,6 +56,7 @@ public class Person {
 
     public Person(@NonNull final UUID id, @NonNull final String email, @NonNull final String firstName,
                   @NonNull final String lastName) {
+        this();
         this.id = id;
         this.email = email;
         this.firstName = firstName;
@@ -71,6 +79,18 @@ public class Person {
         this.lastName = lastName;
     }
 
+    public boolean haveJob() {
+        return job != null;
+    }
+
+    public boolean haveHobbies() {
+        return !hobbies.isEmpty();
+    }
+
+    public void removeJob() {
+        job = null;
+    }
+
     public void setJob(@NonNull final Job job) {
         this.job = job;
     }
@@ -82,6 +102,7 @@ public class Person {
 
     public void removeHobby(@NonNull final Hobby hobby) {
         hobbies.remove(hobby);
+        hobby.removePerson();
     }
 
 }

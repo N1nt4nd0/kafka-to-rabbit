@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.entities.generation;
+package org.kafka.practice.kafkademo.domain.generation;
 
 import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;

@@ -16,4 +16,11 @@ public class StringUnit {
         return toRepeat.repeat(count);
     }
 
+    public static boolean isEmpty(final String string) {
+        if (string == null) {
+            return false;
+        }
+        return string.trim().isEmpty();
+    }
+
 }
