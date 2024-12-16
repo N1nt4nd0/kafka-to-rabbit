@@ -10,7 +10,7 @@ public class WebPagesConfig {
     @Value("${web.pages.update-interval-ms}")
     private int pageUpdateIntervalMs;
 
-    @Value("${web.pages.max-elements-size}")
+    @Value("${web.pages.page-max-elements-size}")
     private int pageMaxElementsSize;
 
     @Bean

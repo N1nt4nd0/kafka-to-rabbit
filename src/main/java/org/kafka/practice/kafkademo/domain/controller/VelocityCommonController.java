@@ -1,8 +1,7 @@
 package org.kafka.practice.kafkademo.domain.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kafka.practice.kafkademo.domain.business.service.HobbyBusinessService;
-import org.kafka.practice.kafkademo.domain.business.service.JobBusinessService;
+import org.kafka.practice.kafkademo.domain.business.service.CompanyBusinessService;
 import org.kafka.practice.kafkademo.domain.business.service.PersonBusinessService;
 import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
 import org.kafka.practice.kafkademo.domain.utils.WebPageModelUtils;
@@ -16,10 +15,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class VelocityCommonController {
 
+    private final CompanyBusinessService companyBusinessService;
     private final PersonBusinessService personBusinessService;
-    private final JobBusinessService jobBusinessService;
+    private final String companiesListEndpointPath;
     private final String personsListEndpointPath;
-    private final String jobsListEndpointPath;
     private final int pageUpdateIntervalMs;
     private final int pageMaxElementsSize;
 
@@ -33,14 +32,14 @@ public class VelocityCommonController {
         return "personsList";
     }
 
-    @GetMapping("${web.endpoints.jobs-list-path}")
-    public String jobsList(@RequestParam(defaultValue = "0") final int page,
-                           @RequestParam(defaultValue = "15") final int size,
-                           final Model model) {
+    @GetMapping("${web.endpoints.companies-list-path}")
+    public String companiesList(@RequestParam(defaultValue = "0") final int page,
+                                @RequestParam(defaultValue = "15") final int size,
+                                final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
-        final var jobsPage = jobBusinessService.getJobs(PageRequest.of(page, size));
-        WebPageModelUtils.addRequiredAttributes(model, jobsListEndpointPath, jobsPage, pageUpdateIntervalMs);
-        return "jobsList";
+        final var companiesPage = companyBusinessService.getCompanies(PageRequest.of(page, size));
+        WebPageModelUtils.addRequiredAttributes(model, companiesListEndpointPath, companiesPage, pageUpdateIntervalMs);
+        return "companiesList";
     }
 
 

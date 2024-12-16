@@ -3,10 +3,10 @@
 --changeset viacheslav.fedorov@syntegrico.by:create_uuid_generate_extension
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
---changeset viacheslav.fedorov@syntegrico.by:create_jobs_table
-CREATE TABLE jobs (
+--changeset viacheslav.fedorov@syntegrico.by:create_companies_table
+CREATE TABLE companies (
     id BIGSERIAL PRIMARY KEY,
-    job_title VARCHAR(255) NOT NULL UNIQUE
+    company_name VARCHAR(255) NOT NULL UNIQUE
 );
 
 --changeset viacheslav.fedorov@syntegrico.by:create_persons_table
@@ -15,8 +15,8 @@ CREATE TABLE persons (
     email VARCHAR(255) NOT NULL UNIQUE,
     first_name VARCHAR(255) NOT NULL,
     last_name VARCHAR(255) NOT NULL,
-    job_id BIGINT,
-    FOREIGN KEY (job_id) REFERENCES jobs(id) ON DELETE SET NULL
+    company_id BIGINT,
+    FOREIGN KEY (company_id) REFERENCES companies(id) ON DELETE SET NULL
 );
 
 --changeset viacheslav.fedorov@syntegrico.by:create_idx_lower_email

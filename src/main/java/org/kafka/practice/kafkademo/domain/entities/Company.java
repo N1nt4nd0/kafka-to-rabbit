@@ -10,51 +10,51 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "jobs", schema = "public")
+@Table(name = "companies", schema = "public")
 @Getter
 @ToString
 @EqualsAndHashCode
-public class Job {
+public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "job_title", nullable = false, unique = true)
-    private String jobTitle;
+    @Column(name = "company_name", nullable = false, unique = true)
+    private String companyName;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "job", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
     private final List<Person> employees;
 
-    public Job() {
+    public Company() {
         employees = new ArrayList<>();
     }
 
-    public Job(@NonNull final String jobTitle) {
+    public Company(@NonNull final String companyName) {
         this();
-        this.jobTitle = jobTitle;
+        this.companyName = companyName;
     }
 
-    public Job(@NonNull final Long id, @NonNull final String jobTitle) {
+    public Company(@NonNull final Long id, @NonNull final String companyName) {
         this();
         this.id = id;
-        this.jobTitle = jobTitle;
+        this.companyName = companyName;
     }
 
     protected void setId(@NonNull final Long id) {
         this.id = id;
     }
 
-    protected void setJobTitle(@NonNull final String jobTitle) {
-        this.jobTitle = jobTitle;
+    protected void setCompanyName(@NonNull final String companyName) {
+        this.companyName = companyName;
     }
 
     public void hireEmployee(@NonNull final Person person) {
         employees.add(person);
-        person.setJob(this);
+        person.setCompany(this);
     }
 
     public void fireEmployee(@NonNull final Person person) {

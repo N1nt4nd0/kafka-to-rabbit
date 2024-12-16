@@ -4,6 +4,12 @@
     margin-bottom: 10px;
 }
 
+.right-buttons {
+    display: flex;
+    gap: 5px;
+    margin-left: auto;
+}
+
 .page-input-field {
     width: 80px;
     text-align: center;

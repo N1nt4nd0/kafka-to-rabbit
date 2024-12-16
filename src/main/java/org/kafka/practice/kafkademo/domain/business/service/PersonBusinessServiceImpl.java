@@ -12,7 +12,7 @@ import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
 import org.kafka.practice.kafkademo.domain.entities.Person;
-import org.kafka.practice.kafkademo.domain.service.JobService;
+import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.data.domain.Page;
@@ -32,10 +32,10 @@ public class PersonBusinessServiceImpl implements PersonBusinessService {
 
     private final ObjectFactory<Person> randomPersonGenerator;
     private final ObjectFactory<Hobby> randomHobbyGenerator;
+    private final CompanyService companyService;
     private final PersonService personService;
     private final PersonMapper personMapper;
     private final HobbyMapper hobbyMapper;
-    private final JobService jobService;
 
     @Override
     public PersonDtoOut updateOrCreate(@NonNull final PersonDtoIn personDtoIn) {
@@ -67,8 +67,11 @@ public class PersonBusinessServiceImpl implements PersonBusinessService {
         return Stream.generate(randomPersonGenerator::getObject)
                 .limit(fillRandomPersonsDtoIn.getPersonsCount())
                 .map(randomPerson -> {
-                    final var randomJob = jobService.getRandomJob(fillRandomPersonsDtoIn.getJobBound());
-                    randomJob.hireEmployee(randomPerson);
+                    if (new Random().nextBoolean()) {
+                        final var randomCompany = companyService
+                                .getRandomCompany(fillRandomPersonsDtoIn.getCompaniesBound());
+                        randomCompany.hireEmployee(randomPerson);
+                    }
                     Stream.generate(randomHobbyGenerator::getObject)
                             .distinct()
                             .limit(new Random().nextInt(fillRandomPersonsDtoIn.getMaxHobbiesCount()))

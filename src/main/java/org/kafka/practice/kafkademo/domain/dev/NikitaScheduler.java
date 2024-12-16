@@ -2,8 +2,8 @@ package org.kafka.practice.kafkademo.domain.dev;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.dto.mappers.message.PersonDTOMessageMapper;
+import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;

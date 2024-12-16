@@ -10,8 +10,8 @@ public class EndpointsConfig {
     @Value("${web.endpoints.persons-list-path}")
     private String personsListEndpointPath;
 
-    @Value("${web.endpoints.jobs-list-path}")
-    private String jobsListEndpointPath;
+    @Value("${web.endpoints.companies-list-path}")
+    private String companiesListEndpointPath;
 
     @Bean
     public String personsListEndpointPath() {
@@ -19,8 +19,8 @@ public class EndpointsConfig {
     }
 
     @Bean
-    public String jobsListEndpointPath() {
-        return jobsListEndpointPath;
+    public String companiesListEndpointPath() {
+        return companiesListEndpointPath;
     }
 
 }

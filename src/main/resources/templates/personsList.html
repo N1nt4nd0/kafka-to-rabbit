@@ -24,11 +24,11 @@
 
 <div class="pagination-container">
     <div id="page-buttons">
-        <button onclick="window.location='${contentPath}?page=0&size=${contentPage.size}'">First page</button>
-        <button onclick="window.location='${contentPath}?page=${lastPage}&size=${contentPage.size}'">Last page</button>
-        <span>|</span>
         <button onclick="window.location='${contentPath}?page=${prevPage}&size=${contentPage.size}'">Prev page</button>
         <button onclick="window.location='${contentPath}?page=${nextPage}&size=${contentPage.size}'">Next page</button>
+        <span>|</span>
+        <button onclick="window.location='${contentPath}?page=0&size=${contentPage.size}'">First page</button>
+        <button onclick="window.location='${contentPath}?page=${lastPage}&size=${contentPage.size}'">Last page</button>
     </div>
     <span>|</span>
     <div id="page-input-form">
@@ -42,6 +42,10 @@
     <div id="page-info-label">
         <span>Page: ${contentPage.number} / ${lastPage}. Total elements: ${contentPage.totalElements}</span>
     </div>
+    <div class="right-buttons">
+        <button onclick="window.location='/persons/list'">Persons</button>
+        <button onclick="window.location='/companies/list'">Companies</button>
+    </div>
 </div>
 
 <div id="content-table" class="content-table">
@@ -52,7 +56,7 @@
             <th>Email</th>
             <th>First Name</th>
             <th>Last Name</th>
-            <th>Job</th>
+            <th>Company</th>
             <th>Hobbies</th>
         </tr>
         </thead>
@@ -63,7 +67,7 @@
             <td>${person.email}</td>
             <td>${person.firstName}</td>
             <td>${person.lastName}</td>
-            <td>${person.jobTitle}</td>
+            <td>${person.companyName}</td>
             <td>
                 #foreach ($hobby in $person.hobbies)
                 ${hobby}<br>

@@ -6,7 +6,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableTransactionManagement
-public class KafkaRabbitApplication { //TODO job to company!
+public class KafkaRabbitApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(KafkaRabbitApplication.class, args);

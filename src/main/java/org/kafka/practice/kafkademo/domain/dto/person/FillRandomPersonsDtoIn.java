@@ -10,7 +10,7 @@ import lombok.ToString;
 public class FillRandomPersonsDtoIn {
 
     private final int personsCount;
-    private final int jobBound;
+    private final int companiesBound;
     private final int maxHobbiesCount;
 
 }

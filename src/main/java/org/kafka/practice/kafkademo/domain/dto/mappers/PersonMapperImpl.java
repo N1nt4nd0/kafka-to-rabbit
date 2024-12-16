@@ -11,13 +11,13 @@ public class PersonMapperImpl implements PersonMapper {
 
     @Override
     public PersonDtoOut toPersonDtoOut(@NonNull final Person person) {
-        var jobTitle = "";
+        var companyName = "";
         if (person.haveJob()) {
-            jobTitle = person.getJob().getJobTitle();
+            companyName = person.getCompany().getCompanyName();
         }
         final var hobbyList = person.getHobbies().stream().map(Hobby::getHobbyName).toList();
         return new PersonDtoOut(person.getId(), person.getEmail(), person.getFirstName(),
-                person.getLastName(), jobTitle, hobbyList);
+                person.getLastName(), companyName, hobbyList);
     }
 
 }

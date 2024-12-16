@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto.job;
+package org.kafka.practice.kafkademo.domain.dto.company;
 
 import lombok.Getter;
 import lombok.NonNull;
@@ -11,7 +11,7 @@ import lombok.ToString;
 public class EmployeeManagementDtoOut {
 
     @NonNull
-    private final String jobTitle;
+    private final String companyName;
     @NonNull
     private final String personEmail;
     @NonNull

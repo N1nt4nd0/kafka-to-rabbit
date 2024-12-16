@@ -1,8 +1,8 @@
 package org.kafka.practice.kafkademo.domain.generation;
 
 import net.datafaker.Faker;
+import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
-import org.kafka.practice.kafkademo.domain.entities.Job;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -24,10 +24,10 @@ public class EntityGenerator {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)
-    public Job fakeRandomJob() {
+    public Company fakeRandomCompany() {
         final var faker = new Faker();
-        final var job = faker.job();
-        return new Job(job.title());
+        final var company = faker.company();
+        return new Company(company.name());
     }
 
     @Bean
@@ -44,8 +44,8 @@ public class EntityGenerator {
     }
 
     @Bean
-    public ObjectFactory<Job> randomJobGenerator() {
-        return this::fakeRandomJob;
+    public ObjectFactory<Company> randomCompanyGenerator() {
+        return this::fakeRandomCompany;
     }
 
     @Bean

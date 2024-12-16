@@ -22,7 +22,7 @@ public class PersonDtoOut {
     @NonNull
     private final String lastName;
     @NonNull
-    private final String jobTitle;
+    private final String companyName;
     @NonNull
     private final List<String> hobbies;
 

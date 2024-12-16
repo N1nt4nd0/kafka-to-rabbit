@@ -2,8 +2,8 @@ package org.kafka.practice.kafkademo.domain.dev;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.dto.mappers.message.PersonDTOMessageMapper;
+import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.exception.RandomGeneratorException;
 import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;

@@ -34,8 +34,8 @@ public class Person {
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "job_id")
-    private Job job;
+    @JoinColumn(name = "company_id")
+    private Company company;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
@@ -80,7 +80,7 @@ public class Person {
     }
 
     public boolean haveJob() {
-        return job != null;
+        return company != null;
     }
 
     public boolean haveHobbies() {
@@ -88,11 +88,11 @@ public class Person {
     }
 
     public void removeJob() {
-        job = null;
+        company = null;
     }
 
-    public void setJob(@NonNull final Job job) {
-        this.job = job;
+    public void setCompany(@NonNull final Company company) {
+        this.company = company;
     }
 
     public void addHobby(@NonNull final Hobby hobby) {

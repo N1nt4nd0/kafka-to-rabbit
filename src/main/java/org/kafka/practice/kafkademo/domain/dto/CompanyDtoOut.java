@@ -5,12 +5,18 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.util.List;
+
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class JobDtoIn {
+public class CompanyDtoOut {
 
     @NonNull
-    private final String jobTitle;
+    private final Long id;
+    @NonNull
+    private final String companyName;
+    @NonNull
+    private final List<String> employeesEmails;
 
 }
