@@ -14,10 +14,10 @@ public class EndpointsConfig {
     private String companiesListEndpointPath;
 
     @Value("${web.rest-api.endpoints.persons-list-api}")
-    private String personsListEndpointApiPath;
+    private String personsListApiEndpointPath;
 
     @Value("${web.rest-api.endpoints.companies-list-api}")
-    private String companiesListEndpointApiPath;
+    private String companiesListApiEndpointPath;
 
     @Bean
     public String personsListEndpointPath() {
@@ -30,13 +30,13 @@ public class EndpointsConfig {
     }
 
     @Bean
-    public String personsListEndpointApiPath() {
-        return personsListEndpointApiPath;
+    public String personsListApiEndpointPath() {
+        return personsListApiEndpointPath;
     }
 
     @Bean
-    public String companiesListEndpointApiPath() {
-        return companiesListEndpointApiPath;
+    public String companiesListApiEndpointPath() {
+        return companiesListApiEndpointPath;
     }
 
 }

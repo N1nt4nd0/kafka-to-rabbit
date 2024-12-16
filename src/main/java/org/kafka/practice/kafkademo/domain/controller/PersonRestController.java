@@ -1,0 +1,29 @@
+package org.kafka.practice.kafkademo.domain.controller;
+
+import lombok.RequiredArgsConstructor;
+import org.kafka.practice.kafkademo.domain.business.service.PersonBusinessService;
+import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
+import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequiredArgsConstructor
+public class PersonRestController {
+
+    private final PersonBusinessService personBusinessService;
+    private final int pageMaxElementsSize;
+
+    @GetMapping("${web.rest-api.endpoints.persons-list-api}")
+    public ResponseEntity<Page<PersonDtoOut>> personsPage(@RequestParam(defaultValue = "0") final int page,
+                                                          @RequestParam(defaultValue = "100") final int size) {
+        PageableUtils.checkSizeRange(size, pageMaxElementsSize);
+        final var personsPage = personBusinessService.getPersons(PageRequest.of(page, size));
+        return ResponseEntity.ok(personsPage);
+    }
+
+}

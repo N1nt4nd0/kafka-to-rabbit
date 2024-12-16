@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Controller
 @RequiredArgsConstructor
-public class WebMvcCompanyController {
+public class CompanyMvcController {
 
     private final CompanyBusinessService companyBusinessService;
-    private final String companiesListEndpointPath;
+    private final String companiesListApiEndpointPath;
     private final int pageUpdateIntervalMs;
     private final int pageMaxElementsSize;
 
@@ -25,7 +25,7 @@ public class WebMvcCompanyController {
                                 final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
         final var companiesPage = companyBusinessService.getCompanies(PageRequest.of(page, size));
-        WebPageModelUtils.addRequiredAttributes(model, companiesListEndpointPath, companiesPage, pageUpdateIntervalMs);
+        WebPageModelUtils.addRequiredAttributes(model, companiesListApiEndpointPath, companiesPage, pageUpdateIntervalMs);
         return "companiesList";
     }
 
