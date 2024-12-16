@@ -43,8 +43,8 @@
         <span>Page: ${contentPage.number} / ${lastPage}. Total elements: ${contentPage.totalElements}</span>
     </div>
     <div class="right-buttons">
-        <button onclick="window.location='/persons/list'">Persons</button>
-        <button onclick="window.location='/companies/list'">Companies</button>
+        <button onclick="window.location='/persons/list?size=${contentPage.size}'">Persons</button>
+        <button onclick="window.location='/companies/list?size=${contentPage.size}'">Companies</button>
     </div>
 </div>
 

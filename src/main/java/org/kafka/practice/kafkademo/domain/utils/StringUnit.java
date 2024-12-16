@@ -5,7 +5,7 @@ import lombok.NonNull;
 public class StringUnit {
 
     public static String equalsRepeat() {
-        return equalsRepeat(180);
+        return equalsRepeat(120);
     }
 
     public static String equalsRepeat(final int count) {
