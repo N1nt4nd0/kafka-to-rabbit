@@ -24,7 +24,7 @@ public class VelocityCommonController {
 
     @GetMapping("${web.endpoints.persons-list-path}")
     public String personsList(@RequestParam(defaultValue = "0") final int page,
-                              @RequestParam(defaultValue = "15") final int size,
+                              @RequestParam(defaultValue = "100") final int size,
                               final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
         final var personsPage = personBusinessService.getPersons(PageRequest.of(page, size));
@@ -34,7 +34,7 @@ public class VelocityCommonController {
 
     @GetMapping("${web.endpoints.companies-list-path}")
     public String companiesList(@RequestParam(defaultValue = "0") final int page,
-                                @RequestParam(defaultValue = "15") final int size,
+                                @RequestParam(defaultValue = "100") final int size,
                                 final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
         final var companiesPage = companyBusinessService.getCompanies(PageRequest.of(page, size));
