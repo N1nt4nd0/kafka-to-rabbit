@@ -40,6 +40,7 @@ web:
     max-elements-size: 300
   endpoints:
     persons-list-path: /persons/list
+    jobs-list-path: /jobs/list
 
 server:
   port: 8080

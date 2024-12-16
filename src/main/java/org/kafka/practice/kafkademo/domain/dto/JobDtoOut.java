@@ -17,6 +17,6 @@ public class JobDtoOut {
     @NonNull
     private final String jobTitle;
     @NonNull
-    private final List<String> employeeEmails;
+    private final List<String> employeesEmails;
 
 }

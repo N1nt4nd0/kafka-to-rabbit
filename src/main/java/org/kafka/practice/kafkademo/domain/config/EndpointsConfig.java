@@ -10,9 +10,17 @@ public class EndpointsConfig {
     @Value("${web.endpoints.persons-list-path}")
     private String personsListEndpointPath;
 
+    @Value("${web.endpoints.jobs-list-path}")
+    private String jobsListEndpointPath;
+
     @Bean
     public String personsListEndpointPath() {
         return personsListEndpointPath;
+    }
+
+    @Bean
+    public String jobsListEndpointPath() {
+        return jobsListEndpointPath;
     }
 
 }

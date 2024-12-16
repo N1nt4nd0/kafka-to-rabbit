@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="EN">
 <head>
-    <title>Persons</title>
+    <title>Jobs</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
@@ -49,24 +49,18 @@
         <thead>
         <tr>
             <th></th>
-            <th>Email</th>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Job</th>
-            <th>Hobbies</th>
+            <th>Job title</th>
+            <th>Employees emails</th>
         </tr>
         </thead>
         <tbody>
-        #foreach ($person in $contentPage.content)
+        #foreach ($job in $contentPage.content)
         <tr>
             <td></td>
-            <td>${person.email}</td>
-            <td>${person.firstName}</td>
-            <td>${person.lastName}</td>
-            <td>${person.jobTitle}</td>
+            <td>${job.jobTitle}</td>
             <td>
-                #foreach ($hobby in $person.hobbies)
-                ${hobby}<br>
+                #foreach ($email in $job.employeesEmails)
+                ${email}<br>
                 #end
             </td>
         </tr>
@@ -76,10 +70,10 @@
 </div>
 
 <div id="update-content-data"
-    data-content-path="${contentPath}"
-    data-current-page="${contentPage.number}"
-    data-page-size="${contentPage.size}"
-    data-update-interval="${updateInterval}">
+     data-content-path="${contentPath}"
+     data-current-page="${contentPage.number}"
+     data-page-size="${contentPage.size}"
+     data-update-interval="${updateInterval}">
 </div>
 
 <script src="/js/updateContent.js"></script>
