@@ -42,11 +42,15 @@ web:
       persons-list-path: /persons/list
       companies-list-path: /companies/list
   rest-api:
+    name: Kafka To Rabbit API
+    version: 0.0.1
+    author-email: viacheslav.fedorov@syntegrico.by
     endpoints:
       persons-list-api: api/persons/list
       companies-list-api: api/companies/list
 
 server:
+  address: localhost
   port: 8080
   servlet:
     encoding:

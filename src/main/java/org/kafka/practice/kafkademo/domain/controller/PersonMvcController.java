@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class PersonMvcController {
 
     private final PersonBusinessService personBusinessService;
-    private final String personsListApiEndpointPath;
+    private final String personsListEndpointPath;
     private final int pageUpdateIntervalMs;
     private final int pageMaxElementsSize;
 
@@ -25,7 +25,7 @@ public class PersonMvcController {
                               final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
         final var personsPage = personBusinessService.getPersons(PageRequest.of(page, size));
-        WebPageModelUtils.addRequiredAttributes(model, personsListApiEndpointPath, personsPage, pageUpdateIntervalMs);
+        WebPageModelUtils.addRequiredAttributes(model, personsListEndpointPath, personsPage, pageUpdateIntervalMs);
         return "personsList";
     }
 
