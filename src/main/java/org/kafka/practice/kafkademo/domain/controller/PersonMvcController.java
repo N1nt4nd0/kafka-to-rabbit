@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class PersonMvcController {
 
+    private final String personsListApiEndpointPath;
     private final String personsListEndpointPath;
     private final PersonUseCases personUseCases;
     private final int pageUpdateIntervalMs;
@@ -24,9 +25,11 @@ public class PersonMvcController {
                               @RequestParam(defaultValue = "100") final int size,
                               final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
-        final var personsPage = personUseCases.getPersons(PageRequest.of(page, size));
-        WebPageModelUtils.addRequiredAttributes(model, personsListEndpointPath, personsPage, pageUpdateIntervalMs);
-        return "personsList";
+        model.addAttribute("contentApiPath", personsListApiEndpointPath);
+        model.addAttribute("updateInterval", pageUpdateIntervalMs);
+        model.addAttribute("pageNumber", page);
+        model.addAttribute("pageSize", size);
+        return "personsListJs";
     }
 
 }

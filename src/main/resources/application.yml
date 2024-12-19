@@ -36,7 +36,7 @@ spring:
 
 web:
   pages:
-    update-interval-ms: 3000
+    update-interval-ms: 1000
     page-max-elements-size: 300
     endpoints:
       persons-list-path: /persons/list
@@ -46,8 +46,8 @@ web:
     version: 0.0.1
     author-email: viacheslav.fedorov@syntegrico.by
     endpoints:
-      persons-list-api: api/persons/list
-      companies-list-api: api/companies/list
+      persons-list-api: /api/persons/list
+      companies-list-api: /api/companies/list
 
 server:
   address: localhost

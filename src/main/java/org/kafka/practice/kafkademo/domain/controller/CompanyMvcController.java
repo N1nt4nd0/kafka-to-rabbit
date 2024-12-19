@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class CompanyMvcController {
 
+    private final String companiesListApiEndpointPath;
     private final String companiesListEndpointPath;
     private final CompanyUseCases companyUseCases;
     private final int pageUpdateIntervalMs;
@@ -25,7 +26,8 @@ public class CompanyMvcController {
                                 final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
         final var companiesPage = companyUseCases.getCompanies(PageRequest.of(page, size));
-        WebPageModelUtils.addRequiredAttributes(model, companiesListEndpointPath, companiesPage, pageUpdateIntervalMs);
+        WebPageModelUtils.addRequiredAttributes(model, companiesListEndpointPath, companiesListApiEndpointPath,
+                companiesPage, pageUpdateIntervalMs);
         return "companiesList";
     }
 

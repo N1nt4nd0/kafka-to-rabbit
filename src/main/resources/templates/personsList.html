@@ -11,11 +11,19 @@
         #set($lastPage = $contentPage.totalPages - 1)
         #set($prevPage = $contentPage.number - 1)
         #set($nextPage = $contentPage.number + 1)
-        <button #if(!$contentPage.hasPrevious())disabled="disabled"#end onclick="window.location='${contentPath}?page=${prevPage}&size=${contentPage.size}'">Prev page</button>
-        <button #if(!$contentPage.hasNext())disabled="disabled"#end onclick="window.location='${contentPath}?page=${nextPage}&size=${contentPage.size}'">Next page</button>
+        <button #if(!$contentPage.hasPrevious())disabled="disabled" #end
+                onclick="window.location='${contentPath}?page=${prevPage}&size=${contentPage.size}'">Prev page
+        </button>
+        <button #if(!$contentPage.hasNext())disabled="disabled" #end
+                onclick="window.location='${contentPath}?page=${nextPage}&size=${contentPage.size}'">Next page
+        </button>
         <span>|</span>
-        <button #if($contentPage.first)disabled="disabled"#end onclick="window.location='${contentPath}?page=0&size=${contentPage.size}'">First page</button>
-        <button #if($contentPage.last)disabled="disabled"#end onclick="window.location='${contentPath}?page=${lastPage}&size=${contentPage.size}'">Last page</button>
+        <button #if($contentPage.first)disabled="disabled" #end
+                onclick="window.location='${contentPath}?page=0&size=${contentPage.size}'">First page
+        </button>
+        <button #if($contentPage.last)disabled="disabled" #end
+                onclick="window.location='${contentPath}?page=${lastPage}&size=${contentPage.size}'">Last page
+        </button>
     </div>
     <span>|</span>
     <div id="page-input-form">
@@ -67,10 +75,10 @@
 </div>
 
 <div id="update-content-data"
-    data-content-path="${contentPath}"
-    data-current-page="${contentPage.number}"
-    data-page-size="${contentPage.size}"
-    data-update-interval="${updateInterval}">
+     data-content-path="${contentPath}"
+     data-current-page="${contentPage.number}"
+     data-page-size="${contentPage.size}"
+     data-update-interval="${updateInterval}">
 </div>
 
 <script src="/js/updateContent.js"></script>
