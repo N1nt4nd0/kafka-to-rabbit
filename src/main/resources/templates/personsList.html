@@ -1,34 +1,21 @@
 <!DOCTYPE html>
-<html lang="EN">
 <head>
     <title>Persons</title>
+    <meta charset="UTF-8">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
 </head>
 <body>
 
-#set($lastPage = $contentPage.totalPages - 1)
-#set($prevPage = $contentPage.number)
-#set($nextPage = $contentPage.number)
-
-#if ($lastPage < 0)
-#set($lastPage = 0)
-#end
-
-#if ($contentPage.hasPrevious())
-#set($prevPage = $contentPage.number - 1)
-#end
-
-#if ($contentPage.hasNext())
-#set($nextPage = $contentPage.number + 1)
-#end
-
 <div class="pagination-container">
     <div id="page-buttons">
-        <button onclick="window.location='${contentPath}?page=${prevPage}&size=${contentPage.size}'">Prev page</button>
-        <button onclick="window.location='${contentPath}?page=${nextPage}&size=${contentPage.size}'">Next page</button>
+        #set($lastPage = $contentPage.totalPages - 1)
+        #set($prevPage = $contentPage.number - 1)
+        #set($nextPage = $contentPage.number + 1)
+        <button #if(!$contentPage.hasPrevious())disabled="disabled"#end onclick="window.location='${contentPath}?page=${prevPage}&size=${contentPage.size}'">Prev page</button>
+        <button #if(!$contentPage.hasNext())disabled="disabled"#end onclick="window.location='${contentPath}?page=${nextPage}&size=${contentPage.size}'">Next page</button>
         <span>|</span>
-        <button onclick="window.location='${contentPath}?page=0&size=${contentPage.size}'">First page</button>
-        <button onclick="window.location='${contentPath}?page=${lastPage}&size=${contentPage.size}'">Last page</button>
+        <button #if($contentPage.first)disabled="disabled"#end onclick="window.location='${contentPath}?page=0&size=${contentPage.size}'">First page</button>
+        <button #if($contentPage.last)disabled="disabled"#end onclick="window.location='${contentPath}?page=${lastPage}&size=${contentPage.size}'">Last page</button>
     </div>
     <span>|</span>
     <div id="page-input-form">
