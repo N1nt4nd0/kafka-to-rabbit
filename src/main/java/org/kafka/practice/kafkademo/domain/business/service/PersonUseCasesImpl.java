@@ -17,7 +17,6 @@ import org.kafka.practice.kafkademo.domain.exception.NoAnyCompanyException;
 import org.kafka.practice.kafkademo.domain.exception.NoAnyHobbyException;
 import org.kafka.practice.kafkademo.domain.exception.PersonAlreadyHasHobbyException;
 import org.kafka.practice.kafkademo.domain.exception.PersonHaveNotHobbyException;
-import org.kafka.practice.kafkademo.domain.mappers.HobbyMapper;
 import org.kafka.practice.kafkademo.domain.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
