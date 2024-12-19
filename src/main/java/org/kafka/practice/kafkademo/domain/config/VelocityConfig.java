@@ -52,7 +52,8 @@ public class VelocityConfig {
             }
 
             @Override
-            public void render(@NonNull final Map<String, ?> model, @NonNull final HttpServletRequest request,
+            public void render(@NonNull final Map<String, ?> model,
+                               @NonNull final HttpServletRequest request,
                                @NonNull final HttpServletResponse response) throws Exception {
                 final var template = velocityEngine.getTemplate(
                         VELOCITY_PAGES_PATH + viewName + PAGES_TYPE, ENCODING_UTF8);

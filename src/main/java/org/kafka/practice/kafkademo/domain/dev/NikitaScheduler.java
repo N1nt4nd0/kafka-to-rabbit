@@ -2,9 +2,9 @@ package org.kafka.practice.kafkademo.domain.dev;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.dto.mappers.message.PersonDTOMessageMapper;
-import org.kafka.practice.kafkademo.domain.entities.Person;
-import org.springframework.beans.factory.ObjectFactory;
+import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
@@ -19,15 +19,16 @@ import org.springframework.stereotype.Service;
 public class NikitaScheduler {
 
     private final PersonDTOMessageMapper personDTOMessageMapper;
-    private final ObjectFactory<Person> randomPersonGenerator;
 
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String personDtoKafkaReceiveTopic;
 
     @Scheduled(fixedDelayString = "#{@nikitaKafkaProducerDelayMs}")
     public void sendPersonDtoKafkaRequestAsNikita() {
-        final var randomPerson = randomPersonGenerator.getObject();
-        final var request = personDTOMessageMapper.toPersonDtoRequest(randomPerson);
+        final var faker = new Faker();
+        final var email = faker.internet().emailAddress();
+        final var fakerName = faker.name();
+        final var request = new PersonDTORequest(email, fakerName.firstName(), fakerName.lastName());
         kafkaTemplate.send(personDtoKafkaReceiveTopic, request);
         log.debug("[DEV] PersonDtoRequest sent to kafka by Nikita: {}", request);
     }

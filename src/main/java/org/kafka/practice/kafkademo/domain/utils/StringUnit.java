@@ -1,7 +1,5 @@
 package org.kafka.practice.kafkademo.domain.utils;
 
-import lombok.NonNull;
-
 public class StringUnit {
 
     public static String equalsRepeat() {
@@ -12,7 +10,7 @@ public class StringUnit {
         return repeat("=", count);
     }
 
-    public static String repeat(@NonNull final String toRepeat, int count) {
+    public static String repeat(final String toRepeat, int count) {
         return toRepeat.repeat(count);
     }
 

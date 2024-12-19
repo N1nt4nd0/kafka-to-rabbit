@@ -8,6 +8,10 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 public class KafkaRabbitApplication {
 
+    // TODO learn cache levels in hibernate
+    // TODO make mock tests
+    // TODO make ManyToMany for hobbies
+
     public static void main(String[] args) {
         SpringApplication.run(KafkaRabbitApplication.class, args);
     }

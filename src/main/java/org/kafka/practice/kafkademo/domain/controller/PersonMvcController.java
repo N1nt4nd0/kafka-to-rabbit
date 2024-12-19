@@ -1,7 +1,7 @@
 package org.kafka.practice.kafkademo.domain.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kafka.practice.kafkademo.domain.business.service.PersonBusinessService;
+import org.kafka.practice.kafkademo.domain.business.service.PersonUseCases;
 import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
 import org.kafka.practice.kafkademo.domain.utils.WebPageModelUtils;
 import org.springframework.data.domain.PageRequest;
@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class PersonMvcController {
 
-    private final PersonBusinessService personBusinessService;
     private final String personsListEndpointPath;
+    private final PersonUseCases personUseCases;
     private final int pageUpdateIntervalMs;
     private final int pageMaxElementsSize;
 
@@ -24,7 +24,7 @@ public class PersonMvcController {
                               @RequestParam(defaultValue = "100") final int size,
                               final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
-        final var personsPage = personBusinessService.getPersons(PageRequest.of(page, size));
+        final var personsPage = personUseCases.getPersons(PageRequest.of(page, size));
         WebPageModelUtils.addRequiredAttributes(model, personsListEndpointPath, personsPage, pageUpdateIntervalMs);
         return "personsList";
     }

@@ -7,9 +7,8 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class FillRandomPersonsDtoIn {
+public class PersonCountDtoOut {
 
-    private final int personsCount;
-    private final int hobbiesMaxCount;
+    private final long personCount;
 
 }

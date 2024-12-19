@@ -1,9 +1,9 @@
 package org.kafka.practice.kafkademo.domain.service;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.Person;
+import org.kafka.practice.kafkademo.domain.exception.PersonAlreadyExistException;
 import org.kafka.practice.kafkademo.domain.exception.PersonNotFoundByEmailException;
 import org.kafka.practice.kafkademo.domain.repository.PersonRepository;
 import org.springframework.data.domain.Page;
@@ -20,47 +20,46 @@ public class PersonServiceImpl implements PersonService {
     private final PersonRepository personRepository;
 
     @Override
-    public Person updateOrCreate(@NonNull final String email,
-                                 @NonNull final String firstName, @NonNull final String lastName) {
-        log.debug("Starting to create or update person at database");
+    public Person createPerson(final String email, final String firstName, final String lastName) {
+        log.debug("Starting to create new person at database");
         final var personByEmailOptional = personRepository.findByEmailIgnoreCase(email);
-        Person personToProcess;
         if (personByEmailOptional.isPresent()) {
-            final var personByEmail = personByEmailOptional.get();
-            personToProcess = new Person(personByEmail.getId(), personByEmail.getEmail(), firstName, lastName);
-            log.debug("Person already exist, try to update person from {} to {}", personByEmail, personToProcess);
-        } else {
-            personToProcess = new Person(email, firstName, lastName);
-            log.debug("It's a new person, try to create: {}", personToProcess);
+            throw new PersonAlreadyExistException(email);
         }
-        return savePerson(personToProcess);
+        final var newPerson = Person.blankPerson(email, firstName, lastName);
+        return savePerson(newPerson);
     }
 
     @Override
-    public Page<Person> getPersons(@NonNull final Pageable pageable) {
+    public Page<Person> getPersons(final Pageable pageable) {
         return personRepository.findAll(pageable);
     }
 
     @Override
-    public Person getByEmail(@NonNull final String email) {
+    public Person getByEmail(final String email) {
         return personRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new PersonNotFoundByEmailException(email));
     }
 
     @Override
-    public Person savePerson(@NonNull final Person person) {
+    public Person savePerson(final Person person) {
         return personRepository.save(person);
     }
 
     @Override
-    public void deletePerson(@NonNull final Person person) {
+    public void deletePerson(final Person person) {
         personRepository.delete(person);
     }
 
     @Override
-    public void deleteByEmail(@NonNull final String email) {
-        final var person = getByEmail(email);
-        deletePerson(person);
+    public void deleteByEmail(final String email) {
+        final var personByEmail = getByEmail(email);
+        deletePerson(personByEmail);
+    }
+
+    @Override
+    public long getPersonCount() {
+        return personRepository.count();
     }
 
 }

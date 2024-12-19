@@ -14,7 +14,5 @@ public class HobbyDtoOut {
     private final Long id;
     @NonNull
     private final String hobbyName;
-    @NonNull
-    private final String hobbyistEmail;
 
 }

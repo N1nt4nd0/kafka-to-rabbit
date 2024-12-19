@@ -1,6 +1,5 @@
 package org.kafka.practice.kafkademo.domain.service;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
@@ -19,14 +18,8 @@ public class HobbyServiceImpl implements HobbyService {
     private final HobbyRepository hobbyRepository;
 
     @Override
-    public Page<Hobby> getHobbies(@NonNull final Pageable pageable) {
+    public Page<Hobby> getHobbies(final Pageable pageable) {
         return hobbyRepository.findAll(pageable);
-    }
-
-    @Override
-    public Hobby createHobby(@NonNull final String hobbyName) {
-        final var hobby = new Hobby(hobbyName);
-        return hobbyRepository.save(hobby);
     }
 
 }

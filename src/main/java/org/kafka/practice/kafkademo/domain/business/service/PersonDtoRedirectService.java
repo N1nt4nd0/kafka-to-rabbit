@@ -3,7 +3,7 @@ package org.kafka.practice.kafkademo.domain.business.service;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 
-public interface PersonDtoRedirectBusinessService {
+public interface PersonDtoRedirectService {
 
     void receivePersonDtoRequestFromKafka(PersonDTORequest request);
 

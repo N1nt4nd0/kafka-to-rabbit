@@ -24,6 +24,6 @@ public class PersonDtoOut {
     @NonNull
     private final String companyName;
     @NonNull
-    private final List<String> hobbies;
+    private final List<HobbyDtoOut> hobbies;
 
 }

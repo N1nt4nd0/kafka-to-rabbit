@@ -54,7 +54,6 @@
         <tr>
             <th></th>
             <th>Company name</th>
-            <th>Employees emails</th>
         </tr>
         </thead>
         <tbody>
@@ -62,11 +61,6 @@
         <tr>
             <td></td>
             <td>${company.companyName}</td>
-            <td>
-                #foreach ($email in $company.employeesEmails)
-                ${email}<br>
-                #end
-            </td>
         </tr>
         #end
         </tbody>

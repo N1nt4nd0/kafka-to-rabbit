@@ -1,24 +1,17 @@
 package org.kafka.practice.kafkademo.domain.service;
 
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.exception.CompanyNotFoundByNameException;
-import org.kafka.practice.kafkademo.domain.exception.FillRandomCompaniesException;
-import org.kafka.practice.kafkademo.domain.exception.GetRandomCompanyOutOfBoundsException;
-import org.kafka.practice.kafkademo.domain.exception.NoAnyCompanyException;
 import org.kafka.practice.kafkademo.domain.repository.CompanyRepository;
-import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Random;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -26,66 +19,53 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
-    private final ObjectFactory<Company> randomCompanyGenerator;
     private final CompanyRepository companyRepository;
+    private final int pageMaxElementsSize;
 
     @Override
-    public Page<Company> getCompanies(@NonNull final Pageable pageable) {
+    public Page<Company> getCompanies(final Pageable pageable) {
         return companyRepository.findAll(pageable);
     }
 
     @Override
-    public Company getByCompanyName(@NonNull final String companyName) {
+    public Company getRandomCompany() {
+        final var companyPage = getCompanies(PageRequest.of(0, pageMaxElementsSize));
+        final var companyList = companyPage.getContent();
+        final var randomCompanyIndex = new Random().nextInt(companyList.size());
+        return companyList.get(randomCompanyIndex);
+    }
+
+    @Override
+    public Company getByCompanyName(final String companyName) {
         return companyRepository.findByCompanyName(companyName)
                 .orElseThrow(() -> new CompanyNotFoundByNameException(companyName));
     }
 
     @Override
-    public Company getRandomCompany(final int bound) {
-        final var companiesCount = companyRepository.count();
-        if (companiesCount == 0) {
-            throw new NoAnyCompanyException();
-        } else if (bound > companiesCount) {
-            throw new GetRandomCompanyOutOfBoundsException(bound, companiesCount);
-        }
-        final int randomCompanyIndex = new Random().nextInt(bound);
-        final var companiesPage = getCompanies(PageRequest.of(0, bound));
-        return companiesPage.getContent().get(randomCompanyIndex);
+    public Company createNewCompany(final String companyName) {
+        final var newCompany = Company.blankCompany(companyName);
+        return saveCompany(newCompany);
     }
 
     @Override
-    public List<Company> fillRandomCompanies(final int count) {
-        final var companiesCount = companyRepository.count();
-        if (companiesCount > 0) {
-            throw new FillRandomCompaniesException("Can execute only if companies database is empty");
-        }
-        final var randomCompaniesList = Stream.generate(randomCompanyGenerator::getObject)
-                .distinct()
-                .limit(count)
-                .toList();
-        return randomCompaniesList.stream().peek(this::saveCompany).toList();
+    public void deleteByCompanyName(final String companyName) {
+        final var companyByName = getByCompanyName(companyName);
+        deleteCompany(companyByName);
     }
 
     @Override
-    public Company createNewCompany(@NonNull final String companyName) {
-        final var company = new Company(companyName);
-        return saveCompany(company);
-    }
-
-    @Override
-    public Company saveCompany(@NonNull final Company company) {
+    public Company saveCompany(final Company company) {
         return companyRepository.save(company);
     }
 
     @Override
-    public void deleteCompany(@NonNull final Company company) {
+    public void deleteCompany(final Company company) {
         companyRepository.delete(company);
     }
 
     @Override
-    public void deleteByCompanyName(@NonNull final String companyName) {
-        final var company = getByCompanyName(companyName);
-        deleteCompany(company);
+    public long getCompanyCount() {
+        return companyRepository.count();
     }
 
 }

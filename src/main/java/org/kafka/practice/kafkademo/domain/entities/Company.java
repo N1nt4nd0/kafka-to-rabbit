@@ -1,65 +1,37 @@
 package org.kafka.practice.kafkademo.domain.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
-import lombok.NonNull;
+import lombok.NoArgsConstructor;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Entity
-@Table(name = "companies", schema = "public")
+@Table(name = "company")
 @Getter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
 public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private final Long id;
 
     @Column(name = "company_name", nullable = false, unique = true)
-    private String companyName;
+    private final String companyName;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "company", fetch = FetchType.LAZY)
-    private final List<Person> employees;
-
-    public Company() {
-        employees = new ArrayList<>();
-    }
-
-    public Company(@NonNull final String companyName) {
-        this();
-        this.companyName = companyName;
-    }
-
-    public Company(@NonNull final Long id, @NonNull final String companyName) {
-        this();
-        this.id = id;
-        this.companyName = companyName;
-    }
-
-    protected void setId(@NonNull final Long id) {
-        this.id = id;
-    }
-
-    protected void setCompanyName(@NonNull final String companyName) {
-        this.companyName = companyName;
-    }
-
-    public void hireEmployee(@NonNull final Person person) {
-        employees.add(person);
-        person.setCompany(this);
-    }
-
-    public void dismissEmployee(@NonNull final Person person) {
-        employees.remove(person);
-        person.removeJob();
+    public static Company blankCompany(final String companyName) {
+        return new Company(null, companyName);
     }
 
 }

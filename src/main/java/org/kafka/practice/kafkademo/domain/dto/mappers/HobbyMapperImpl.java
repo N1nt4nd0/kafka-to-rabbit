@@ -1,6 +1,5 @@
 package org.kafka.practice.kafkademo.domain.dto.mappers;
 
-import lombok.NonNull;
 import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
@@ -11,18 +10,18 @@ import org.springframework.stereotype.Component;
 public class HobbyMapperImpl implements HobbyMapper {
 
     @Override
-    public HobbyDtoOut toHobbyDtoOut(@NonNull final Hobby hobby) {
-        return new HobbyDtoOut(hobby.getId(), hobby.getHobbyName(), hobby.getPerson().getEmail());
+    public HobbyDtoOut toHobbyDtoOut(final Hobby hobby) {
+        return new HobbyDtoOut(hobby.getId(), hobby.getHobbyName());
     }
 
     @Override
-    public Hobby fromPersonAddHobbyDto(@NonNull final AddPersonHobbyDtoIn addPersonHobbyDto) {
-        return new Hobby(addPersonHobbyDto.getHobbyName());
+    public Hobby fromPersonAddHobbyDto(final AddPersonHobbyDtoIn addPersonHobbyDto) {
+        return Hobby.blankHobby(addPersonHobbyDto.getHobbyName());
     }
 
     @Override
-    public Hobby fromPersonRemoveHobbyDto(@NonNull final RemovePersonHobbyDtoIn removePersonHobbyDto) {
-        return new Hobby(removePersonHobbyDto.getHobbyName());
+    public Hobby fromPersonRemoveHobbyDto(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
+        return new Hobby(removePersonHobbyDto.getHobbyId(), removePersonHobbyDto.getHobbyName(), null);
     }
 
 }

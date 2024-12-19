@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 
 public interface PersonService {
 
-    Person updateOrCreate(String email, String firstName, String lastName);
+    Person createPerson(String email, String firstName, String lastName);
 
     Page<Person> getPersons(Pageable pageable);
 
@@ -17,5 +17,7 @@ public interface PersonService {
     void deletePerson(Person person);
 
     void deleteByEmail(String email);
+
+    long getPersonCount();
 
 }

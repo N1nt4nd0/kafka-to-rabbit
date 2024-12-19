@@ -8,6 +8,4 @@ public interface HobbyService {
 
     Page<Hobby> getHobbies(Pageable pageable);
 
-    Hobby createHobby(String hobbyName);
-
 }
