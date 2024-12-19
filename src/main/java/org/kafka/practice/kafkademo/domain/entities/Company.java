@@ -19,16 +19,16 @@ import lombok.ToString;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private final Long id;
+    private Long id;
 
     @Column(name = "company_name", nullable = false, unique = true)
-    private final String companyName;
+    private String companyName;
 
     public static Company blankCompany(final String companyName) {
         return new Company(null, companyName);

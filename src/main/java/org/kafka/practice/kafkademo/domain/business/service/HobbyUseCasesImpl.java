@@ -12,7 +12,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class HobbyUseCasesImpl implements HobbyUseCases {
 
@@ -20,6 +19,7 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
     private final HobbyMapper hobbyMapper;
 
     @Override
+    @Transactional
     public Page<HobbyDtoOut> getHobbies(final Pageable pageable) {
         return hobbyService.getHobbies(pageable).map(hobbyMapper::toHobbyDtoOut);
     }

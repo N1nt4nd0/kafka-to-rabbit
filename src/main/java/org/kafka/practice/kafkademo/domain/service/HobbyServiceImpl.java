@@ -11,15 +11,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class HobbyServiceImpl implements HobbyService {
 
     private final HobbyRepository hobbyRepository;
 
     @Override
+    @Transactional
     public Page<Hobby> getHobbies(final Pageable pageable) {
         return hobbyRepository.findAll(pageable);
+    }
+
+    @Override
+    @Transactional
+    public void deleteHobby(final Hobby hobby) {
+        hobbyRepository.delete(hobby);
     }
 
 }

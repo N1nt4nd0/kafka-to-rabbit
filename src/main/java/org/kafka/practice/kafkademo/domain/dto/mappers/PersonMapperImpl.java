@@ -14,7 +14,7 @@ public class PersonMapperImpl implements PersonMapper {
     @Override
     public PersonDtoOut toPersonDtoOut(final Person person) {
         var companyName = "";
-        if (person.haveJob()) {
+        if (person.hasJob()) {
             companyName = person.getCompany().getCompanyName();
         }
         final var hobbyList = person.getHobbies().stream().map(hobbyMapper::toHobbyDtoOut).toList();

@@ -11,116 +11,103 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
-import org.hibernate.annotations.Immutable;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
-import java.util.stream.Stream;
 
 @Entity
 @Table(name = "person")
 @Getter
 @ToString
 @EqualsAndHashCode
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Person {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private final UUID id;
+    private UUID id;
 
     @Column(name = "email", nullable = false, unique = true)
-    private final String email;
+    private String email;
 
     @Column(name = "first_name", nullable = false)
-    private final String firstName;
+    private String firstName;
 
     @Column(name = "last_name", nullable = false)
-    private final String lastName;
+    private String lastName;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
-    private final Company company;
+    private Company company;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private final List<Hobby> hobbies;
+    private List<Hobby> hobbies;
 
-    protected Person() {
-        this.id = null;
-        this.email = null;
-        this.firstName = null;
-        this.lastName = null;
-        this.company = null;
-        this.hobbies = new ArrayList<>();
+    public static Person blankPerson(@NonNull final String email,
+                                     @NonNull final String firstName,
+                                     @NonNull final String lastName) {
+        return new Person(null, email, firstName, lastName, null, List.of());
     }
 
-    private Person(final UUID id,
-                   final String email,
-                   final String firstName,
-                   final String lastName,
-                   final Company company,
-                   final List<Hobby> hobbies) {
-        this.id = id;
-        this.email = email;
-        this.firstName = firstName;
-        this.lastName = lastName;
-        if (company == null) {
-            this.company = null;
-        } else {
-            this.company = new Company(company.getId(), company.getCompanyName());
-        }
-        this.hobbies = hobbies.stream()
-                .map(hobby -> new Hobby(hobby.getId(), hobby.getHobbyName(), this))
-                .toList();
+    public Person withAddedHobby(final Hobby hobby) {
+        final var newHobbies = new ArrayList<>(hobbies);
+        final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
+        newHobbies.add(new Hobby(hobby.getId(), hobby.getHobbyName(), newPerson));
+        return newPerson;
     }
 
-    public Person withAddedHobbies(@NonNull final List<Hobby> hobbiesToAdd) {
-        return new Person(id, email, firstName, lastName, company,
-                Stream.of(hobbies, hobbiesToAdd).flatMap(Collection::stream).toList());
-    }
-
-    public Person withAddedHobby(@NonNull final Hobby hobbyToAdd) {
-        final var updatedHobbies = new ArrayList<>(hobbies);
-        updatedHobbies.add(hobbyToAdd);
-        return new Person(id, email, firstName, lastName, company, updatedHobbies);
-    }
-
-    public Person withRemovedHobby(@NonNull final Hobby hobbyToRemove) {
-        final var updatedHobbies = new ArrayList<>(hobbies);
-        updatedHobbies.remove(hobbyToRemove);
-        return new Person(id, email, firstName, lastName, company, updatedHobbies);
+    public Person withRemovedHobby(final Hobby hobby) {
+        final var newHobbies = new ArrayList<>(hobbies);
+        final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
+        newHobbies.remove(hobby);
+        return newPerson;
     }
 
     public Person withCompany(final Company company) {
-        return new Person(id, email, firstName, lastName, company, hobbies);
+        return new Person(id, email, firstName, lastName, company, new ArrayList<>(hobbies));
     }
 
     public Person withoutCompany() {
         return withCompany(null);
     }
 
-    public boolean haveJob() {
+    public Person withAddedHobbies(final List<Hobby> addedHobbies) {
+        final var newHobbies = new ArrayList<>(hobbies);
+        final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
+        addedHobbies.stream()
+                .map(hobby -> new Hobby(hobby.getId(), hobby.getHobbyName(), newPerson))
+                .forEach(newHobbies::add);
+        return newPerson;
+    }
+
+    public boolean isCompanyEmployee(final Company company) {
+        return hasJob() && this.company.equals(company);
+    }
+
+    public boolean hasJob() {
         return company != null;
     }
 
-    public boolean haveHobbies() {
+    public boolean hasHobbies() {
         return !hobbies.isEmpty();
     }
 
-    public static Person blankPerson(@NonNull final String email,
-                                     @NonNull final String firstName,
-                                     @NonNull final String lastName) {
-        return new Person(null, email, firstName, lastName, null, List.of());
+    public boolean hasHobby(final Hobby hobby) {
+        return hasHobbies() && hobbies.contains(hobby);
     }
 
 }

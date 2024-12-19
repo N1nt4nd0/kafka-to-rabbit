@@ -12,9 +12,9 @@ import org.kafka.practice.kafkademo.domain.business.company.EmployeeManagementTy
 public class EmployeeManagementDtoIn {
 
     @NonNull
-    private final String companyName;
-    @NonNull
     private final String personEmail;
+    @NonNull
+    private final String companyName;
     @NonNull
     private final EmployeeManagementType managementType;
 

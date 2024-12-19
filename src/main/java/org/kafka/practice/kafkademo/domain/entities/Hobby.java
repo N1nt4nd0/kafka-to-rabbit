@@ -15,7 +15,6 @@ import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
-import org.hibernate.annotations.Immutable;
 
 @Entity
 @Table(name = "hobby")
@@ -23,22 +22,22 @@ import org.hibernate.annotations.Immutable;
 @ToString
 @EqualsAndHashCode
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hobby {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private final Long id;
+    private Long id;
 
     @Column(name = "hobby_name", nullable = false)
-    private final String hobbyName;
+    private String hobbyName;
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "person_id", nullable = false)
-    private final Person person;
+    private Person person;
 
     public static Hobby blankHobby(final String hobbyName) {
         return new Hobby(null, hobbyName, null);

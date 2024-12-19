@@ -11,6 +11,7 @@ public class KafkaRabbitApplication {
     // TODO learn cache levels in hibernate
     // TODO make mock tests
     // TODO make ManyToMany for hobbies
+    // TODO company, hobby dto send only ids
 
     public static void main(String[] args) {
         SpringApplication.run(KafkaRabbitApplication.class, args);

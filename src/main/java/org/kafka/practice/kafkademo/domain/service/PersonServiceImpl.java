@@ -13,13 +13,13 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class PersonServiceImpl implements PersonService {
 
     private final PersonRepository personRepository;
 
     @Override
+    @Transactional
     public Person createPerson(final String email, final String firstName, final String lastName) {
         log.debug("Starting to create new person at database");
         final var personByEmailOptional = personRepository.findByEmailIgnoreCase(email);
@@ -31,33 +31,39 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    @Transactional
     public Page<Person> getPersons(final Pageable pageable) {
         return personRepository.findAll(pageable);
     }
 
     @Override
+    @Transactional
     public Person getByEmail(final String email) {
         return personRepository.findByEmailIgnoreCase(email)
                 .orElseThrow(() -> new PersonNotFoundByEmailException(email));
     }
 
     @Override
+    @Transactional
     public Person savePerson(final Person person) {
         return personRepository.save(person);
     }
 
     @Override
+    @Transactional
     public void deletePerson(final Person person) {
         personRepository.delete(person);
     }
 
     @Override
+    @Transactional
     public void deleteByEmail(final String email) {
         final var personByEmail = getByEmail(email);
         deletePerson(personByEmail);
     }
 
     @Override
+    @Transactional
     public long getPersonCount() {
         return personRepository.count();
     }

@@ -8,4 +8,6 @@ public interface HobbyService {
 
     Page<Hobby> getHobbies(Pageable pageable);
 
+    void deleteHobby(Hobby hobby);
+
 }
