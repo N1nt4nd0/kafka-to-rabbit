@@ -12,7 +12,6 @@ public class RemovePersonHobbyDtoIn {
 
     @NonNull
     private final String email;
-    private final long hobbyId;
     @NonNull
     private final String hobbyName;
 

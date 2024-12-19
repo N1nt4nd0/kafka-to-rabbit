@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto.mappers.message;
+package org.kafka.practice.kafkademo.domain.mappers.message;
 
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;

@@ -8,8 +8,6 @@ public interface CompanyService {
 
     Page<Company> getCompanies(Pageable pageable);
 
-    Company getRandomCompany();
-
     Company getByCompanyName(String companyName);
 
     Company createNewCompany(String companyName);

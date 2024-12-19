@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto.mappers;
+package org.kafka.practice.kafkademo.domain.mappers;
 
 import lombok.RequiredArgsConstructor;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;

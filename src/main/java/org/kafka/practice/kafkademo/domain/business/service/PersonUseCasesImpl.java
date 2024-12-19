@@ -6,8 +6,6 @@ import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.mappers.HobbyMapper;
-import org.kafka.practice.kafkademo.domain.dto.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonCountDtoOut;
@@ -15,8 +13,12 @@ import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
 import org.kafka.practice.kafkademo.domain.entities.Person;
-import org.kafka.practice.kafkademo.domain.exception.HobbyNotFoundException;
 import org.kafka.practice.kafkademo.domain.exception.NoAnyCompanyException;
+import org.kafka.practice.kafkademo.domain.exception.NoAnyHobbyException;
+import org.kafka.practice.kafkademo.domain.exception.PersonAlreadyHasHobbyException;
+import org.kafka.practice.kafkademo.domain.exception.PersonHaveNotHobbyException;
+import org.kafka.practice.kafkademo.domain.mappers.HobbyMapper;
+import org.kafka.practice.kafkademo.domain.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
@@ -26,8 +28,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -39,7 +41,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
     private final HobbyService hobbyService;
     private final PersonMapper personMapper;
     private final int pageMaxElementsSize;
-    private final HobbyMapper hobbyMapper;
+    private final Faker dataFaker;
 
     @Override
     @Transactional
@@ -53,7 +55,10 @@ public class PersonUseCasesImpl implements PersonUseCases {
     @Transactional
     public PersonDtoOut addHobby(final AddPersonHobbyDtoIn addPersonHobbyDto) {
         final var personByEmail = personService.getByEmail(addPersonHobbyDto.getEmail());
-        final var hobby = new Hobby(null, addPersonHobbyDto.getHobbyName(), personByEmail);
+        final var hobby = hobbyService.getByHobbyName(addPersonHobbyDto.getHobbyName());
+        if (personByEmail.hasHobby(hobby)) {
+            throw new PersonAlreadyHasHobbyException(personByEmail.getEmail(), hobby.getHobbyName());
+        }
         final var savedPerson = personService.savePerson(personByEmail.withAddedHobby(hobby));
         return personMapper.toPersonDtoOut(savedPerson);
     }
@@ -62,13 +67,12 @@ public class PersonUseCasesImpl implements PersonUseCases {
     @Transactional
     public PersonDtoOut removeHobby(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
         final var personByEmail = personService.getByEmail(removePersonHobbyDto.getEmail());
-        final var hobby = hobbyMapper.fromPersonRemoveHobbyDto(removePersonHobbyDto);
+        final var hobby = hobbyService.getByHobbyName(removePersonHobbyDto.getHobbyName());
         if (personByEmail.hasHobby(hobby)) {
-            hobbyService.deleteHobby(hobby);
             final var savedPerson = personService.savePerson(personByEmail.withRemovedHobby(hobby));
             return personMapper.toPersonDtoOut(savedPerson);
         } else {
-            throw new HobbyNotFoundException(hobby.getHobbyName(), hobby.getId());
+            throw new PersonHaveNotHobbyException(personByEmail.getEmail(), hobby.getHobbyName());
         }
     }
 
@@ -78,28 +82,30 @@ public class PersonUseCasesImpl implements PersonUseCases {
         if (companyService.getCompanyCount() == 0) {
             throw new NoAnyCompanyException();
         }
-        final var companyPage = companyService.getCompanies(PageRequest.of(0, pageMaxElementsSize));
-        final var companyList = companyPage.getContent();
+        if (hobbyService.getHobbyCount() == 0) {
+            throw new NoAnyHobbyException();
+        }
+        final var pageable = PageRequest.of(0, pageMaxElementsSize);
+        final var companyList = companyService.getCompanies(pageable).getContent();
+        final var hobbyList = hobbyService.getHobbies(pageable).getContent();
         final var random = new Random();
-        final var faker = new Faker();
         var filledCount = 0;
-        for (int i = 0; i < fillRandomPersonsDtoIn.getPersonsCount(); i++) {
-            final var email = faker.internet().emailAddress();
-            final var fakerHobby = faker.hobby();
-            final var fakerName = faker.name();
+        for (int person_i = 0; person_i < fillRandomPersonsDtoIn.getPersonsCount(); person_i++) {
+            final var randomHobbies = new ArrayList<Hobby>();
+            final var fakerInternet = dataFaker.internet();
+            final var fakerName = dataFaker.name();
             Company randomCompany = null;
             if (random.nextBoolean()) {
                 randomCompany = companyList.get(random.nextInt(companyList.size()));
             }
-            final var randomHobbies = Stream.generate(fakerHobby::activity)
-                    .distinct()
-                    .limit(random.nextInt(fillRandomPersonsDtoIn.getHobbiesMaxCount()))
-                    .map(Hobby::blankHobby)
-                    .toList();
-            final var randomPerson = Person.blankPerson(email, fakerName.firstName(), fakerName.lastName())
+            for (int hobby_i = 0; hobby_i < random.nextInt(fillRandomPersonsDtoIn.getHobbiesMaxCount()); hobby_i++) {
+                randomHobbies.add(hobbyList.get(random.nextInt(hobbyList.size())));
+            }
+            final var randomPerson = Person.blankPerson(fakerInternet.emailAddress(),
+                            fakerName.firstName(), fakerName.lastName())
                     .withCompany(randomCompany)
                     .withAddedHobbies(randomHobbies);
-            final var savedPerson = personService.savePerson(randomPerson);
+            personService.savePerson(randomPerson);
             filledCount++;
         }
         return new FillRandomDataDtoOut("Random persons successfully filled", filledCount);
@@ -127,8 +133,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
     @Override
     @Transactional
     public PersonCountDtoOut getPersonCount() {
-        final var personCount = personService.getPersonCount();
-        return new PersonCountDtoOut(personCount);
+        return new PersonCountDtoOut(personService.getPersonCount());
     }
 
 }

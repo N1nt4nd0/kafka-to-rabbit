@@ -3,7 +3,6 @@ package org.kafka.practice.kafkademo.domain.business.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
-import org.kafka.practice.kafkademo.domain.business.company.EmployeeManagementType;
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
@@ -11,10 +10,10 @@ import org.kafka.practice.kafkademo.domain.dto.company.CompanyCountDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.EmployeeManagementDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.company.EmployeeManagementDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.mappers.CompanyMapper;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.exception.EmployeeManagementException;
-import org.kafka.practice.kafkademo.domain.exception.FillRandomCompaniesException;
+import org.kafka.practice.kafkademo.domain.exception.FillRandomDataException;
+import org.kafka.practice.kafkademo.domain.mappers.CompanyMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
 import org.springframework.data.domain.Page;
@@ -32,6 +31,7 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
     private final CompanyService companyService;
     private final PersonService personService;
     private final CompanyMapper companyMapper;
+    private final Faker dataFaker;
 
     @Override
     @Transactional
@@ -40,20 +40,22 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
         final var companyByName = companyService.getByCompanyName(employeeManagementDtoIn.getCompanyName());
         Person person;
         String message;
-        if (employeeManagementDtoIn.getManagementType() == EmployeeManagementType.HIRE) {
-            if (personByEmail.isCompanyEmployee(companyByName)) {
-                throw new EmployeeManagementException("Person already hired at company");
+        switch (employeeManagementDtoIn.getManagementType()) {
+            case HIRE -> {
+                if (personByEmail.isCompanyEmployee(companyByName)) {
+                    throw new EmployeeManagementException("Person already hired at company");
+                }
+                person = personByEmail.withCompany(companyByName);
+                message = "Employee was hired successfully";
             }
-            person = personByEmail.withCompany(companyByName);
-            message = "Employee was hired successfully";
-        } else if (employeeManagementDtoIn.getManagementType() == EmployeeManagementType.DISMISS) {
-            if (!personByEmail.isCompanyEmployee(companyByName)) {
-                throw new EmployeeManagementException("Person is not company employee");
+            case DISMISS -> {
+                if (!personByEmail.isCompanyEmployee(companyByName)) {
+                    throw new EmployeeManagementException("Person is not company employee");
+                }
+                person = personByEmail.withoutCompany();
+                message = "Employee was dismissed successfully";
             }
-            person = personByEmail.withoutCompany();
-            message = "Employee was dismissed successfully";
-        } else {
-            throw new EmployeeManagementException("Unsupported management type");
+            default -> throw new EmployeeManagementException("Unimplemented management type");
         }
         final var savedPerson = personService.savePerson(person);
         return new EmployeeManagementDtoOut(savedPerson.getEmail(), companyByName.getCompanyName(), message);
@@ -63,10 +65,9 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
     @Transactional
     public FillRandomDataDtoOut fillRandomCompanies(final FillRandomCompaniesDtoIn fillRandomCompaniesDtoIn) {
         if (companyService.getCompanyCount() > 0) {
-            throw new FillRandomCompaniesException("Companies already filled");
+            throw new FillRandomDataException("Companies already filled");
         }
-        final var faker = new Faker();
-        Stream.generate(() -> faker.company().name())
+        Stream.generate(() -> dataFaker.company().name())
                 .distinct()
                 .limit(fillRandomCompaniesDtoIn.getCompaniesCount())
                 .forEach(companyService::createNewCompany);
@@ -102,8 +103,7 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
     @Override
     @Transactional
     public CompanyCountDtoOut getCompanyCount() {
-        final var companyCount = companyService.getCompanyCount();
-        return new CompanyCountDtoOut(companyCount);
+        return new CompanyCountDtoOut(companyService.getCompanyCount());
     }
 
 }

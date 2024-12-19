@@ -2,9 +2,9 @@ package org.kafka.practice.kafkademo.domain.config;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.kafka.practice.kafkademo.domain.business.service.PersonDtoRedirectServiceImpl;
-import org.kafka.practice.kafkademo.domain.dto.mappers.message.PersonDTOMessageMapper;
+import org.kafka.practice.kafkademo.domain.business.service.PersonDtoRedirectService;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
+import org.kafka.practice.kafkademo.domain.mappers.message.PersonDTOMessageMapper;
 import org.kafka.practice.kafkademo.domain.utils.LogHelper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.kafka.listener.DefaultErrorHandler;
@@ -16,7 +16,7 @@ import org.springframework.util.backoff.FixedBackOff;
 @RequiredArgsConstructor
 public class KafkaExceptionHandler {
 
-    private final PersonDtoRedirectServiceImpl personDtoRedirectService;
+    private final PersonDtoRedirectService personDtoRedirectService;
     private final PersonDTOMessageMapper personDTOMessageMapper;
 
     @Bean

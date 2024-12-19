@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto.mappers;
+package org.kafka.practice.kafkademo.domain.mappers;
 
 import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
@@ -21,7 +21,7 @@ public class HobbyMapperImpl implements HobbyMapper {
 
     @Override
     public Hobby fromPersonRemoveHobbyDto(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
-        return new Hobby(removePersonHobbyDto.getHobbyId(), removePersonHobbyDto.getHobbyName(), null);
+        return new Hobby(null, removePersonHobbyDto.getHobbyName());
     }
 
 }

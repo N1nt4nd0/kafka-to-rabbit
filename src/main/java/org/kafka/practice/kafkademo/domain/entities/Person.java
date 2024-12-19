@@ -8,8 +8,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.JoinTable;
+import jakarta.persistence.ManyToMany;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -54,7 +55,12 @@ public class Person {
 
     @ToString.Exclude
     @EqualsAndHashCode.Exclude
-    @OneToMany(mappedBy = "person", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinTable(
+            name = "person_hobby",
+            joinColumns = @JoinColumn(name = "person_id"),
+            inverseJoinColumns = @JoinColumn(name = "hobby_id")
+    )
     private List<Hobby> hobbies;
 
     public static Person blankPerson(@NonNull final String email,
@@ -66,7 +72,7 @@ public class Person {
     public Person withAddedHobby(final Hobby hobby) {
         final var newHobbies = new ArrayList<>(hobbies);
         final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
-        newHobbies.add(new Hobby(hobby.getId(), hobby.getHobbyName(), newPerson));
+        newHobbies.add(hobby);
         return newPerson;
     }
 
@@ -88,9 +94,7 @@ public class Person {
     public Person withAddedHobbies(final List<Hobby> addedHobbies) {
         final var newHobbies = new ArrayList<>(hobbies);
         final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
-        addedHobbies.stream()
-                .map(hobby -> new Hobby(hobby.getId(), hobby.getHobbyName(), newPerson))
-                .forEach(newHobbies::add);
+        newHobbies.addAll(addedHobbies);
         return newPerson;
     }
 

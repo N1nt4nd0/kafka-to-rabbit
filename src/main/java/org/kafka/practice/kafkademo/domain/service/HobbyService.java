@@ -8,6 +8,14 @@ public interface HobbyService {
 
     Page<Hobby> getHobbies(Pageable pageable);
 
+    Hobby getByHobbyName(String hobbyName);
+
+    Hobby createNewHobby(String hobbyName);
+
+    Hobby saveHobby(Hobby hobby);
+
     void deleteHobby(Hobby hobby);
+
+    long getHobbyCount();
 
 }

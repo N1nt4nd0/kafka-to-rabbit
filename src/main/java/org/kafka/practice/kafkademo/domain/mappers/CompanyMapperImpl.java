@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto.mappers;
+package org.kafka.practice.kafkademo.domain.mappers;
 
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.entities.Company;
