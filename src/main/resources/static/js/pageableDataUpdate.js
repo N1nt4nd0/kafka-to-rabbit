@@ -1,4 +1,5 @@
-const variablesElement = document.getElementById('variables-element');
+const variablesElement = document.getElementById('page-data-variables');
+
 const firstPageButton = document.getElementById('first-page-button');
 const prevPageButton = document.getElementById('prev-page-button');
 const nextPageButton = document.getElementById('next-page-button');
@@ -19,8 +20,9 @@ function updateData() {
     if (isUpdating) return;
     isUpdating = true;
 
-    const fetchUrl = `${contentApiPath}?page=${currentPage}&size=${pageSize}`;
-    fetch(fetchUrl)
+    const contentApiUrl = `${contentApiPath}?page=${currentPage}&size=${pageSize}`;
+
+    fetch(contentApiUrl)
         .then(response => response.json())
         .then(data => {
             lastPage = data.totalPages - 1;
@@ -47,7 +49,7 @@ function updateData() {
 
 function showUpdateError(error) {
     changePageButtonsState(true, true);
-    pageInfoLabel.innerHTML = `Error updating content: ` + error.message;
+    pageInfoLabel.innerHTML = `<span style="color: red;">Error updating content: ` + error.message;
     contentTbody.innerHTML = '';
 }
 

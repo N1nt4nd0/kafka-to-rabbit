@@ -39,15 +39,18 @@ web:
     update-interval-ms: 3000
     page-max-elements-size: 150
     endpoints:
-      persons-list-path: /persons/list
-      companies-list-path: /companies/list
+      persons-list: /person/list
+      companies-list: /company/list
   rest-api:
     name: Kafka To Rabbit API
     version: 0.0.1
     author-email: viacheslav.fedorov@syntegrico.by
     endpoints:
-      persons-list-api: /api/persons/list
-      companies-list-api: /api/companies/list
+      persons-list: /api/person/list
+      persons-fill: /api/person/fill
+      companies-list: /api/company/list
+      companies-fill: /api/company/fill
+      hobbies-fill: /api/hobby/fill
 
 server:
   address: localhost

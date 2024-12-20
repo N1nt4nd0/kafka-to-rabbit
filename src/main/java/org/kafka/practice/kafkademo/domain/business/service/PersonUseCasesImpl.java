@@ -3,6 +3,7 @@ package org.kafka.practice.kafkademo.domain.business.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
+import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
@@ -37,10 +38,10 @@ import java.util.stream.IntStream;
 public class PersonUseCasesImpl implements PersonUseCases {
 
     private final CompanyService companyService;
+    private final WebPagesConfig webPagesConfig;
     private final PersonService personService;
     private final HobbyService hobbyService;
     private final PersonMapper personMapper;
-    private final int pageMaxElementsSize;
     private final Faker dataFaker;
 
     @Override
@@ -85,7 +86,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
         if (companyService.getCompanyCount() == 0) {
             throw new NoAnyCompanyException();
         }
-        final var pageable = PageRequest.of(0, pageMaxElementsSize);
+        final var pageable = PageRequest.of(0, webPagesConfig.getPageMaxElementsSize());
         final var companyList = companyService.getCompanies(pageable).getContent();
         final var hobbyList = hobbyService.getHobbies(pageable).getContent();
         final var random = new Random();

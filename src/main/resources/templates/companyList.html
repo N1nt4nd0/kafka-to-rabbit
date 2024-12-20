@@ -6,7 +6,7 @@
 </head>
 <body>
 
-<div class="pagination-container">
+<div class="toolbar-container">
     <div id="page-buttons">
         <button id="prev-page-button" disabled="disabled">Prev page</button>
         <button id="next-page-button" disabled="disabled">Next page</button>
@@ -19,8 +19,8 @@
         <span>Loading info...</span>
     </div>
     <div class="right-buttons">
-        <button onclick="window.location='/persons/list'">Persons</button>
-        <button onclick="window.location='/companies/list'">Companies</button>
+        <button onclick="window.location='/person/list'">Persons</button>
+        <button onclick="window.location='/company/list'">Companies</button>
     </div>
 </div>
 
@@ -49,6 +49,6 @@
 </div>
 
 <script src="/js/createCompaniesRow.js"></script>
-<script src="/js/pageableUpdate.js"></script>
+<script src="/js/pageableDataUpdate.js"></script>
 
 </body>

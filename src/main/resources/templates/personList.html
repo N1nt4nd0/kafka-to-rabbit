@@ -6,21 +6,23 @@
 </head>
 <body>
 
-<div class="pagination-container">
+<div class="toolbar-container">
     <div id="page-buttons">
         <button id="prev-page-button" disabled="disabled">Prev page</button>
         <button id="next-page-button" disabled="disabled">Next page</button>
         <span>|</span>
         <button id="first-page-button" disabled="disabled">First page</button>
         <button id="last-page-button" disabled="disabled">Last page</button>
+        <span>|</span>
+        <button id="fill-data-button">Fill data</button>
     </div>
     <span>|</span>
     <div id="page-info-label">
         <span>Loading info...</span>
     </div>
     <div class="right-buttons">
-        <button onclick="window.location='/persons/list'">Persons</button>
-        <button onclick="window.location='/companies/list'">Companies</button>
+        <button onclick="window.location='${endpoints.personsListPath}'">Persons</button>
+        <button onclick="window.location='${endpoints.companiesListPath}'">Companies</button>
     </div>
 </div>
 
@@ -45,14 +47,14 @@
     </table>
 </div>
 
-<div id="variables-element"
-     data-content-api-path="${contentApiPath}"
+<div id="page-data-variables"
+     data-content-api-path="${endpoints.personsListApiPath}"
      data-current-page="${pageNumber}"
      data-page-size="${pageSize}"
-     data-update-interval="${updateInterval}">
+     data-update-interval="${webConfig.pageUpdateIntervalMs}">
 </div>
 
 <script src="/js/createPersonsRow.js"></script>
-<script src="/js/pageableUpdate.js"></script>
+<script src="/js/pageableDataUpdate.js"></script>
 
 </body>

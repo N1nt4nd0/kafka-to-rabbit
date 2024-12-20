@@ -1,6 +1,8 @@
 package org.kafka.practice.kafkademo.domain.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.kafka.practice.kafkademo.domain.config.EndpointsConfig;
+import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
 import org.kafka.practice.kafkademo.domain.utils.WebPageModelUtils;
 import org.springframework.stereotype.Controller;
@@ -12,16 +14,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class CompanyMvcController {
 
-    private final String companiesListApiPath;
-    private final int pageUpdateIntervalMs;
-    private final int pageMaxElementsSize;
+    private final EndpointsConfig endpointsConfig;
+    private final WebPagesConfig webPagesConfig;
 
-    @GetMapping("${web.pages.endpoints.companies-list-path}")
-    public String companiesList(@RequestParam(defaultValue = "0") final int page,
-                                @RequestParam(defaultValue = "50") final int size,
-                                final Model model) {
-        PageableUtils.checkSizeRange(size, pageMaxElementsSize);
-        WebPageModelUtils.addRequiredAttributes(model, companiesListApiPath, page, size, pageUpdateIntervalMs);
+    @GetMapping("${web.pages.endpoints.companies-list}")
+    public String companyList(@RequestParam(defaultValue = "0") final int page,
+                              @RequestParam(defaultValue = "50") final int size,
+                              final Model model) {
+        PageableUtils.checkSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        WebPageModelUtils.addRequiredAttributes(model, endpointsConfig, webPagesConfig, page, size);
         return "companyList";
     }
 
