@@ -21,7 +21,7 @@ public class HobbyMapperImpl implements HobbyMapper {
 
     @Override
     public Hobby fromPersonRemoveHobbyDto(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
-        return new Hobby(null, removePersonHobbyDto.getHobbyName());
+        return Hobby.blankHobby(removePersonHobbyDto.getHobbyName());
     }
 
 }

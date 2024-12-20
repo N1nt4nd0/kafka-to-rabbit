@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<head>
+    <title>Companies</title>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
+</head>
+<body>
+
+<div class="pagination-container">
+    <div id="page-buttons">
+        <button id="prev-page-button" disabled="disabled">Prev page</button>
+        <button id="next-page-button" disabled="disabled">Next page</button>
+        <span>|</span>
+        <button id="first-page-button" disabled="disabled">First page</button>
+        <button id="last-page-button" disabled="disabled">Last page</button>
+    </div>
+    <span>|</span>
+    <div id="page-info-label">
+        <span>Loading info...</span>
+    </div>
+    <div class="right-buttons">
+        <button onclick="window.location='/persons/list'">Persons</button>
+        <button onclick="window.location='/companies/list'">Companies</button>
+    </div>
+</div>
+
+<div class="content-table">
+    <table>
+        <thead>
+        <tr>
+            <th></th>
+            <th>Company name</th>
+        </tr>
+        </thead>
+        <tbody id="content-tbody">
+        <tr>
+            <td></td>
+            <td>Loading data...</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<div id="variables-element"
+     data-content-api-path="${contentApiPath}"
+     data-current-page="${pageNumber}"
+     data-page-size="${pageSize}"
+     data-update-interval="${updateInterval}">
+</div>
+
+<script src="/js/createCompaniesRow.js"></script>
+<script src="/js/pageableUpdate.js"></script>
+
+</body>

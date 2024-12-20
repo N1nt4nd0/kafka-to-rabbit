@@ -11,7 +11,6 @@ import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonCountDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.entities.Company;
-import org.kafka.practice.kafkademo.domain.entities.Hobby;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.exception.NoAnyCompanyException;
 import org.kafka.practice.kafkademo.domain.exception.NoAnyHobbyException;
@@ -27,8 +26,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Slf4j
 @Service
@@ -78,37 +79,38 @@ public class PersonUseCasesImpl implements PersonUseCases {
     @Override
     @Transactional
     public FillRandomDataDtoOut fillRandomPersons(final FillRandomPersonsDtoIn fillRandomPersonsDtoIn) {
-        if (companyService.getCompanyCount() == 0) {
-            throw new NoAnyCompanyException();
-        }
         if (hobbyService.getHobbyCount() == 0) {
             throw new NoAnyHobbyException();
+        }
+        if (companyService.getCompanyCount() == 0) {
+            throw new NoAnyCompanyException();
         }
         final var pageable = PageRequest.of(0, pageMaxElementsSize);
         final var companyList = companyService.getCompanies(pageable).getContent();
         final var hobbyList = hobbyService.getHobbies(pageable).getContent();
         final var random = new Random();
-        var filledCount = 0;
-        for (int person_i = 0; person_i < fillRandomPersonsDtoIn.getPersonsCount(); person_i++) {
-            final var randomHobbies = new ArrayList<Hobby>();
-            final var fakerInternet = dataFaker.internet();
-            final var fakerName = dataFaker.name();
-            Company randomCompany = null;
-            if (random.nextBoolean()) {
-                randomCompany = companyList.get(random.nextInt(companyList.size()));
-            }
-            for (int hobby_i = 0; hobby_i < random.nextInt(fillRandomPersonsDtoIn.getHobbiesMaxCount()); hobby_i++) {
-                randomHobbies.add(hobbyList.get(random.nextInt(hobbyList.size())));
-            }
-            final var randomPerson = Person.blankPerson(fakerInternet.emailAddress(),
-                            fakerName.firstName(), fakerName.lastName())
-                    .withCompany(randomCompany)
-                    .withAddedHobbies(randomHobbies);
-            personService.savePerson(randomPerson);
-            filledCount++;
-        }
-        return new FillRandomDataDtoOut("Random persons successfully filled", filledCount);
+        final List<Person> randomPersons = IntStream.range(0, fillRandomPersonsDtoIn.getPersonsCount())
+                .mapToObj(personIndex -> {
+                    final var fakerInternet = dataFaker.internet();
+                    final var fakerName = dataFaker.name();
+                    Company randomCompany = null;
+                    if (random.nextBoolean()) {
+                        randomCompany = companyList.get(random.nextInt(companyList.size()));
+                    }
+                    final var randomHobbies = random.ints(0, hobbyList.size())
+                            .distinct()
+                            .limit(random.nextInt(fillRandomPersonsDtoIn.getHobbiesMaxCount()))
+                            .mapToObj(hobbyList::get)
+                            .collect(Collectors.toSet());
+                    return Person.blankPerson(fakerInternet.emailAddress(), fakerName.firstName(), fakerName.lastName())
+                            .withCompany(randomCompany)
+                            .withAddedHobbies(randomHobbies);
+                })
+                .toList();
+        randomPersons.forEach(personService::savePerson);
+        return new FillRandomDataDtoOut("Random persons successfully filled", randomPersons.size());
     }
+
 
     @Override
     @Transactional

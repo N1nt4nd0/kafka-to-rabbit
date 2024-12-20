@@ -1,10 +1,8 @@
 package org.kafka.practice.kafkademo.domain.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.kafka.practice.kafkademo.domain.business.service.PersonUseCases;
 import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
 import org.kafka.practice.kafkademo.domain.utils.WebPageModelUtils;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,22 +12,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class PersonMvcController {
 
-    private final String personsListApiEndpointPath;
-    private final String personsListEndpointPath;
-    private final PersonUseCases personUseCases;
+    private final String personsListApiPath;
     private final int pageUpdateIntervalMs;
     private final int pageMaxElementsSize;
 
     @GetMapping("${web.pages.endpoints.persons-list-path}")
     public String personsList(@RequestParam(defaultValue = "0") final int page,
-                              @RequestParam(defaultValue = "100") final int size,
+                              @RequestParam(defaultValue = "50") final int size,
                               final Model model) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
-        model.addAttribute("contentApiPath", personsListApiEndpointPath);
-        model.addAttribute("updateInterval", pageUpdateIntervalMs);
-        model.addAttribute("pageNumber", page);
-        model.addAttribute("pageSize", size);
-        return "personsListJs";
+        WebPageModelUtils.addRequiredAttributes(model, personsListApiPath, page, size, pageUpdateIntervalMs);
+        return "personList";
     }
 
 }

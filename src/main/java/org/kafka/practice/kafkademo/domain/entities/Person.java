@@ -20,8 +20,8 @@ import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.UUID;
 
 @Entity
@@ -61,38 +61,38 @@ public class Person {
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "hobby_id")
     )
-    private List<Hobby> hobbies;
+    private Set<Hobby> hobbies;
 
     public static Person blankPerson(@NonNull final String email,
                                      @NonNull final String firstName,
                                      @NonNull final String lastName) {
-        return new Person(null, email, firstName, lastName, null, List.of());
+        return new Person(null, email, firstName, lastName, null, Set.of());
     }
 
     public Person withAddedHobby(final Hobby hobby) {
-        final var newHobbies = new ArrayList<>(hobbies);
+        final var newHobbies = new HashSet<>(hobbies);
         final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
         newHobbies.add(hobby);
         return newPerson;
     }
 
     public Person withRemovedHobby(final Hobby hobby) {
-        final var newHobbies = new ArrayList<>(hobbies);
+        final var newHobbies = new HashSet<>(hobbies);
         final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
         newHobbies.remove(hobby);
         return newPerson;
     }
 
     public Person withCompany(final Company company) {
-        return new Person(id, email, firstName, lastName, company, new ArrayList<>(hobbies));
+        return new Person(id, email, firstName, lastName, company, new HashSet<>(hobbies));
     }
 
     public Person withoutCompany() {
         return withCompany(null);
     }
 
-    public Person withAddedHobbies(final List<Hobby> addedHobbies) {
-        final var newHobbies = new ArrayList<>(hobbies);
+    public Person withAddedHobbies(final Set<Hobby> addedHobbies) {
+        final var newHobbies = new HashSet<>(hobbies);
         final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
         newHobbies.addAll(addedHobbies);
         return newPerson;

@@ -24,6 +24,7 @@ public class HobbyServiceImpl implements HobbyService {
     }
 
     @Override
+    @Transactional
     public Hobby getByHobbyName(final String hobbyName) {
         return hobbyRepository.findByHobbyName(hobbyName)
                 .orElseThrow(() -> new HobbyNotFoundByNameException(hobbyName));

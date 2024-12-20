@@ -8,35 +8,35 @@ import org.springframework.context.annotation.Configuration;
 public class EndpointsConfig {
 
     @Value("${web.pages.endpoints.persons-list-path}")
-    private String personsListEndpointPath;
+    private String personsListPath;
 
     @Value("${web.pages.endpoints.companies-list-path}")
-    private String companiesListEndpointPath;
+    private String companiesListPath;
 
     @Value("${web.rest-api.endpoints.persons-list-api}")
-    private String personsListApiEndpointPath;
+    private String personsListApiPath;
 
     @Value("${web.rest-api.endpoints.companies-list-api}")
-    private String companiesListApiEndpointPath;
+    private String companiesListApiPath;
 
     @Bean
-    public String personsListEndpointPath() {
-        return personsListEndpointPath;
+    public String personsListPath() {
+        return personsListPath;
     }
 
     @Bean
-    public String companiesListEndpointPath() {
-        return companiesListEndpointPath;
+    public String companiesListPath() {
+        return companiesListPath;
     }
 
     @Bean
-    public String personsListApiEndpointPath() {
-        return personsListApiEndpointPath;
+    public String personsListApiPath() {
+        return personsListApiPath;
     }
 
     @Bean
-    public String companiesListApiEndpointPath() {
-        return companiesListApiEndpointPath;
+    public String companiesListApiPath() {
+        return companiesListApiPath;
     }
 
 }

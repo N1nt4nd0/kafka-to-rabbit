@@ -10,7 +10,7 @@ spring:
   liquibase:
     change-log: classpath:db/changelog/changelog.sql
   jpa:
-    show-sql: true
+    show-sql: false
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
@@ -36,8 +36,8 @@ spring:
 
 web:
   pages:
-    update-interval-ms: 1000
-    page-max-elements-size: 300
+    update-interval-ms: 3000
+    page-max-elements-size: 150
     endpoints:
       persons-list-path: /persons/list
       companies-list-path: /companies/list
@@ -84,9 +84,9 @@ logging:
     # Listeners log level
     org.kafka.practice.kafkademo.domain.listeners: DEBUG
     # Transaction logging
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.transaction: TRACE
-    org.hibernate.transaction: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.transaction: DEBUG
     # Dev profiles logging
     org.kafka.practice.kafkademo.domain.dev: DEBUG
 

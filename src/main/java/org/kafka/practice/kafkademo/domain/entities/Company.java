@@ -18,7 +18,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @EqualsAndHashCode
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Company {
 
