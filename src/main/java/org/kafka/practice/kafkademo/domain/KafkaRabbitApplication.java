@@ -13,7 +13,7 @@ public class KafkaRabbitApplication {
     // TODO one index.html and other logic by JS
     // TODO add more swagger documentation
     // TODO pin .env file to all tests
-    // TODO create CommonUsesCases service and implement fill all random data. Add fill data button on page
+    // TODO create CommonUseCases service and implement fill all random data. Add fill data button on page
 
     public static void main(String[] args) {
         SpringApplication.run(KafkaRabbitApplication.class, args);

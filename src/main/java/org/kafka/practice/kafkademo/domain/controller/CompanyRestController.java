@@ -8,7 +8,6 @@ import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
