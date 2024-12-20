@@ -26,8 +26,8 @@ public class PersonRestController {
     public ResponseEntity<Page<PersonDtoOut>> personsPage(@RequestParam(defaultValue = "0") final int page,
                                                           @RequestParam(defaultValue = "50") final int size) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
-        final var personsPage = personUseCases.getPersons(PageRequest.of(page, size));
-        return ResponseEntity.ok(personsPage);
+        final var personPage = personUseCases.getPersons(PageRequest.of(page, size));
+        return ResponseEntity.ok(personPage);
     }
 
 }

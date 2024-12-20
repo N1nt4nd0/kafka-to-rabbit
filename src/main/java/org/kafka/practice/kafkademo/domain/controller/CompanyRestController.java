@@ -26,8 +26,8 @@ public class CompanyRestController {
     public ResponseEntity<Page<CompanyDtoOut>> companiesPage(@RequestParam(defaultValue = "0") final int page,
                                                              @RequestParam(defaultValue = "50") final int size) {
         PageableUtils.checkSizeRange(size, pageMaxElementsSize);
-        final var companiesPage = companyUseCases.getCompanies(PageRequest.of(page, size));
-        return ResponseEntity.ok(companiesPage);
+        final var companyPage = companyUseCases.getCompanies(PageRequest.of(page, size));
+        return ResponseEntity.ok(companyPage);
     }
 
 }
