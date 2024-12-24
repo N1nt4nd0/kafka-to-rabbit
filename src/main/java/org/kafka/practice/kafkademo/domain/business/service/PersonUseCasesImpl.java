@@ -2,47 +2,32 @@ package org.kafka.practice.kafkademo.domain.business.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datafaker.Faker;
-import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonCountDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
-import org.kafka.practice.kafkademo.domain.entities.Company;
-import org.kafka.practice.kafkademo.domain.entities.Person;
-import org.kafka.practice.kafkademo.domain.exception.NoAnyCompanyException;
-import org.kafka.practice.kafkademo.domain.exception.NoAnyHobbyException;
 import org.kafka.practice.kafkademo.domain.exception.PersonAlreadyHasHobbyException;
-import org.kafka.practice.kafkademo.domain.exception.PersonHaveNotHobbyException;
+import org.kafka.practice.kafkademo.domain.exception.PersonHaveNoHobbyException;
 import org.kafka.practice.kafkademo.domain.mappers.PersonMapper;
-import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class PersonUseCasesImpl implements PersonUseCases {
 
-    private final CompanyService companyService;
-    private final WebPagesConfig webPagesConfig;
     private final PersonService personService;
     private final HobbyService hobbyService;
     private final PersonMapper personMapper;
-    private final Faker dataFaker;
 
     @Override
     @Transactional
@@ -73,45 +58,19 @@ public class PersonUseCasesImpl implements PersonUseCases {
             final var savedPerson = personService.savePerson(personByEmail.withRemovedHobby(hobby));
             return personMapper.toPersonDtoOut(savedPerson);
         } else {
-            throw new PersonHaveNotHobbyException(personByEmail.getEmail(), hobby.getHobbyName());
+            throw new PersonHaveNoHobbyException(personByEmail.getEmail(), hobby.getHobbyName());
         }
     }
 
     @Override
     @Transactional
     public FillRandomDataDtoOut fillRandomPersons(final FillRandomPersonsDtoIn fillRandomPersonsDtoIn) {
-        if (hobbyService.getHobbyCount() == 0) {
-            throw new NoAnyHobbyException();
-        }
-        if (companyService.getCompanyCount() == 0) {
-            throw new NoAnyCompanyException();
-        }
-        final var pageable = PageRequest.of(0, webPagesConfig.getPageMaxElementsSize());
-        final var companyList = companyService.getCompanies(pageable).getContent();
-        final var hobbyList = hobbyService.getHobbies(pageable).getContent();
-        final var random = new Random();
-        final List<Person> randomPersons = IntStream.range(0, fillRandomPersonsDtoIn.getPersonsCount())
-                .mapToObj(personIndex -> {
-                    final var fakerInternet = dataFaker.internet();
-                    final var fakerName = dataFaker.name();
-                    Company randomCompany = null;
-                    if (random.nextBoolean()) {
-                        randomCompany = companyList.get(random.nextInt(companyList.size()));
-                    }
-                    final var randomHobbies = random.ints(0, hobbyList.size())
-                            .distinct()
-                            .limit(random.nextInt(fillRandomPersonsDtoIn.getHobbiesMaxCount()))
-                            .mapToObj(hobbyList::get)
-                            .collect(Collectors.toSet());
-                    return Person.blankPerson(fakerInternet.emailAddress(), fakerName.firstName(), fakerName.lastName())
-                            .withCompany(randomCompany)
-                            .withAddedHobbies(randomHobbies);
-                })
-                .toList();
-        randomPersons.forEach(personService::savePerson);
-        return new FillRandomDataDtoOut("Random persons successfully filled", randomPersons.size());
+        personService.validateGenerationCount(fillRandomPersonsDtoIn.getPersonCount(),
+                fillRandomPersonsDtoIn.getHobbyMaxCount());
+        return new FillRandomDataDtoOut("Random persons successfully filled",
+                personService.generateNRandomPersons(fillRandomPersonsDtoIn.getPersonCount(),
+                        fillRandomPersonsDtoIn.getHobbyMaxCount()));
     }
-
 
     @Override
     @Transactional
@@ -130,6 +89,13 @@ public class PersonUseCasesImpl implements PersonUseCases {
     @Transactional
     public void deleteByEmail(final String email) {
         personService.deleteByEmail(email);
+    }
+
+    @Override
+    @Transactional
+    public TruncateTableDtoOut truncatePersons() {
+        personService.truncatePersonsTable();
+        return new TruncateTableDtoOut("Persons table successfully truncated");
     }
 
     @Override

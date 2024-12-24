@@ -4,10 +4,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.exception.HobbyNotFoundByNameException;
-import org.kafka.practice.kafkademo.domain.exception.NoAnyHobbyException;
 import org.kafka.practice.kafkademo.domain.exception.PersonAlreadyExistException;
 import org.kafka.practice.kafkademo.domain.repository.HobbyRepository;
 import org.kafka.practice.kafkademo.domain.repository.PersonRepository;
@@ -52,13 +50,6 @@ public class PersonUsesCasesTests {
                 .thenThrow(new HobbyNotFoundByNameException(hobbyName));
         Assertions.assertThrows(HobbyNotFoundByNameException.class, () ->
                 personUseCases.addHobby(new AddPersonHobbyDtoIn(email, hobbyName)));
-    }
-
-    @Test
-    void testFillRandomPersonsWhenHobbyRepositoryIsEmpty() {
-        Mockito.when(hobbyRepository.count()).thenReturn(0L);
-        Assertions.assertThrows(NoAnyHobbyException.class, () ->
-                personUseCases.fillRandomPersons(new FillRandomPersonsDtoIn(50, 5)));
     }
 
 }

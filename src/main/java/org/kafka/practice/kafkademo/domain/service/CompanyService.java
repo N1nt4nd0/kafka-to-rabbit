@@ -6,6 +6,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface CompanyService {
 
+    long generateNRandomCompanies(int companyCount);
+
+    void validateGenerationCount(int requestedCount);
+
     Page<Company> getCompanies(Pageable pageable);
 
     Company getByCompanyName(String companyName);
@@ -17,6 +21,8 @@ public interface CompanyService {
     Company saveCompany(Company company);
 
     void deleteCompany(Company company);
+
+    void truncateCompanyTable();
 
     long getCompanyCount();
 

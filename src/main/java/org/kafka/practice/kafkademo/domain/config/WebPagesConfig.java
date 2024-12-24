@@ -14,4 +14,7 @@ public class WebPagesConfig {
     @Value("${web.pages.page-max-elements-size}")
     private int pageMaxElementsSize;
 
+    @Value("${web.pages.page-default-elements-size}")
+    private int pageDefaultElementsSize;
+
 }

@@ -37,20 +37,22 @@ spring:
 web:
   pages:
     update-interval-ms: 3000
+    page-default-elements-size: 30
     page-max-elements-size: 150
-    endpoints:
-      persons-list: /person/list
-      companies-list: /company/list
   rest-api:
     name: Kafka To Rabbit API
     version: 0.0.1
     author-email: viacheslav.fedorov@syntegrico.by
     endpoints:
-      persons-list: /api/person/list
-      persons-fill: /api/person/fill
-      companies-list: /api/company/list
-      companies-fill: /api/company/fill
-      hobbies-fill: /api/hobby/fill
+      person-truncate: /api/person/truncate
+      person-list: /api/person/list
+      person-fill: /api/person/fill
+      company-truncate: /api/company/truncate
+      company-list: /api/company/list
+      company-fill: /api/company/fill
+      hobby-truncate: /api/hobby/truncate
+      hobby-list: /api/hobby/list
+      hobby-fill: /api/hobby/fill
 
 server:
   address: localhost
@@ -78,6 +80,7 @@ messaging:
 logging:
   level:
     # Exception handlers log level
+    org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler: TRACE
     org.kafka.practice.kafkademo.domain.config.ControllerExceptionHandler: TRACE
     org.kafka.practice.kafkademo.domain.config.RabbitExceptionHandler: DEBUG
     org.kafka.practice.kafkademo.domain.config.KafkaExceptionHandler: DEBUG

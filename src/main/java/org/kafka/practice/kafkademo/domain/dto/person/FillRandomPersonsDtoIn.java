@@ -9,7 +9,7 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class FillRandomPersonsDtoIn {
 
-    private final int personsCount;
-    private final int hobbiesMaxCount;
+    private final int personCount;
+    private final int hobbyMaxCount;
 
 }

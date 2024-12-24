@@ -6,6 +6,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface PersonService {
 
+    long generateNRandomPersons(int personCount, int personMaxHobbyCount);
+
+    void validateGenerationCount(int requestedCount, int requestedHobbyCount);
+
     Person createPerson(String email, String firstName, String lastName);
 
     Page<Person> getPersons(Pageable pageable);
@@ -17,6 +21,8 @@ public interface PersonService {
     void deletePerson(Person person);
 
     void deleteByEmail(String email);
+
+    void truncatePersonsTable();
 
     long getPersonCount();
 

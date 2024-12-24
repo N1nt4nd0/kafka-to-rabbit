@@ -8,17 +8,17 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+
+import java.util.Objects;
 
 @Entity
 @Table(name = "hobby")
 @Getter
 @ToString
-@EqualsAndHashCode
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Hobby {
 
@@ -30,8 +30,17 @@ public class Hobby {
     @Column(name = "hobby_name", nullable = false)
     private String hobbyName;
 
-    public static Hobby blankHobby(final String hobbyName) {
-        return new Hobby(null, hobbyName);
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof Hobby hobby) {
+            return Objects.equals(hobbyName, hobby.hobbyName);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(hobbyName);
     }
 
 }

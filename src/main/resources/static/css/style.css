@@ -1,4 +1,4 @@
-.toolbar-container {
+.flex-container {
     display: flex;
     gap: 5px;
     margin-bottom: 10px;
@@ -10,8 +10,8 @@
     margin-left: auto;
 }
 
-.page-input-field {
-    width: 80px;
+.number-input-field {
+    width: 40px;
     text-align: center;
 }
 

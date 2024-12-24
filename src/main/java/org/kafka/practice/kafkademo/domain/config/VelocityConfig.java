@@ -2,6 +2,7 @@ package org.kafka.practice.kafkademo.domain.config;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.apache.velocity.VelocityContext;
 import org.apache.velocity.app.VelocityEngine;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
@@ -17,6 +18,7 @@ import java.util.Map;
 import java.util.Properties;
 
 @Configuration
+@RequiredArgsConstructor
 public class VelocityConfig {
 
     public static final String CLASSPATH_RESOURCE_LOADER_CLASS = "classpath.resource.loader.class";
@@ -27,6 +29,9 @@ public class VelocityConfig {
     public static final String ENCODING_UTF8 = "UTF-8";
     public static final String CLASSPATH = "classpath";
     public static final String PAGES_TYPE = ".html";
+
+    private final EndpointsConfig endpointsConfig;
+    private final WebPagesConfig webPagesConfig;
 
     @Bean
     public VelocityEngine velocityEngine() {
@@ -55,10 +60,13 @@ public class VelocityConfig {
             public void render(@NonNull final Map<String, ?> model,
                                @NonNull final HttpServletRequest request,
                                @NonNull final HttpServletResponse response) throws Exception {
+                final var context = new VelocityContext(new HashMap<>(model));
+                context.put("endpoints", endpointsConfig);
+                context.put("webConfig", webPagesConfig);
                 final var template = velocityEngine.getTemplate(
                         VELOCITY_PAGES_PATH + viewName + PAGES_TYPE, ENCODING_UTF8);
                 final var writer = new StringWriter();
-                template.merge(new VelocityContext(new HashMap<>(model)), writer);
+                template.merge(context, writer);
                 response.getWriter().write(writer.toString());
             }
 

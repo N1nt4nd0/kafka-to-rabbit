@@ -8,25 +8,31 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class EndpointsConfig {
 
-    @Value("${web.pages.endpoints.persons-list}")
-    private String personsListPath;
+    @Value("${web.rest-api.endpoints.person-list}")
+    private String personListApiPath;
 
-    @Value("${web.pages.endpoints.companies-list}")
-    private String companiesListPath;
+    @Value("${web.rest-api.endpoints.person-fill}")
+    private String personFillApiPath;
 
-    @Value("${web.rest-api.endpoints.persons-list}")
-    private String personsListApiPath;
+    @Value("${web.rest-api.endpoints.person-truncate}")
+    private String personTruncateApiPath;
 
-    @Value("${web.rest-api.endpoints.companies-list}")
-    private String companiesListApiPath;
+    @Value("${web.rest-api.endpoints.company-list}")
+    private String companyListApiPath;
 
-    @Value("${web.rest-api.endpoints.companies-fill}")
-    private String companiesFillApiPath;
+    @Value("${web.rest-api.endpoints.company-fill}")
+    private String companyFillApiPath;
 
-    @Value("${web.rest-api.endpoints.hobbies-fill}")
-    private String hobbiesFillApiPath;
+    @Value("${web.rest-api.endpoints.company-truncate}")
+    private String companyTruncateApiPath;
 
-    @Value("${web.rest-api.endpoints.persons-fill}")
-    private String personsFillApiPath;
+    @Value("${web.rest-api.endpoints.hobby-list}")
+    private String hobbyListApiPath;
+
+    @Value("${web.rest-api.endpoints.hobby-fill}")
+    private String hobbyFillApiPath;
+
+    @Value("${web.rest-api.endpoints.hobby-truncate}")
+    private String hobbyTruncateApiPath;
 
 }

@@ -9,6 +9,6 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class FillRandomCompaniesDtoIn {
 
-    private final int companiesCount;
+    private final int companyCount;
 
 }

@@ -6,6 +6,10 @@ import org.springframework.data.domain.Pageable;
 
 public interface HobbyService {
 
+    long generateNRandomHobbies(int hobbyCount);
+
+    void validateGenerationCount(int requestedCount);
+
     Page<Hobby> getHobbies(Pageable pageable);
 
     Hobby getByHobbyName(String hobbyName);
@@ -16,6 +20,7 @@ public interface HobbyService {
 
     void deleteHobby(Hobby hobby);
 
-    long getHobbyCount();
+    void truncateHobbyTable();
 
+    long getHobbyCount();
 }

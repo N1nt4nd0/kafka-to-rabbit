@@ -2,21 +2,47 @@ package org.kafka.practice.kafkademo.domain.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.exception.CompanyNotFoundByNameException;
+import org.kafka.practice.kafkademo.domain.exception.FillRandomDataException;
 import org.kafka.practice.kafkademo.domain.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.stream.Stream;
+
 @Slf4j
 @Service
-@Transactional
 @RequiredArgsConstructor
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final Faker dataFaker;
+
+    @Override
+    @Transactional
+    public long generateNRandomCompanies(final int companyCount) {
+        return Stream.generate(() -> dataFaker.company().name())
+                .limit(companyCount)
+                .distinct()
+                .map(this::createNewCompany)
+                .toList()
+                .size();
+    }
+
+    @Override
+    @Transactional
+    public void validateGenerationCount(final int requestedCount) {
+        if (getCompanyCount() > 0) {
+            throw new FillRandomDataException("Company database already filled");
+        }
+        if (requestedCount <= 10) {
+            throw new FillRandomDataException("Companies count must be great than 10");
+        }
+    }
 
     @Override
     @Transactional
@@ -34,8 +60,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Override
     @Transactional
     public Company createNewCompany(final String companyName) {
-        final var newCompany = Company.blankCompany(companyName);
-        return saveCompany(newCompany);
+        return saveCompany(new Company(null, companyName));
     }
 
     @Override
@@ -55,6 +80,12 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     public void deleteCompany(final Company company) {
         companyRepository.delete(company);
+    }
+
+    @Override
+    @Transactional
+    public void truncateCompanyTable() {
+        companyRepository.deleteAll();
     }
 
     @Override

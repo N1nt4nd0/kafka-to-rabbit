@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 
+import java.util.List;
 import java.util.Optional;
 
 @SpringBootTest
@@ -38,13 +39,13 @@ public class CompanyUsesCasesTests {
     }
 
     @Test
-    void testHireEmployeeWhenAlreadyHired() {
+    void testHireEmployeeWhenAlreadyHired() { // TODO use only mock objects!
         final var email = "test@test.com";
         final var firstName = "John";
         final var lastName = "Doe";
         final var companyName = "TestCompany";
-        final var company = Company.blankCompany(companyName);
-        final var person = Person.blankPerson(email, firstName, lastName).withCompany(company);
+        final var company = new Company(null, companyName);
+        final var person = new Person(null, email, firstName, lastName, company, List.of());
         Mockito.when(companyRepository.findByCompanyName(companyName))
                 .thenReturn(Optional.of(company));
         Mockito.when(personRepository.findByEmailIgnoreCase(email))
@@ -52,7 +53,6 @@ public class CompanyUsesCasesTests {
         Assertions.assertThrows(EmployeeManagementException.class, () ->
                 companyUseCases.manageEmployee(new EmployeeManagementDtoIn(email, companyName,
                         EmployeeManagementType.HIRE)));
-
     }
 
 }

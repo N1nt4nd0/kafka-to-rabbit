@@ -10,7 +10,7 @@ import lombok.ToString;
 public class FillRandomAllDataDtoIn {
 
     private final int personsCount;
-    private final int personHobbiesMaxCount;
+    private final int personHobbiesCount;
     private final int initCompaniesCount;
     private final int initHobbiesCount;
 

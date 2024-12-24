@@ -2,17 +2,16 @@ package org.kafka.practice.kafkademo.domain.business.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.CompanyCountDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.EmployeeManagementDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.company.EmployeeManagementDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.exception.EmployeeManagementException;
-import org.kafka.practice.kafkademo.domain.exception.FillRandomDataException;
 import org.kafka.practice.kafkademo.domain.mappers.CompanyMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
@@ -20,8 +19,6 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.stream.Stream;
 
 @Slf4j
 @Service
@@ -31,7 +28,6 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
     private final CompanyService companyService;
     private final PersonService personService;
     private final CompanyMapper companyMapper;
-    private final Faker dataFaker;
 
     @Override
     @Transactional
@@ -64,14 +60,9 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
     @Override
     @Transactional
     public FillRandomDataDtoOut fillRandomCompanies(final FillRandomCompaniesDtoIn fillRandomCompaniesDtoIn) {
-        if (companyService.getCompanyCount() > 0) {
-            throw new FillRandomDataException("Companies already filled");
-        }
-        Stream.generate(() -> dataFaker.company().name())
-                .distinct()
-                .limit(fillRandomCompaniesDtoIn.getCompaniesCount())
-                .forEach(companyService::createNewCompany);
-        return new FillRandomDataDtoOut("Random companies successfully filled", companyService.getCompanyCount());
+        companyService.validateGenerationCount(fillRandomCompaniesDtoIn.getCompanyCount());
+        return new FillRandomDataDtoOut("Random companies successfully filled",
+                companyService.generateNRandomCompanies(fillRandomCompaniesDtoIn.getCompanyCount()));
     }
 
     @Override
@@ -98,6 +89,13 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
     @Transactional
     public void deleteCompany(final CompanyDtoIn companyDtoIn) {
         companyService.deleteByCompanyName(companyDtoIn.getCompanyName());
+    }
+
+    @Override
+    @Transactional
+    public TruncateTableDtoOut truncateCompanies() {
+        companyService.truncateCompanyTable();
+        return new TruncateTableDtoOut("Company table successfully truncated");
     }
 
     @Override

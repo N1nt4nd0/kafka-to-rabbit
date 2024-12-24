@@ -1,6 +1,5 @@
 package org.kafka.practice.kafkademo.domain.entities;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -14,22 +13,20 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
 import lombok.ToString;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 @Table(name = "person")
 @Getter
 @ToString
-@EqualsAndHashCode
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Person {
 
@@ -47,55 +44,42 @@ public class Person {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
-    @ToString.Exclude
-    @EqualsAndHashCode.Exclude
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToMany
     @JoinTable(
             name = "person_hobby",
             joinColumns = @JoinColumn(name = "person_id"),
             inverseJoinColumns = @JoinColumn(name = "hobby_id")
     )
-    private Set<Hobby> hobbies;
-
-    public static Person blankPerson(@NonNull final String email,
-                                     @NonNull final String firstName,
-                                     @NonNull final String lastName) {
-        return new Person(null, email, firstName, lastName, null, Set.of());
-    }
+    private List<Hobby> hobbies;
 
     public Person withAddedHobby(final Hobby hobby) {
-        final var newHobbies = new HashSet<>(hobbies);
-        final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
+        final var newHobbies = new ArrayList<>(hobbies);
         newHobbies.add(hobby);
-        return newPerson;
+        return new Person(id, email, firstName, lastName, company, newHobbies);
     }
 
     public Person withRemovedHobby(final Hobby hobby) {
-        final var newHobbies = new HashSet<>(hobbies);
-        final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
+        final var newHobbies = new ArrayList<>(hobbies);
         newHobbies.remove(hobby);
-        return newPerson;
+        return new Person(id, email, firstName, lastName, company, newHobbies);
     }
 
     public Person withCompany(final Company company) {
-        return new Person(id, email, firstName, lastName, company, new HashSet<>(hobbies));
+        return new Person(id, email, firstName, lastName, company, new ArrayList<>(hobbies));
     }
 
     public Person withoutCompany() {
         return withCompany(null);
     }
 
-    public Person withAddedHobbies(final Set<Hobby> addedHobbies) {
-        final var newHobbies = new HashSet<>(hobbies);
-        final var newPerson = new Person(id, email, firstName, lastName, company, newHobbies);
+    public Person withAddedHobbies(final List<Hobby> addedHobbies) {
+        final var newHobbies = new ArrayList<>(hobbies);
         newHobbies.addAll(addedHobbies);
-        return newPerson;
+        return new Person(id, email, firstName, lastName, company, newHobbies);
     }
 
     public boolean isCompanyEmployee(final Company company) {
@@ -112,6 +96,19 @@ public class Person {
 
     public boolean hasHobby(final Hobby hobby) {
         return hasHobbies() && hobbies.contains(hobby);
+    }
+
+    @Override
+    public boolean equals(Object object) {
+        if (object instanceof Person person) {
+            return Objects.equals(email, person.email);
+        }
+        return false;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(email);
     }
 
 }
