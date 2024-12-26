@@ -45,12 +45,15 @@ web:
     author-email: viacheslav.fedorov@syntegrico.by
     endpoints:
       person-truncate: /api/person/truncate
+      person-create: /api/person/create
       person-list: /api/person/list
       person-fill: /api/person/fill
       company-truncate: /api/company/truncate
+      company-create: /api/company/create
       company-list: /api/company/list
       company-fill: /api/company/fill
       hobby-truncate: /api/hobby/truncate
+      hobby-create: /api/hobby/create
       hobby-list: /api/hobby/list
       hobby-fill: /api/hobby/fill
 

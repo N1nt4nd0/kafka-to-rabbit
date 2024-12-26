@@ -3,6 +3,7 @@ package org.kafka.practice.kafkademo.domain.business.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.hobby.FillRandomHobbiesDtoIn;
@@ -27,6 +28,12 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
         hobbyService.validateGenerationCount(fillRandomHobbiesDtoIn.getHobbyCount());
         return new FillRandomDataDtoOut("Random hobbies successfully filled",
                 hobbyService.generateNRandomHobbies(fillRandomHobbiesDtoIn.getHobbyCount()));
+    }
+
+    @Override
+    @Transactional
+    public HobbyDtoOut createHobby(final HobbyDtoIn hobbyDtoIn) {
+        return hobbyMapper.toHobbyDtoOut(hobbyService.createNewHobby(hobbyDtoIn.getHobbyName()));
     }
 
     @Override

@@ -2,15 +2,17 @@ package org.kafka.practice.kafkademo.domain.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.kafka.practice.kafkademo.domain.annotations.RestExceptionHandling;
 import org.kafka.practice.kafkademo.domain.business.service.PersonUseCases;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
-import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
+import org.kafka.practice.kafkademo.domain.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Person", description = "The persons rest controller")
+@Tag(name = "Person", description = "The person rest controller")
 @RestController
 @RestExceptionHandling
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class PersonRestController {
     @GetMapping("${web.rest-api.endpoints.person-list}")
     public ResponseEntity<Page<PersonDtoOut>> personPage(@RequestParam(defaultValue = "0") final int page,
                                                          @RequestParam(defaultValue = "50") final int size) {
-        PageableUtils.checkSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        ValidationUtils.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
         return ResponseEntity.ok(personUseCases.getPersons(PageRequest.of(page, size)));
     }
 
@@ -42,6 +44,12 @@ public class PersonRestController {
     public ResponseEntity<FillRandomDataDtoOut> fillRandomPersons(
             @RequestBody final FillRandomPersonsDtoIn fillRandomPersonsDtoIn) {
         return ResponseEntity.ok(personUseCases.fillRandomPersons(fillRandomPersonsDtoIn));
+    }
+
+    @Operation(summary = "Create new person")
+    @PostMapping("${web.rest-api.endpoints.person-create}")
+    public ResponseEntity<PersonDtoOut> createPerson(@Valid @RequestBody final PersonDtoIn personDtoIn) {
+        return ResponseEntity.ok(personUseCases.createPerson(personDtoIn));
     }
 
     @Operation(summary = "Truncate persons table")

@@ -48,9 +48,8 @@ public class PersonUseCasesImpl implements PersonUseCases {
     @Override
     @Transactional
     public PersonDtoOut createPerson(final PersonDtoIn personDtoIn) {
-        final var newPerson = personService.createPerson(personDtoIn.getEmail(),
-                personDtoIn.getFirstName(), personDtoIn.getLastName());
-        return personMapper.toPersonDtoOut(newPerson);
+        return personMapper.toPersonDtoOut(personService.createPerson(personDtoIn.getEmail(),
+                personDtoIn.getFirstName(), personDtoIn.getLastName()));
     }
 
     @Override

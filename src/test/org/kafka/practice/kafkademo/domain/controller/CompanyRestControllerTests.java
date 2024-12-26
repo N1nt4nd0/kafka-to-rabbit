@@ -34,6 +34,7 @@ public class CompanyRestControllerTests {
                 .setControllerAdvice(new RestControllerExceptionHandler())
                 .addPlaceholderValue("web.rest-api.endpoints.company-list", "/api/company/list")
                 .addPlaceholderValue("web.rest-api.endpoints.company-fill", "/api/company/fill")
+                .addPlaceholderValue("web.rest-api.endpoints.company-create", "/api/company/create")
                 .addPlaceholderValue("web.rest-api.endpoints.company-truncate", "/api/company/truncate")
                 .build();
     }

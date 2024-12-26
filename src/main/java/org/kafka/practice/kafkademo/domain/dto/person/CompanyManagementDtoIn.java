@@ -1,5 +1,7 @@
 package org.kafka.practice.kafkademo.domain.dto.person;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -11,10 +13,13 @@ import org.kafka.practice.kafkademo.domain.business.person.CompanyManagementType
 @RequiredArgsConstructor
 public class CompanyManagementDtoIn {
 
-    @NonNull
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
     private final String personEmail;
-    @NonNull
+
+    @NotBlank(message = "Company name is required")
     private final String companyName;
+
     @NonNull
     private final CompanyManagementType managementType;
 

@@ -2,15 +2,17 @@ package org.kafka.practice.kafkademo.domain.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.kafka.practice.kafkademo.domain.annotations.RestExceptionHandling;
 import org.kafka.practice.kafkademo.domain.business.service.HobbyUseCases;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.hobby.FillRandomHobbiesDtoIn;
-import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
+import org.kafka.practice.kafkademo.domain.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Company", description = "The companies rest controller")
+@Tag(name = "Hobby", description = "The hobby rest controller")
 @RestController
 @RestExceptionHandling
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class HobbyRestController {
     @GetMapping("${web.rest-api.endpoints.hobby-list}")
     public ResponseEntity<Page<HobbyDtoOut>> hobbyPage(@RequestParam(defaultValue = "0") final int page,
                                                        @RequestParam(defaultValue = "50") final int size) {
-        PageableUtils.checkSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        ValidationUtils.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
         return ResponseEntity.ok(hobbyUseCases.getHobbies(PageRequest.of(page, size)));
     }
 
@@ -42,6 +44,12 @@ public class HobbyRestController {
     public ResponseEntity<FillRandomDataDtoOut> fillRandomHobbies(
             @RequestBody final FillRandomHobbiesDtoIn fillRandomCompaniesDtoIn) {
         return ResponseEntity.ok(hobbyUseCases.fillRandomHobbies(fillRandomCompaniesDtoIn));
+    }
+
+    @Operation(summary = "Create new hobby")
+    @PostMapping("${web.rest-api.endpoints.hobby-create}")
+    public ResponseEntity<HobbyDtoOut> createHobby(@Valid @RequestBody final HobbyDtoIn hobbyDtoIn) {
+        return ResponseEntity.ok(hobbyUseCases.createHobby(hobbyDtoIn));
     }
 
     @Operation(summary = "Truncate hobbies table")

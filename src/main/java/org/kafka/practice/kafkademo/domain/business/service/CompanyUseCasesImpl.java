@@ -2,6 +2,7 @@ package org.kafka.practice.kafkademo.domain.business.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kafka.practice.kafkademo.domain.dto.CompanyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
@@ -27,6 +28,12 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
         companyService.validateGenerationCount(fillRandomCompaniesDtoIn.getCompanyCount());
         return new FillRandomDataDtoOut("Random companies successfully filled",
                 companyService.generateNRandomCompanies(fillRandomCompaniesDtoIn.getCompanyCount()));
+    }
+
+    @Override
+    @Transactional
+    public CompanyDtoOut createCompany(final CompanyDtoIn companyDtoIn) {
+        return companyMapper.toCompanyDtoOut(companyService.createNewCompany(companyDtoIn.getCompanyName()));
     }
 
     @Override

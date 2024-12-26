@@ -1,7 +1,8 @@
 package org.kafka.practice.kafkademo.domain.dto;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -10,11 +11,14 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class PersonDtoIn {
 
-    @NonNull
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
     private final String email;
-    @NonNull
+
+    @NotBlank(message = "First name is required")
     private final String firstName;
-    @NonNull
+
+    @NotBlank(message = "Last name is required")
     private final String lastName;
 
 }

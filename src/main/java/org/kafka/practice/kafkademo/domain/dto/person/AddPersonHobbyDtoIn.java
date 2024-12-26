@@ -1,5 +1,7 @@
 package org.kafka.practice.kafkademo.domain.dto.person;
 
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -10,9 +12,11 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class AddPersonHobbyDtoIn {
 
-    @NonNull
+    @Email(message = "Invalid email format")
+    @NotBlank(message = "Email is required")
     private final String email;
-    @NonNull
+
+    @NotBlank(message = "Hobby name is required")
     private final String hobbyName;
 
 }

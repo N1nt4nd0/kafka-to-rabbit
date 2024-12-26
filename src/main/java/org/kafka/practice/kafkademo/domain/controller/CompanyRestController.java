@@ -2,15 +2,17 @@ package org.kafka.practice.kafkademo.domain.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.kafka.practice.kafkademo.domain.annotations.RestExceptionHandling;
 import org.kafka.practice.kafkademo.domain.business.service.CompanyUseCases;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
+import org.kafka.practice.kafkademo.domain.dto.CompanyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
-import org.kafka.practice.kafkademo.domain.utils.PageableUtils;
+import org.kafka.practice.kafkademo.domain.utils.ValidationUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Tag(name = "Company", description = "The companies rest controller")
+@Tag(name = "Company", description = "The company rest controller")
 @RestController
 @RestExceptionHandling
 @RequiredArgsConstructor
@@ -33,7 +35,7 @@ public class CompanyRestController {
     @GetMapping("${web.rest-api.endpoints.company-list}")
     public ResponseEntity<Page<CompanyDtoOut>> companyPage(@RequestParam(defaultValue = "0") final int page,
                                                            @RequestParam(defaultValue = "50") final int size) {
-        PageableUtils.checkSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        ValidationUtils.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
         return ResponseEntity.ok(companyUseCases.getCompanies(PageRequest.of(page, size)));
     }
 
@@ -42,6 +44,12 @@ public class CompanyRestController {
     public ResponseEntity<FillRandomDataDtoOut> fillRandomCompanies(
             @RequestBody final FillRandomCompaniesDtoIn fillRandomCompaniesDtoIn) {
         return ResponseEntity.ok(companyUseCases.fillRandomCompanies(fillRandomCompaniesDtoIn));
+    }
+
+    @Operation(summary = "Create new company")
+    @PostMapping("${web.rest-api.endpoints.company-create}")
+    public ResponseEntity<CompanyDtoOut> createCompany(@Valid @RequestBody final CompanyDtoIn companyDtoIn) {
+        return ResponseEntity.ok(companyUseCases.createCompany(companyDtoIn));
     }
 
     @Operation(summary = "Truncate companies table")

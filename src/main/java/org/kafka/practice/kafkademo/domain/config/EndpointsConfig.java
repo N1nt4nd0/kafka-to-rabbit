@@ -26,6 +26,9 @@ public class EndpointsConfig {
     @Value("${web.rest-api.endpoints.company-truncate}")
     private String companyTruncateApiPath;
 
+    @Value("${web.rest-api.endpoints.company-create}")
+    private String companyCreateApiPath;
+
     @Value("${web.rest-api.endpoints.hobby-list}")
     private String hobbyListApiPath;
 
