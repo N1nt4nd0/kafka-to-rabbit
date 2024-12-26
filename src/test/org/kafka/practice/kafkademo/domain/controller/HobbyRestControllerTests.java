@@ -8,17 +8,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.business.service.HobbyUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
-import org.kafka.practice.kafkademo.domain.dto.HobbyDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.stream.IntStream;
 
 @ExtendWith(MockitoExtension.class)
 public class HobbyRestControllerTests {
@@ -31,12 +37,16 @@ public class HobbyRestControllerTests {
 
     @Mock
     private WebPagesConfig webPagesConfig;
+
+    @Spy
+    private RestControllerExceptionHandler exceptionHandler;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(sut)
-                .setControllerAdvice(new RestControllerExceptionHandler())
+                .setControllerAdvice(exceptionHandler)
                 .addPlaceholderValue("web.rest-api.endpoints.hobby-truncate", "/api/hobby/truncate")
                 .addPlaceholderValue("web.rest-api.endpoints.hobby-create", "/api/hobby/create")
                 .addPlaceholderValue("web.rest-api.endpoints.hobby-list", "/api/hobby/list")
@@ -54,6 +64,8 @@ public class HobbyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
@@ -77,9 +89,29 @@ public class HobbyRestControllerTests {
 
         Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/hobby/list?size=50"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/hobby/list").param("size", "50"))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+    }
+
+    @Test
+    void testSuccessfullyGetPageWithTenHobbyDtoOutElements() throws Exception {
+        final var expectedPage = new PageImpl<>(IntStream.range(0, 10)
+                .mapToObj(i -> Mockito.mock(HobbyDtoOut.class)).toList(), PageRequest.of(0, 10), 10);
+
+        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
+        Mockito.when(hobbyUseCases.getHobbies(Mockito.any(Pageable.class))).thenReturn(expectedPage);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/hobby/list").param("size", "10"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.empty").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content.length()").value(10))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(10))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(10));
     }
 
     @Test
@@ -91,6 +123,8 @@ public class HobbyRestControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/hobby/truncate"))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test

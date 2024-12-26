@@ -8,11 +8,11 @@ import org.kafka.practice.kafkademo.domain.annotations.RestExceptionHandling;
 import org.kafka.practice.kafkademo.domain.business.service.HobbyUseCases;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.HobbyDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.hobby.FillRandomHobbiesDtoIn;
-import org.kafka.practice.kafkademo.domain.utils.ValidationUtils;
+import org.kafka.practice.kafkademo.domain.utils.ValidationHelper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
@@ -35,7 +35,7 @@ public class HobbyRestController {
     @GetMapping("${web.rest-api.endpoints.hobby-list}")
     public ResponseEntity<Page<HobbyDtoOut>> hobbyPage(@RequestParam(defaultValue = "0") final int page,
                                                        @RequestParam(defaultValue = "50") final int size) {
-        ValidationUtils.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        ValidationHelper.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
         return ResponseEntity.ok(hobbyUseCases.getHobbies(PageRequest.of(page, size)));
     }
 

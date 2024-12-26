@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto;
+package org.kafka.practice.kafkademo.domain.dto.hobby;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
@@ -8,9 +8,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class CompanyDtoIn {
+public class HobbyDtoIn {
 
-    @NotBlank(message = "Company name is required")
-    private final String companyName;
+    @NotBlank(message = "Hobby name is required")
+    private final String hobbyName;
 
 }

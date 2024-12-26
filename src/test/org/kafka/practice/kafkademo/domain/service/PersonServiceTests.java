@@ -34,12 +34,16 @@ public class PersonServiceTests {
 
     @Mock
     private CompanyRepository companyRepository;
+
     @Mock
     private PersonRepository personRepository;
+
     @Mock
     private HobbyRepository hobbyRepository;
+
     @Mock
     private WebPagesConfig webPagesConfig;
+
     @Mock
     private Faker dataFaker;
 
@@ -100,7 +104,7 @@ public class PersonServiceTests {
                 .thenReturn(Optional.of(Mockito.mock(Person.class)));
 
         Assertions.assertThrows(PersonAlreadyExistException.class, () ->
-                sut.createPerson("test@test.com", "TestFirstName", "TestLastName"));
+                sut.createPerson("test@test.com", "FirstName", "LastName"));
     }
 
     @Test

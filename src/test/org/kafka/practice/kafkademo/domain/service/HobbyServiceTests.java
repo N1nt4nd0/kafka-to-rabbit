@@ -22,6 +22,7 @@ public class HobbyServiceTests {
 
     @Mock
     private HobbyRepository hobbyRepository;
+
     @Mock
     private Faker dataFaker;
 
@@ -49,7 +50,7 @@ public class HobbyServiceTests {
     void testGetByHobbyNameThrowHobbyNotFoundByNameExceptionWhenRepositoryHaveNoSpecifiedHobby() {
         Mockito.when(hobbyRepository.findByHobbyName(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(HobbyNotFoundByNameException.class, () -> sut.getByHobbyName("TestHobby"));
+        Assertions.assertThrows(HobbyNotFoundByNameException.class, () -> sut.getByHobbyName("Hobby"));
     }
 
     @Test

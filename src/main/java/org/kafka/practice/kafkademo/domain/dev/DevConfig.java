@@ -1,6 +1,6 @@
 package org.kafka.practice.kafkademo.domain.dev;
 
-import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
+import org.kafka.practice.kafkademo.domain.generation.ExceptionGenerator;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -6,7 +6,7 @@ import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 import org.kafka.practice.kafkademo.domain.mappers.message.PersonDTOMessageMapper;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
-import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
+import org.kafka.practice.kafkademo.domain.generation.ExceptionGenerator;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto;
+package org.kafka.practice.kafkademo.domain.dto.person;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;

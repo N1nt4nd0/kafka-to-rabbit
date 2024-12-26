@@ -6,6 +6,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.config.ControllerExceptionHandler;
 import org.mockito.InjectMocks;
+import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -19,12 +21,15 @@ public class IndexControllerTests {
     @InjectMocks
     private IndexController sut;
 
+    @Spy
+    private ControllerExceptionHandler exceptionHandler;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(sut)
-                .setControllerAdvice(new ControllerExceptionHandler())
+                .setControllerAdvice(exceptionHandler)
                 .build();
     }
 
@@ -40,6 +45,8 @@ public class IndexControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.get("/").flashAttr("do-test-runtime-exception", true))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.view().name("error"));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class), Mockito.any());
     }
 
 }

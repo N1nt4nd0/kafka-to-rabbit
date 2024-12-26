@@ -1,7 +1,7 @@
 package org.kafka.practice.kafkademo.domain.mappers;
 
 import lombok.RequiredArgsConstructor;
-import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.springframework.stereotype.Component;
 

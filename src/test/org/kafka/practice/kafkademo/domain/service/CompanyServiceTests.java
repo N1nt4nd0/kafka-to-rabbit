@@ -22,6 +22,7 @@ public class CompanyServiceTests {
 
     @Mock
     private CompanyRepository companyRepository;
+
     @Mock
     private Faker dataFaker;
 
@@ -49,7 +50,7 @@ public class CompanyServiceTests {
     void testThrowCompanyNotFoundByNameExceptionWhenRepositoryHaveNoSpecifiedCompany() {
         Mockito.when(companyRepository.findByCompanyName(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(CompanyNotFoundByNameException.class, () -> sut.getByCompanyName("TestCompany"));
+        Assertions.assertThrows(CompanyNotFoundByNameException.class, () -> sut.getByCompanyName("Company"));
     }
 
     @Test

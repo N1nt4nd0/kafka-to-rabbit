@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto;
+package org.kafka.practice.kafkademo.domain.dto.hobby;
 
 import lombok.Getter;
 import lombok.NonNull;

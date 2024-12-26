@@ -1,6 +1,6 @@
 package org.kafka.practice.kafkademo.domain.mappers;
 
-import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
 import org.springframework.stereotype.Component;
 

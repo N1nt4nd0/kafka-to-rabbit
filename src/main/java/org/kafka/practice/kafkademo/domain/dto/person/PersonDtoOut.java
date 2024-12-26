@@ -1,9 +1,10 @@
-package org.kafka.practice.kafkademo.domain.dto;
+package org.kafka.practice.kafkademo.domain.dto.person;
 
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 
 import java.util.List;
 import java.util.UUID;

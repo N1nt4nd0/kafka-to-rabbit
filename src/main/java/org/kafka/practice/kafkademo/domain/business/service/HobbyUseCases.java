@@ -1,8 +1,8 @@
 package org.kafka.practice.kafkademo.domain.business.service;
 
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.HobbyDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.hobby.FillRandomHobbiesDtoIn;
 import org.springframework.data.domain.Page;

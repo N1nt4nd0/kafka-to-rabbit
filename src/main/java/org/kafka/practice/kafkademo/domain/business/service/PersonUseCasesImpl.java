@@ -3,8 +3,8 @@ package org.kafka.practice.kafkademo.domain.business.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoIn;
@@ -76,8 +76,9 @@ public class PersonUseCasesImpl implements PersonUseCases {
             }
             default -> throw new CompanyManagementException("Unimplemented management type");
         }
-        final var savedPerson = personService.savePerson(person);
-        return new CompanyManagementDtoOut(savedPerson.getEmail(), companyByName.getCompanyName(), message);
+        personService.savePerson(person);
+        return new CompanyManagementDtoOut(companyManagementDtoIn.getPersonEmail(),
+                companyManagementDtoIn.getCompanyName(), message);
     }
 
     @Override

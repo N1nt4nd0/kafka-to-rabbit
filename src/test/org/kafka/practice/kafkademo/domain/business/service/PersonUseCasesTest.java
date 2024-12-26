@@ -29,8 +29,10 @@ public class PersonUseCasesTest {
 
     @Mock
     private CompanyService companyService;
+
     @Mock
     private PersonService personService;
+
     @Mock
     private HobbyService hobbyService;
 
@@ -69,9 +71,9 @@ public class PersonUseCasesTest {
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
-        Mockito.when(person.isCompanyEmployee(company)).thenReturn(false);
         Mockito.when(personService.getByEmail(Mockito.anyString())).thenReturn(person);
         Mockito.when(companyService.getByCompanyName(Mockito.anyString())).thenReturn(company);
+        Mockito.when(person.isCompanyEmployee(company)).thenReturn(false);
 
         Assertions.assertEquals(expectedMessage, Assertions.assertThrows(CompanyManagementException.class, () ->
                 sut.manageCompany(new CompanyManagementDtoIn("Person", "Company",
@@ -84,13 +86,9 @@ public class PersonUseCasesTest {
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
-        Mockito.when(person.isCompanyEmployee(company)).thenReturn(false);
-        Mockito.when(person.withCompany(company)).thenReturn(person);
-        Mockito.when(person.getEmail()).thenReturn("test@test.com");
-        Mockito.when(company.getCompanyName()).thenReturn("Company");
         Mockito.when(personService.getByEmail(Mockito.anyString())).thenReturn(person);
         Mockito.when(companyService.getByCompanyName(Mockito.anyString())).thenReturn(company);
-        Mockito.when(personService.savePerson(person)).thenReturn(person);
+        Mockito.when(person.isCompanyEmployee(company)).thenReturn(false);
 
         final var response = sut.manageCompany(new CompanyManagementDtoIn("Person", "Company",
                 CompanyManagementType.HIRE));
@@ -104,13 +102,9 @@ public class PersonUseCasesTest {
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
-        Mockito.when(person.isCompanyEmployee(company)).thenReturn(true);
-        Mockito.when(person.withoutCompany()).thenReturn(person);
-        Mockito.when(person.getEmail()).thenReturn("test@test.com");
-        Mockito.when(company.getCompanyName()).thenReturn("Company");
         Mockito.when(personService.getByEmail(Mockito.anyString())).thenReturn(person);
         Mockito.when(companyService.getByCompanyName(Mockito.anyString())).thenReturn(company);
-        Mockito.when(personService.savePerson(person)).thenReturn(person);
+        Mockito.when(person.isCompanyEmployee(company)).thenReturn(true);
 
         final var response = sut.manageCompany(new CompanyManagementDtoIn("Person", "Company",
                 CompanyManagementType.DISMISS));

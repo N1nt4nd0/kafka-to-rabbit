@@ -1,8 +1,8 @@
 package org.kafka.practice.kafkademo.domain.business.service;
 
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoIn;

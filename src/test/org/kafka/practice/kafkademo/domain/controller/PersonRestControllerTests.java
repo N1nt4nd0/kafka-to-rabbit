@@ -8,17 +8,23 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.business.service.PersonUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
-import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
+import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
+
+import java.util.stream.IntStream;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonRestControllerTests {
@@ -31,12 +37,16 @@ public class PersonRestControllerTests {
 
     @Mock
     private WebPagesConfig webPagesConfig;
+
+    @Spy
+    private RestControllerExceptionHandler exceptionHandler;
+
     private MockMvc mockMvc;
 
     @BeforeEach
     void setup() {
         mockMvc = MockMvcBuilders.standaloneSetup(sut)
-                .setControllerAdvice(new RestControllerExceptionHandler())
+                .setControllerAdvice(exceptionHandler)
                 .addPlaceholderValue("web.rest-api.endpoints.person-truncate", "/api/person/truncate")
                 .addPlaceholderValue("web.rest-api.endpoints.person-create", "/api/person/create")
                 .addPlaceholderValue("web.rest-api.endpoints.person-list", "/api/person/list")
@@ -55,6 +65,8 @@ public class PersonRestControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
@@ -68,6 +80,8 @@ public class PersonRestControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
@@ -81,6 +95,8 @@ public class PersonRestControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
@@ -105,9 +121,29 @@ public class PersonRestControllerTests {
 
         Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/person/list?size=50"))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/person/list").param("size", "50"))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+    }
+
+    @Test
+    void testSuccessfullyGetPageWithTenPersonDtoOutElements() throws Exception {
+        final var expectedPage = new PageImpl<>(IntStream.range(0, 10)
+                .mapToObj(i -> Mockito.mock(PersonDtoOut.class)).toList(), PageRequest.of(0, 10), 10);
+
+        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
+        Mockito.when(personUseCases.getPersons(Mockito.any(Pageable.class))).thenReturn(expectedPage);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/person/list").param("size", "10"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.empty").value(false))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content").isArray())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.content.length()").value(10))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(10))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(10));
     }
 
     @Test
@@ -119,6 +155,8 @@ public class PersonRestControllerTests {
         mockMvc.perform(MockMvcRequestBuilders.post("/api/person/truncate"))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
