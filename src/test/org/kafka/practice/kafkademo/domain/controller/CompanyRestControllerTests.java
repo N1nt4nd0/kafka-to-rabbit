@@ -1,15 +1,19 @@
 package org.kafka.practice.kafkademo.domain.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.business.service.CompanyUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
+import org.kafka.practice.kafkademo.domain.dto.CompanyDtoIn;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -37,6 +41,18 @@ public class CompanyRestControllerTests {
                 .addPlaceholderValue("web.rest-api.endpoints.company-create", "/api/company/create")
                 .addPlaceholderValue("web.rest-api.endpoints.company-truncate", "/api/company/truncate")
                 .build();
+    }
+
+    @Test
+    void testCreateNewCompanyThrowMethodArgumentNotValidExceptionWhenCompanyNameIsEmpty() throws Exception {
+        final var expectedMessagePrefix = "Validation failed";
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/company/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(new CompanyDtoIn("     "))))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                        .value(Matchers.startsWith(expectedMessagePrefix)));
     }
 
     @Test
