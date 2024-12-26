@@ -49,17 +49,23 @@ public class PersonServiceTests {
 
     @Test
     void testValidateGenerationCountThrowNoAnyCompanyExceptionWhenCompanyRepositoryIsEmpty() {
+        final var expectedMessage = "There is no any companies in database. Fill companies first";
+
         Mockito.when(companyRepository.count()).thenReturn(0L);
 
-        Assertions.assertThrows(NoAnyCompanyException.class, () -> sut.validateGenerationCount(1, 0));
+        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(NoAnyCompanyException.class, () ->
+                sut.validateGenerationCount(1, 0)).getMessage());
     }
 
     @Test
     void testValidateGenerationCountThrowNoAnyHobbyExceptionWhenHobbyRepositoryIsEmpty() {
+        final var expectedMessage = "There is no any hobbies in database. Fill hobbies first";
+
         Mockito.when(companyRepository.count()).thenReturn(1L);
         Mockito.when(hobbyRepository.count()).thenReturn(0L);
 
-        Assertions.assertThrows(NoAnyHobbyException.class, () -> sut.validateGenerationCount(1, 0));
+        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(NoAnyHobbyException.class, () ->
+                sut.validateGenerationCount(1, 0)).getMessage());
     }
 
     @Test
@@ -86,25 +92,34 @@ public class PersonServiceTests {
 
     @Test
     void testGetByEmailThrowPersonNotFoundByEmailExceptionWhenRepositoryHaveNoSpecifiedPerson() {
+        final var expectedMessagePrefix = "Can't find person by email";
+
         Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(PersonNotFoundByEmailException.class, () -> sut.getByEmail("test@test.com"));
+        Assertions.assertTrue(Assertions.assertThrows(PersonNotFoundByEmailException.class, () ->
+                sut.getByEmail("test@test.com")).getMessage().startsWith(expectedMessagePrefix));
     }
 
     @Test
     void testDeleteByEmailThrowPersonNotFoundByEmailExceptionWhenRepositoryHaveNoSpecifiedPerson() {
+        final var expectedMessagePrefix = "Can't find person by email";
+
         Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(PersonNotFoundByEmailException.class, () -> sut.deleteByEmail("test@test.com"));
+        Assertions.assertTrue(Assertions.assertThrows(PersonNotFoundByEmailException.class, () ->
+                sut.deleteByEmail("test@test.com")).getMessage().startsWith(expectedMessagePrefix));
     }
 
     @Test
     void testCreateNewPersonThrowPersonAlreadyExistExceptionWhenCreatingPersonWithExistingEmail() {
+        final var expectedMessagePrefix = "Person already exist with specified email";
+
         Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString()))
                 .thenReturn(Optional.of(Mockito.mock(Person.class)));
 
-        Assertions.assertThrows(PersonAlreadyExistException.class, () ->
-                sut.createPerson("test@test.com", "FirstName", "LastName"));
+        Assertions.assertTrue(Assertions.assertThrows(PersonAlreadyExistException.class, () ->
+                        sut.createPerson("test@test.com", "FirstName", "LastName")).getMessage()
+                .startsWith(expectedMessagePrefix));
     }
 
     @Test

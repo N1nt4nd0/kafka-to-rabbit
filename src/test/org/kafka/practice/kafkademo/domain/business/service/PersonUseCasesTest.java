@@ -39,6 +39,7 @@ public class PersonUseCasesTest {
     @Test
     void testManagePersonCompanyThrowCompanyManagementExceptionWhenUseUnimplementedManageType() {
         final var expectedMessage = "Unimplemented management type";
+
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
@@ -53,6 +54,7 @@ public class PersonUseCasesTest {
     @Test
     void testManagePersonCompanyThrowCompanyManagementExceptionWhenPersonAlreadyHired() {
         final var expectedMessage = "Person already hired at company";
+
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
@@ -68,6 +70,7 @@ public class PersonUseCasesTest {
     @Test
     void testManagePersonCompanyThrowCompanyManagementExceptionWhenPersonNotHired() {
         final var expectedMessage = "Person is not company employee";
+
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
@@ -83,6 +86,7 @@ public class PersonUseCasesTest {
     @Test
     void testHirePersonAtCompanySuccessfully() {
         final var expectedMessage = "Person was hired successfully";
+
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
@@ -99,6 +103,7 @@ public class PersonUseCasesTest {
     @Test
     void testDismissPersonFromCompanySuccessfully() {
         final var expectedMessage = "Person was dismissed successfully";
+
         final var company = Mockito.mock(Company.class);
         final var person = Mockito.mock(Person.class);
 
@@ -114,6 +119,8 @@ public class PersonUseCasesTest {
 
     @Test
     void testAddHobbyToPersonThrowPersonAlreadyHasHobbyExceptionWhenPersonHaveSpecifiedHobby() {
+        final var expectedMessagePrefix = "Person already has hobby";
+
         final var person = Mockito.mock(Person.class);
         final var hobby = Mockito.mock(Hobby.class);
 
@@ -121,12 +128,15 @@ public class PersonUseCasesTest {
         Mockito.when(hobbyService.getByHobbyName(Mockito.anyString())).thenReturn(hobby);
         Mockito.when(person.hasHobby(hobby)).thenReturn(true);
 
-        Assertions.assertThrows(PersonAlreadyHasHobbyException.class, () ->
-                sut.addHobby(new AddPersonHobbyDtoIn("test@test.com", "Hobby")));
+        Assertions.assertTrue(Assertions.assertThrows(PersonAlreadyHasHobbyException.class, () ->
+                        sut.addHobby(new AddPersonHobbyDtoIn("test@test.com", "Hobby"))).getMessage()
+                .startsWith(expectedMessagePrefix));
     }
 
     @Test
     void testRemoveHobbyFromPersonThrowPersonHaveNoHobbyExceptionWhenPersonHaveNoSpecifiedHobby() {
+        final var expectedMessagePrefix = "Person has no hobbies found";
+
         final var person = Mockito.mock(Person.class);
         final var hobby = Mockito.mock(Hobby.class);
 
@@ -134,13 +144,15 @@ public class PersonUseCasesTest {
         Mockito.when(hobbyService.getByHobbyName(Mockito.anyString())).thenReturn(hobby);
         Mockito.when(person.hasHobby(hobby)).thenReturn(false);
 
-        Assertions.assertThrows(PersonHaveNoHobbyException.class, () ->
-                sut.removeHobby(new RemovePersonHobbyDtoIn("test@test.com", "Hobby")));
+        Assertions.assertTrue(Assertions.assertThrows(PersonHaveNoHobbyException.class, () ->
+                        sut.removeHobby(new RemovePersonHobbyDtoIn("test@test.com", "Hobby"))).getMessage()
+                .startsWith(expectedMessagePrefix));
     }
 
     @Test
     void testAddHobbyToPersonSuccessfully() {
         final var expectedMessage = "Hobby added successfully";
+
         final var person = Mockito.mock(Person.class);
         final var hobby = Mockito.mock(Hobby.class);
 
@@ -157,6 +169,7 @@ public class PersonUseCasesTest {
     @Test
     void testRemovePersonHobbySuccessfully() {
         final var expectedMessage = "Hobby removed successfully";
+
         final var person = Mockito.mock(Person.class);
         final var hobby = Mockito.mock(Hobby.class);
 

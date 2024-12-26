@@ -48,9 +48,12 @@ public class HobbyServiceTests {
 
     @Test
     void testGetByHobbyNameThrowHobbyNotFoundByNameExceptionWhenRepositoryHaveNoSpecifiedHobby() {
+        final var expectedMessagePrefix = "Can't find hobby by name";
+
         Mockito.when(hobbyRepository.findByHobbyName(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(HobbyNotFoundByNameException.class, () -> sut.getByHobbyName("Hobby"));
+        Assertions.assertTrue(Assertions.assertThrows(HobbyNotFoundByNameException.class, () ->
+                sut.getByHobbyName("Hobby")).getMessage().startsWith(expectedMessagePrefix));
     }
 
     @Test

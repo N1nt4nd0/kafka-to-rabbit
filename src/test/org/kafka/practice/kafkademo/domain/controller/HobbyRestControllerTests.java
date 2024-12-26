@@ -71,6 +71,7 @@ public class HobbyRestControllerTests {
     @Test
     void testCreateNewHobbySuccessfullyWhenHobbyNameIsValid() throws Exception {
         final var expectedHobbyName = "Hobby";
+
         final var validHobbyDtoOut = Mockito.mock(HobbyDtoOut.class);
 
         Mockito.when(validHobbyDtoOut.getHobbyName()).thenReturn(expectedHobbyName);

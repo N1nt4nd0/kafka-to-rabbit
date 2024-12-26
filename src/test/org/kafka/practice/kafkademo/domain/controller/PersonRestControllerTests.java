@@ -102,6 +102,7 @@ public class PersonRestControllerTests {
     @Test
     void testCreateNewPersonSuccessfullyWhenAllDataIsValid() throws Exception {
         final var expectedEmail = "test@test.com";
+
         final var validPersonDtoOut = Mockito.mock(PersonDtoOut.class);
 
         Mockito.when(validPersonDtoOut.getEmail()).thenReturn(expectedEmail);

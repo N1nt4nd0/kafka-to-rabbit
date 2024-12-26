@@ -73,6 +73,7 @@ public class CompanyRestControllerTests {
     @Test
     void testCreateNewCompanySuccessfullyWhenCompanyNameIsValid() throws Exception {
         final var expectedCompanyName = "Company";
+
         final var validCompanyDtoOut = Mockito.mock(CompanyDtoOut.class);
 
         Mockito.when(validCompanyDtoOut.getCompanyName()).thenReturn(expectedCompanyName);

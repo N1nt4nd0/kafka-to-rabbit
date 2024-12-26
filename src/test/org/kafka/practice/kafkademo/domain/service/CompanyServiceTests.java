@@ -48,9 +48,12 @@ public class CompanyServiceTests {
 
     @Test
     void testThrowCompanyNotFoundByNameExceptionWhenRepositoryHaveNoSpecifiedCompany() {
+        final var expectedMessagePrefix = "Can't find company by name";
+
         Mockito.when(companyRepository.findByCompanyName(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertThrows(CompanyNotFoundByNameException.class, () -> sut.getByCompanyName("Company"));
+        Assertions.assertTrue(Assertions.assertThrows(CompanyNotFoundByNameException.class, () ->
+                sut.getByCompanyName("Company")).getMessage().startsWith(expectedMessagePrefix));
     }
 
     @Test
