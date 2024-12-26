@@ -44,10 +44,12 @@ public class Person {
     @Column(name = "last_name", nullable = false)
     private String lastName;
 
+    @ToString.Exclude
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "company_id")
     private Company company;
 
+    @ToString.Exclude
     @ManyToMany
     @JoinTable(
             name = "person_hobby",

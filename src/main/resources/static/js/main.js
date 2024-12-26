@@ -180,9 +180,8 @@ document.getElementById('fill-persons-button').onclick = () => {
         url: document.getElementById('endpoints-container').getAttribute('data-person-fill-api-path'),
         method: 'POST',
         body: buildFillPersonsRequest(),
-        successMessage: 'Persons filled successfully',
         errorMessage: 'Fill persons error occurred',
-        callbackFunction: loadPersonListTable
+        callbackFunction: updateData
     });
 }
 
@@ -191,7 +190,7 @@ document.getElementById('truncate-persons-button').onclick = () => {
         url: document.getElementById('endpoints-container').getAttribute('data-person-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear persons error occurred',
-        callbackFunction: loadPersonListTable
+        callbackFunction: updateData
     });
 }
 
@@ -200,9 +199,8 @@ document.getElementById('fill-companies-button').onclick = () => {
         url: document.getElementById('endpoints-container').getAttribute('data-company-fill-api-path'),
         method: 'POST',
         body: buildFillCompaniesRequest(),
-        successMessage: 'Companies filled successfully',
         errorMessage: 'Fill persons error occurred',
-        callbackFunction: loadCompanyListTable
+        callbackFunction: updateData
     });
 }
 
@@ -211,7 +209,7 @@ document.getElementById('truncate-companies-button').onclick = () => {
         url: document.getElementById('endpoints-container').getAttribute('data-company-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear companies error occurred',
-        callbackFunction: loadCompanyListTable
+        callbackFunction: updateData
     });
 }
 
@@ -220,9 +218,8 @@ document.getElementById('fill-hobbies-button').onclick = () => {
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-fill-api-path'),
         method: 'POST',
         body: buildFillHobbiesRequest(),
-        successMessage: 'Hobbies filled successfully',
         errorMessage: 'Fill persons error occurred',
-        callbackFunction: loadHobbyListTable
+        callbackFunction: updateData
     });
 }
 
@@ -231,7 +228,7 @@ document.getElementById('truncate-hobbies-button').onclick = () => {
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear hobbies error occurred',
-        callbackFunction: loadHobbyListTable
+        callbackFunction: updateData
     });
 }
 

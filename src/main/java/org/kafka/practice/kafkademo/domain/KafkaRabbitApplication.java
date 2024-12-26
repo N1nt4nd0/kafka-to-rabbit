@@ -10,9 +10,8 @@ public class KafkaRabbitApplication {
 
     // TODO learn hibernate cache
     // TODO learn js async await
-    // TODO add logging in services
-    // TODO add more swagger documentation
-    // TODO pin .env file to all tests
+    // TODO add more unit tests to controllers and dto validation
+    // TODO more logging in services
 
     public static void main(String[] args) {
         SpringApplication.run(KafkaRabbitApplication.class, args);

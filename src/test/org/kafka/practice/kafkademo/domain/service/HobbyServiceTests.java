@@ -57,7 +57,7 @@ public class HobbyServiceTests {
         final var realFaker = new Faker();
 
         Mockito.when(dataFaker.hobby()).thenReturn(realFaker.hobby());
-        
+
         Assertions.assertTrue(sut.generateNRandomHobbies(10) > 0);
     }
 
