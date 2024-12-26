@@ -18,8 +18,6 @@ public interface HobbyService {
 
     Hobby saveHobby(Hobby hobby);
 
-    void deleteHobby(Hobby hobby);
-
     void truncateHobbyTable();
 
     long getHobbyCount();

@@ -6,7 +6,6 @@ import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.hobby.FillRandomHobbiesDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.person.HobbyCountDtoOut;
 import org.kafka.practice.kafkademo.domain.mappers.HobbyMapper;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
 import org.springframework.data.domain.Page;
@@ -41,12 +40,6 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
     public TruncateTableDtoOut truncateHobbies() {
         hobbyService.truncateHobbyTable();
         return new TruncateTableDtoOut("Hobby table successfully truncated");
-    }
-
-    @Override
-    @Transactional
-    public HobbyCountDtoOut getHobbyCount() {
-        return new HobbyCountDtoOut(hobbyService.getHobbyCount());
     }
 
 }

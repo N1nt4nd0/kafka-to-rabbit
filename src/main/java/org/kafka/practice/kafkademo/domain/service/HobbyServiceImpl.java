@@ -71,12 +71,6 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Override
     @Transactional
-    public void deleteHobby(final Hobby hobby) {
-        hobbyRepository.delete(hobby);
-    }
-
-    @Override
-    @Transactional
     public void truncateHobbyTable() {
         hobbyRepository.deleteAll();
     }

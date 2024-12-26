@@ -16,11 +16,7 @@ public interface CompanyService {
 
     Company createNewCompany(String companyName);
 
-    void deleteByCompanyName(String companyName);
-
     Company saveCompany(Company company);
-
-    void deleteCompany(Company company);
 
     void truncateCompanyTable();
 

@@ -120,8 +120,7 @@ public class PersonServiceImpl implements PersonService {
     @Override
     @Transactional
     public void deleteByEmail(final String email) {
-        final var personByEmail = getByEmail(email);
-        deletePerson(personByEmail);
+        deletePerson(getByEmail(email));
     }
 
     @Override

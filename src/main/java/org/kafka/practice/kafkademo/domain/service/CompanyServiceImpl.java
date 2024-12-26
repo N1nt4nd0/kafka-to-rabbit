@@ -65,21 +65,8 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
-    public void deleteByCompanyName(final String companyName) {
-        final var companyByName = getByCompanyName(companyName);
-        deleteCompany(companyByName);
-    }
-
-    @Override
-    @Transactional
     public Company saveCompany(final Company company) {
         return companyRepository.save(company);
-    }
-
-    @Override
-    @Transactional
-    public void deleteCompany(final Company company) {
-        companyRepository.delete(company);
     }
 
     @Override

@@ -5,30 +5,28 @@ import org.kafka.practice.kafkademo.domain.dto.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.PersonDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.person.PersonCountDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonHobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 public interface PersonUseCases {
 
+    FillRandomDataDtoOut fillRandomPersons(FillRandomPersonsDtoIn fillRandomPersonsDtoIn);
+
     PersonDtoOut createPerson(PersonDtoIn personDtoIn);
 
-    PersonDtoOut addHobby(AddPersonHobbyDtoIn addPersonHobbyDtoIn);
+    CompanyManagementDtoOut manageCompany(CompanyManagementDtoIn companyManagementDtoIn);
 
-    PersonDtoOut removeHobby(RemovePersonHobbyDtoIn removePersonHobbyDtoIn);
+    PersonHobbyDtoOut addHobby(AddPersonHobbyDtoIn addPersonHobbyDtoIn);
 
-    FillRandomDataDtoOut fillRandomPersons(FillRandomPersonsDtoIn fillRandomPersonsDtoIn);
+    PersonHobbyDtoOut removeHobby(RemovePersonHobbyDtoIn removePersonHobbyDtoIn);
 
     Page<PersonDtoOut> getPersons(Pageable pageable);
 
-    PersonDtoOut getByEmail(String email);
-
-    void deleteByEmail(String email);
-
     TruncateTableDtoOut truncatePersons();
-
-    PersonCountDtoOut getPersonCount();
 
 }

@@ -1,14 +1,16 @@
 package org.kafka.practice.kafkademo.domain.dto.person;
 
 import lombok.Getter;
+import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class HobbyCountDtoOut {
+public class PersonHobbyDtoOut {
 
-    private final long hobbyCount;
+    @NonNull
+    private final String message;
 
 }
