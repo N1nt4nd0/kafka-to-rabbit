@@ -80,6 +80,9 @@ public class PersonServiceImpl implements PersonService {
         if (requestedCount < 1) {
             throw new FillRandomDataException("Persons count must be great than 1");
         }
+        if (requestedCount > 1000) {
+            throw new FillRandomDataException("Persons count must be less than 1000");
+        }
     }
 
     @Override

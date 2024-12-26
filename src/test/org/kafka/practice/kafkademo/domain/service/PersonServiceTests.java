@@ -91,6 +91,17 @@ public class PersonServiceTests {
     }
 
     @Test
+    void testValidateGenerationCountThrowFillRandomDataExceptionWhenRequestedPersonCountGreaterThanThousand() {
+        final var expectedMessage = "Persons count must be less than 1000";
+
+        Mockito.when(companyRepository.count()).thenReturn(1L);
+        Mockito.when(hobbyRepository.count()).thenReturn(1L);
+
+        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(FillRandomDataException.class, () ->
+                sut.validateGenerationCount(1001, 0)).getMessage());
+    }
+
+    @Test
     void testGetByEmailThrowPersonNotFoundByEmailExceptionWhenRepositoryHaveNoSpecifiedPerson() {
         final var expectedMessagePrefix = "Can't find person by email";
 
