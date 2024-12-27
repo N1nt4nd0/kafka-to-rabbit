@@ -11,18 +11,25 @@ function updateData() {
     }
     isUpdating = true;
     fetch(`${pageContentRequestUrl}?page=${currentPage}&size=${pageSize}`)
-        .then(response => response.json())
-        .then(pageData => {
-            pageButtonsDisableState(pageData.first, pageData.last);
+        .then(response => {
+            return response.json().then(data => {
+                if (response.ok) {
+                    return data;
+                }
+                throw {message: 'Bad response. Status: ' + response.status, details: data};
+            });
+        })
+        .then(data => {
+            pageButtonsDisableState(data.first, data.last);
             fillDataContainerDisableState(false);
             listButtonsDisableState(false);
-            lastPage = pageData.totalPages > 0 ? pageData.totalPages - 1 : 0;
+            lastPage = data.totalPages > 0 ? data.totalPages - 1 : 0;
             document.getElementById('info-label').innerHTML = `
-                Page: ${pageData.number} / ${lastPage}. 
-                Page content: ${pageData.numberOfElements} / ${pageData.size}. 
-                Total elements: ${pageData.totalElements}.
+                Page: ${data.number} / ${lastPage}. 
+                Page content: ${data.numberOfElements} / ${data.size}. 
+                Total elements: ${data.totalElements}.
             `;
-            document.getElementById('content-tbody').innerHTML = pageData.content
+            document.getElementById('content-tbody').innerHTML = data.content
                 .map(content => fillTbodyFunction(content))
                 .join('');
         })
@@ -37,7 +44,10 @@ function updateError(error) {
     fillDataContainerDisableState(true);
     pageButtonsDisableState(true, true);
     listButtonsDisableState(true);
-    document.getElementById('info-label').innerHTML = `<span style="color: red;">Error updating content` + error.message;
+    document.getElementById('info-label').innerHTML = `
+        <span style="color: red;">
+        ${error.message}${error.details ? ` ${JSON.stringify(error.details)}` : ''}
+        </span>`;
     document.getElementById('content-thead').innerHTML = '';
     document.getElementById('content-tbody').innerHTML = '';
 }

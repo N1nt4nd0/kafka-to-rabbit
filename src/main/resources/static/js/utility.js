@@ -36,7 +36,7 @@ function sendRestApiRequest({
         .catch(error => {
             console.error('Error sending REST API request: ', error.message, error.details || 'No details');
             if (errorMessage) {
-                alert(`${errorMessage}${error.details ? `: ${JSON.stringify(error.details)}` : ''}`);
+                alert(`${errorMessage}${error.details ? ` ${JSON.stringify(error.details)}` : ''}`);
             }
         });
 }
