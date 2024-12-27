@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.dto.person;
+package org.kafka.practice.kafkademo.domain.dto;
 
 import jakarta.validation.Validation;
 import jakarta.validation.Validator;
@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kafka.practice.kafkademo.domain.business.person.CompanyManagementType;
+import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoIn;
 
 public class CompanyManagementDtoInTests {
 
