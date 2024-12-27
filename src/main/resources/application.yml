@@ -83,8 +83,8 @@ messaging:
 logging:
   level:
     # Exception handlers log level
-    org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler: TRACE
-    org.kafka.practice.kafkademo.domain.config.ControllerExceptionHandler: TRACE
+    org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler: DEBUG
+    org.kafka.practice.kafkademo.domain.config.MvcControllerExceptionHandler: DEBUG
     org.kafka.practice.kafkademo.domain.config.RabbitExceptionHandler: DEBUG
     org.kafka.practice.kafkademo.domain.config.KafkaExceptionHandler: DEBUG
     # Services log level

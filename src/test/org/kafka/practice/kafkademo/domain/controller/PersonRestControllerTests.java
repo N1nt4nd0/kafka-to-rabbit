@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.business.service.PersonUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
+import org.kafka.practice.kafkademo.domain.controller.rest.PersonRestController;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.mockito.InjectMocks;
@@ -55,78 +56,20 @@ public class PersonRestControllerTests {
     }
 
     @Test
-    void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenEmailIsInvalid() throws Exception {
-        final var expectedMessagePrefix = "Validation failed";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper()
-                                .writeValueAsString(new PersonDtoIn("invalid_email", "FirstName", "LastName"))))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
-                        .value(Matchers.startsWith(expectedMessagePrefix)));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
-    }
-
-    @Test
-    void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenFirstNameIsEmpty() throws Exception {
-        final var expectedMessagePrefix = "Validation failed";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper()
-                                .writeValueAsString(new PersonDtoIn("test@email.com", "     ", "LastName"))))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
-                        .value(Matchers.startsWith(expectedMessagePrefix)));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
-    }
-
-    @Test
-    void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenLastNameIsEmpty() throws Exception {
-        final var expectedMessagePrefix = "Validation failed";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper()
-                                .writeValueAsString(new PersonDtoIn("test@email.com", "FirstName", "     "))))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
-                        .value(Matchers.startsWith(expectedMessagePrefix)));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
-    }
-
-    @Test
     void testCreateNewPersonSuccessfullyWhenAllDataIsValid() throws Exception {
+        final var expectedDtoOut = Mockito.mock(PersonDtoOut.class);
         final var expectedEmail = "test@test.com";
 
-        final var validPersonDtoOut = Mockito.mock(PersonDtoOut.class);
+        Mockito.when(expectedDtoOut.getEmail()).thenReturn(expectedEmail);
+        Mockito.when(personUseCases.createPerson(Mockito.any(PersonDtoIn.class))).thenReturn(expectedDtoOut);
 
-        Mockito.when(validPersonDtoOut.getEmail()).thenReturn(expectedEmail);
-        Mockito.when(personUseCases.createPerson(Mockito.any(PersonDtoIn.class))).thenReturn(validPersonDtoOut);
+        final var personDtoIn = new PersonDtoIn(expectedEmail, "FirstName", "LastName");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper()
-                                .writeValueAsString(new PersonDtoIn(expectedEmail, "FirstName", "LastName"))))
+                        .content(new ObjectMapper().writeValueAsString(personDtoIn)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value(expectedEmail));
-    }
-
-    @Test
-    void testGetPersonPageThrowPageSizeLimitExceptionWhenMaxPageSizeEqualsTen() throws Exception {
-        final var expectedMessage = "Page size must be less than 10";
-
-        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/person/list").param("size", "50"))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
@@ -145,6 +88,67 @@ public class PersonRestControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(10));
+    }
+
+    @Test
+    void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenEmailIsInvalid() throws Exception {
+        final var expectedMessagePrefix = "Validation failed";
+
+        final var personDtoIn = new PersonDtoIn("invalid_email", "FirstName", "LastName");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(personDtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                        .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+    }
+
+    @Test
+    void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenFirstNameIsEmpty() throws Exception {
+        final var expectedMessagePrefix = "Validation failed";
+
+        final var personDtoIn = new PersonDtoIn("test@email.com", "     ", "LastName");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(personDtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                        .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+    }
+
+    @Test
+    void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenLastNameIsEmpty() throws Exception {
+        final var expectedMessagePrefix = "Validation failed";
+
+        final var personDtoIn = new PersonDtoIn("test@email.com", "FirstName", "     ");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(personDtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                        .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+    }
+
+    @Test
+    void testGetPersonPageThrowPageSizeLimitExceptionWhenMaxPageSizeEqualsTen() throws Exception {
+        final var expectedMessage = "Page size must be less than 10";
+
+        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/person/list").param("size", "50"))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test

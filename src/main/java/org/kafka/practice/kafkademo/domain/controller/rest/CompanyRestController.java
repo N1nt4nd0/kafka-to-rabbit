@@ -1,16 +1,15 @@
-package org.kafka.practice.kafkademo.domain.controller;
+package org.kafka.practice.kafkademo.domain.controller.rest;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.kafka.practice.kafkademo.domain.annotations.RestExceptionHandling;
 import org.kafka.practice.kafkademo.domain.business.service.CompanyUseCases;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
-import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
 import org.kafka.practice.kafkademo.domain.utils.ValidationHelper;
 import org.springframework.data.domain.Page;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Tag(name = "Company", description = "The company rest controller")
 @RestController
-@RestExceptionHandling
 @RequiredArgsConstructor
 public class CompanyRestController {
 

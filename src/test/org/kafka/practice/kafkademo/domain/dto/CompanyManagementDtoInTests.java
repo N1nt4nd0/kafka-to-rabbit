@@ -18,11 +18,19 @@ public class CompanyManagementDtoInTests {
     }
 
     @Test
+    void testValidateCompanyManagementDtoInWhenAllArgumentsAreValid() {
+        final var violations = validator.validate(new CompanyManagementDtoIn("email@email", "Company",
+                CompanyManagementType.HIRE));
+
+        Assertions.assertEquals(0, violations.size());
+    }
+
+    @Test
     void testValidateCompanyManagementDtoInWhenEmailHasInvalidFormat() {
         final var expectedMessage = "Invalid email format";
 
-        final var violations = validator
-                .validate(new CompanyManagementDtoIn("email@", "Company", CompanyManagementType.UNKNOWN));
+        final var violations = validator.validate(new CompanyManagementDtoIn("email@", "Company",
+                CompanyManagementType.HIRE));
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
@@ -32,19 +40,11 @@ public class CompanyManagementDtoInTests {
     void testValidateCompanyManagementDtoInWhenCompanyNameIsEmpty() {
         final var expectedMessage = "Company name is required";
 
-        final var violations = validator
-                .validate(new CompanyManagementDtoIn("email@email", "     ", CompanyManagementType.UNKNOWN));
+        final var violations = validator.validate(new CompanyManagementDtoIn("email@email", "     ",
+                CompanyManagementType.HIRE));
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
-    }
-
-    @Test
-    void testValidateCompanyManagementDtoInWhenAllArgumentsAreValid() {
-        final var violations = validator
-                .validate(new CompanyManagementDtoIn("email@email", "Company", CompanyManagementType.UNKNOWN));
-
-        Assertions.assertEquals(0, violations.size());
     }
 
 }

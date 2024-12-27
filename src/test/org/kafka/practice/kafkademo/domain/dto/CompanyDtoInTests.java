@@ -17,6 +17,13 @@ public class CompanyDtoInTests {
     }
 
     @Test
+    void testValidateCompanyDtoInWhenCompanyNameIsValid() {
+        final var violations = validator.validate(new CompanyDtoIn("Company"));
+
+        Assertions.assertEquals(0, violations.size());
+    }
+
+    @Test
     void testValidateCompanyDtoInWhenCompanyNameIsEmpty() {
         final var expectedMessage = "Company name is required";
 
@@ -24,13 +31,6 @@ public class CompanyDtoInTests {
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
-    }
-
-    @Test
-    void testValidateCompanyDtoInWhenCompanyNameIsValid() {
-        final var violations = validator.validate(new CompanyDtoIn("Company"));
-
-        Assertions.assertEquals(0, violations.size());
     }
 
 }

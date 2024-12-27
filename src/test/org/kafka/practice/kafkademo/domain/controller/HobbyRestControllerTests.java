@@ -8,6 +8,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.business.service.HobbyUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
+import org.kafka.practice.kafkademo.domain.controller.rest.HobbyRestController;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.mockito.InjectMocks;
@@ -55,46 +56,20 @@ public class HobbyRestControllerTests {
     }
 
     @Test
-    void testCreateNewHobbyThrowMethodArgumentNotValidExceptionWhenHobbyNameIsEmpty() throws Exception {
-        final var expectedMessagePrefix = "Validation failed";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/hobby/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new HobbyDtoIn("     "))))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
-                        .value(Matchers.startsWith(expectedMessagePrefix)));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
-    }
-
-    @Test
     void testCreateNewHobbySuccessfullyWhenHobbyNameIsValid() throws Exception {
+        final var expectedDtoOut = Mockito.mock(HobbyDtoOut.class);
         final var expectedHobbyName = "Hobby";
 
-        final var validHobbyDtoOut = Mockito.mock(HobbyDtoOut.class);
+        Mockito.when(expectedDtoOut.getHobbyName()).thenReturn(expectedHobbyName);
+        Mockito.when(hobbyUseCases.createHobby(Mockito.any(HobbyDtoIn.class))).thenReturn(expectedDtoOut);
 
-        Mockito.when(validHobbyDtoOut.getHobbyName()).thenReturn(expectedHobbyName);
-        Mockito.when(hobbyUseCases.createHobby(Mockito.any(HobbyDtoIn.class))).thenReturn(validHobbyDtoOut);
+        final var hobbyDtoIn = new HobbyDtoIn(expectedHobbyName);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/hobby/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new HobbyDtoIn(expectedHobbyName))))
+                        .content(new ObjectMapper().writeValueAsString(hobbyDtoIn)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.hobbyName").value(expectedHobbyName));
-    }
-
-    @Test
-    void testGetHobbyPageThrowPageSizeLimitExceptionWhenMaxPageSizeEqualsTen() throws Exception {
-        final var expectedMessage = "Page size must be less than 10";
-
-        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/hobby/list").param("size", "50"))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
@@ -113,6 +88,35 @@ public class HobbyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(10));
+    }
+
+    @Test
+    void testCreateNewHobbyThrowMethodArgumentNotValidExceptionWhenHobbyNameIsEmpty() throws Exception {
+        final var expectedMessagePrefix = "Validation failed";
+
+        final var hobbyDtoIn = new HobbyDtoIn("     ");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/hobby/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(hobbyDtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                        .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+    }
+
+    @Test
+    void testGetHobbyPageThrowPageSizeLimitExceptionWhenMaxPageSizeEqualsTen() throws Exception {
+        final var expectedMessage = "Page size must be less than 10";
+
+        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/hobby/list").param("size", "50"))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test

@@ -12,7 +12,7 @@ public class ExceptionGeneratorTests {
     private final ExceptionGenerator sut = new ExceptionGenerator(100);
 
     @Test
-    void testExceptionGeneratorWithOneHundredProbabilityThrowsRandomGeneratorExceptionOneHundredTimes() {
+    void testExceptionGeneratorWithOneHundredProbabilityThrowRandomGeneratorExceptionOneHundredTimes() {
         Assertions.assertAll("RandomGeneratorException throw 100 times",
                 IntStream.range(0, 100).mapToObj(i -> () ->
                         Assertions.assertThrows(RandomGeneratorException.class, sut::generateRandomException))

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.business.service.CompanyUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
+import org.kafka.practice.kafkademo.domain.controller.rest.CompanyRestController;
 import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
 import org.mockito.InjectMocks;
@@ -57,46 +58,20 @@ public class CompanyRestControllerTests {
     }
 
     @Test
-    void testCreateNewCompanyThrowMethodArgumentNotValidExceptionWhenCompanyNameIsEmpty() throws Exception {
-        final var expectedMessagePrefix = "Validation failed";
-
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/company/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new CompanyDtoIn("     "))))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
-                        .value(Matchers.startsWith(expectedMessagePrefix)));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
-    }
-
-    @Test
     void testCreateNewCompanySuccessfullyWhenCompanyNameIsValid() throws Exception {
+        final var expectedDtoOut = Mockito.mock(CompanyDtoOut.class);
         final var expectedCompanyName = "Company";
 
-        final var validCompanyDtoOut = Mockito.mock(CompanyDtoOut.class);
+        Mockito.when(expectedDtoOut.getCompanyName()).thenReturn(expectedCompanyName);
+        Mockito.when(companyUseCases.createCompany(Mockito.any(CompanyDtoIn.class))).thenReturn(expectedDtoOut);
 
-        Mockito.when(validCompanyDtoOut.getCompanyName()).thenReturn(expectedCompanyName);
-        Mockito.when(companyUseCases.createCompany(Mockito.any(CompanyDtoIn.class))).thenReturn(validCompanyDtoOut);
+        final var companyDtoIn = new CompanyDtoIn(expectedCompanyName);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/company/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(new CompanyDtoIn(expectedCompanyName))))
+                        .content(new ObjectMapper().writeValueAsString(companyDtoIn)))
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.companyName").value(expectedCompanyName));
-    }
-
-    @Test
-    void testGetCompanyPageThrowPageSizeLimitExceptionWhenMaxPageSizeEqualsTen() throws Exception {
-        final var expectedMessage = "Page size must be less than 10";
-
-        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/company/list").param("size", "50"))
-                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
-
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test
@@ -115,6 +90,35 @@ public class CompanyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(10));
+    }
+
+    @Test
+    void testCreateNewCompanyThrowMethodArgumentNotValidExceptionWhenCompanyNameIsEmpty() throws Exception {
+        final var expectedMessagePrefix = "Validation failed";
+
+        final var companyDtoIn = new CompanyDtoIn("     ");
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/company/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(companyDtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
+                        .value(Matchers.startsWith(expectedMessagePrefix)));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+    }
+
+    @Test
+    void testGetCompanyPageThrowPageSizeLimitExceptionWhenMaxPageSizeEqualsTen() throws Exception {
+        final var expectedMessage = "Page size must be less than 10";
+
+        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/company/list").param("size", "50"))
+                .andExpect(MockMvcResultMatchers.status().isInternalServerError())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
+
+        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
     }
 
     @Test

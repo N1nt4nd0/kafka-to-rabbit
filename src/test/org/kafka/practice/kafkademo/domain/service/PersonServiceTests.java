@@ -1,6 +1,8 @@
 package org.kafka.practice.kafkademo.domain.service;
 
 import net.datafaker.Faker;
+import net.datafaker.providers.base.Internet;
+import net.datafaker.providers.base.Name;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -48,13 +50,40 @@ public class PersonServiceTests {
     private Faker dataFaker;
 
     @Test
+    void testSuccessfullyGenerateTenRandomPersonsWhenInputHasTwentyEmails() {
+        final var fakerInternetMock = Mockito.mock(Internet.class);
+        final var fakerNameMock = Mockito.mock(Name.class);
+
+        Mockito.when(dataFaker.internet()).thenReturn(fakerInternetMock);
+        Mockito.when(dataFaker.name()).thenReturn(fakerNameMock);
+        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
+        Mockito.when(companyRepository.findAll(Mockito.any(PageRequest.class)))
+                .thenReturn(new PageImpl<>(List.of(Mockito.mock(Company.class))));
+        Mockito.when(hobbyRepository.findAll(Mockito.any(PageRequest.class)))
+                .thenReturn(new PageImpl<>(List.of(Mockito.mock(Hobby.class))));
+        Mockito.when(fakerNameMock.firstName()).thenReturn("FirstName");
+        Mockito.when(fakerNameMock.lastName()).thenReturn("LastName");
+        Mockito.when(fakerInternetMock.emailAddress()).thenReturn(
+                "01@gmail.com", "02@gmail.com", "03@gmail.com", "04@gmail.com", "05@gmail.com",
+                "06@gmail.com", "07@gmail.com", "08@gmail.com", "09@gmail.com", "10@gmail.com",
+                "11@gmail.com", "12@gmail.com", "13@gmail.com", "14@gmail.com", "15@gmail.com",
+                "16@gmail.com", "17@gmail.com", "18@gmail.com", "19@gmail.com", "20@gmail.com");
+
+        final var expectedTen = sut.generateNRandomPersons(10, 0);
+
+        Assertions.assertEquals(10, expectedTen);
+    }
+
+    @Test
     void testValidateGenerationCountThrowNoAnyCompanyExceptionWhenCompanyRepositoryIsEmpty() {
         final var expectedMessage = "There is no any companies in database. Fill companies first";
 
         Mockito.when(companyRepository.count()).thenReturn(0L);
 
-        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(NoAnyCompanyException.class, () ->
-                sut.validateGenerationCount(1, 0)).getMessage());
+        final var resultingException = Assertions.assertThrows(NoAnyCompanyException.class, () ->
+                sut.validateGenerationCount(1, 0));
+
+        Assertions.assertEquals(expectedMessage, resultingException.getMessage());
     }
 
     @Test
@@ -64,8 +93,10 @@ public class PersonServiceTests {
         Mockito.when(companyRepository.count()).thenReturn(1L);
         Mockito.when(hobbyRepository.count()).thenReturn(0L);
 
-        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(NoAnyHobbyException.class, () ->
-                sut.validateGenerationCount(1, 0)).getMessage());
+        final var resultingException = Assertions.assertThrows(NoAnyHobbyException.class, () ->
+                sut.validateGenerationCount(1, 0));
+
+        Assertions.assertEquals(expectedMessage, resultingException.getMessage());
     }
 
     @Test
@@ -75,8 +106,10 @@ public class PersonServiceTests {
         Mockito.when(companyRepository.count()).thenReturn(1L);
         Mockito.when(hobbyRepository.count()).thenReturn(1L);
 
-        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(FillRandomDataException.class, () ->
-                sut.validateGenerationCount(1, -1)).getMessage());
+        final var resultingException = Assertions.assertThrows(FillRandomDataException.class, () ->
+                sut.validateGenerationCount(1, -1));
+
+        Assertions.assertEquals(expectedMessage, resultingException.getMessage());
     }
 
     @Test
@@ -86,8 +119,10 @@ public class PersonServiceTests {
         Mockito.when(companyRepository.count()).thenReturn(1L);
         Mockito.when(hobbyRepository.count()).thenReturn(1L);
 
-        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(FillRandomDataException.class, () ->
-                sut.validateGenerationCount(0, 0)).getMessage());
+        final var resultingException = Assertions.assertThrows(FillRandomDataException.class, () ->
+                sut.validateGenerationCount(0, 0));
+
+        Assertions.assertEquals(expectedMessage, resultingException.getMessage());
     }
 
     @Test
@@ -97,8 +132,10 @@ public class PersonServiceTests {
         Mockito.when(companyRepository.count()).thenReturn(1L);
         Mockito.when(hobbyRepository.count()).thenReturn(1L);
 
-        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(FillRandomDataException.class, () ->
-                sut.validateGenerationCount(1001, 0)).getMessage());
+        final var resultingException = Assertions.assertThrows(FillRandomDataException.class, () ->
+                sut.validateGenerationCount(1001, 0));
+
+        Assertions.assertEquals(expectedMessage, resultingException.getMessage());
     }
 
     @Test
@@ -107,8 +144,10 @@ public class PersonServiceTests {
 
         Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertTrue(Assertions.assertThrows(PersonNotFoundByEmailException.class, () ->
-                sut.getByEmail("test@test.com")).getMessage().startsWith(expectedMessagePrefix));
+        final var resultingException = Assertions.assertThrows(PersonNotFoundByEmailException.class, () ->
+                sut.getByEmail("test@test.com"));
+
+        Assertions.assertTrue(resultingException.getMessage().startsWith(expectedMessagePrefix));
     }
 
     @Test
@@ -117,8 +156,10 @@ public class PersonServiceTests {
 
         Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertTrue(Assertions.assertThrows(PersonNotFoundByEmailException.class, () ->
-                sut.deleteByEmail("test@test.com")).getMessage().startsWith(expectedMessagePrefix));
+        final var resultingException = Assertions.assertThrows(PersonNotFoundByEmailException.class, () ->
+                sut.deleteByEmail("test@test.com"));
+
+        Assertions.assertTrue(resultingException.getMessage().startsWith(expectedMessagePrefix));
     }
 
     @Test
@@ -128,24 +169,10 @@ public class PersonServiceTests {
         Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString()))
                 .thenReturn(Optional.of(Mockito.mock(Person.class)));
 
-        Assertions.assertTrue(Assertions.assertThrows(PersonAlreadyExistException.class, () ->
-                        sut.createPerson("test@test.com", "FirstName", "LastName")).getMessage()
-                .startsWith(expectedMessagePrefix));
-    }
+        final var resultingException = Assertions.assertThrows(PersonAlreadyExistException.class, () ->
+                sut.createPerson("test@test.com", "FirstName", "LastName"));
 
-    @Test
-    void testGenerateNRandomPersonsWithGreaterThanZeroResult() {
-        final var realFaker = new Faker();
-
-        Mockito.when(dataFaker.internet()).thenReturn(realFaker.internet());
-        Mockito.when(dataFaker.name()).thenReturn(realFaker.name());
-        Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
-        Mockito.when(companyRepository.findAll(Mockito.any(PageRequest.class)))
-                .thenReturn(new PageImpl<>(List.of(Mockito.mock(Company.class))));
-        Mockito.when(hobbyRepository.findAll(Mockito.any(PageRequest.class)))
-                .thenReturn(new PageImpl<>(List.of(Mockito.mock(Hobby.class))));
-
-        Assertions.assertTrue(sut.generateNRandomPersons(10, 0) > 0);
+        Assertions.assertTrue(resultingException.getMessage().startsWith(expectedMessagePrefix));
     }
 
 }

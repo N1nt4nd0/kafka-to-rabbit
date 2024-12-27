@@ -3,15 +3,16 @@ package org.kafka.practice.kafkademo.domain.business.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonHobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
+import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.exception.CompanyManagementException;
 import org.kafka.practice.kafkademo.domain.exception.PersonAlreadyHasHobbyException;
@@ -57,28 +58,38 @@ public class PersonUseCasesImpl implements PersonUseCases {
     public CompanyManagementDtoOut manageCompany(final CompanyManagementDtoIn companyManagementDtoIn) {
         final var personByEmail = personService.getByEmail(companyManagementDtoIn.getPersonEmail());
         final var companyByName = companyService.getByCompanyName(companyManagementDtoIn.getCompanyName());
-        Person person;
-        String message;
+        return managePersonCompany(companyManagementDtoIn, personByEmail, companyByName);
+    }
+
+    private CompanyManagementDtoOut managePersonCompany(final CompanyManagementDtoIn companyManagementDtoIn,
+                                                        final Person person, final Company company) {
         switch (companyManagementDtoIn.getManagementType()) {
             case HIRE -> {
-                if (personByEmail.isCompanyEmployee(companyByName)) {
-                    throw new CompanyManagementException("Person already hired at company");
-                }
-                person = personByEmail.withCompany(companyByName);
-                message = "Person was hired successfully";
+                return hirePerson(person, company);
             }
             case DISMISS -> {
-                if (!personByEmail.isCompanyEmployee(companyByName)) {
-                    throw new CompanyManagementException("Person is not company employee");
-                }
-                person = personByEmail.withoutCompany();
-                message = "Person was dismissed successfully";
+                return dismissEmployee(person, company);
             }
             default -> throw new CompanyManagementException("Unimplemented management type");
         }
-        personService.savePerson(person);
-        return new CompanyManagementDtoOut(companyManagementDtoIn.getPersonEmail(),
-                companyManagementDtoIn.getCompanyName(), message);
+    }
+
+    private CompanyManagementDtoOut hirePerson(final Person personByEmail, final Company companyByName) {
+        if (personByEmail.isCompanyEmployee(companyByName)) {
+            throw new CompanyManagementException("Person already hired at company");
+        }
+        final var savedPerson = personService.savePerson(personByEmail.withCompany(companyByName));
+        return new CompanyManagementDtoOut(savedPerson.getEmail(), companyByName.getCompanyName(),
+                "Person was hired successfully");
+    }
+
+    private CompanyManagementDtoOut dismissEmployee(final Person person, final Company company) {
+        if (person.isCompanyEmployee(company)) {
+            final var savedPerson = personService.savePerson(person.withoutCompany());
+            return new CompanyManagementDtoOut(savedPerson.getEmail(), company.getCompanyName(),
+                    "Person was dismissed successfully");
+        }
+        throw new CompanyManagementException("Person is not company employee");
     }
 
     @Override
@@ -97,12 +108,12 @@ public class PersonUseCasesImpl implements PersonUseCases {
     @Transactional
     public PersonHobbyDtoOut removeHobby(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
         final var personByEmail = personService.getByEmail(removePersonHobbyDto.getEmail());
-        final var hobby = hobbyService.getByHobbyName(removePersonHobbyDto.getHobbyName());
-        if (personByEmail.hasHobby(hobby)) {
-            personService.savePerson(personByEmail.withRemovedHobby(hobby));
+        final var hobbyByName = hobbyService.getByHobbyName(removePersonHobbyDto.getHobbyName());
+        if (personByEmail.hasHobby(hobbyByName)) {
+            personService.savePerson(personByEmail.withRemovedHobby(hobbyByName));
             return new PersonHobbyDtoOut("Hobby removed successfully");
         }
-        throw new PersonHaveNoHobbyException(personByEmail.getEmail(), hobby.getHobbyName());
+        throw new PersonHaveNoHobbyException(personByEmail.getEmail(), hobbyByName.getHobbyName());
     }
 
     @Override

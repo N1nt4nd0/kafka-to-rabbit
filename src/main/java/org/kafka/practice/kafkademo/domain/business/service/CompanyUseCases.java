@@ -1,9 +1,9 @@
 package org.kafka.practice.kafkademo.domain.business.service;
 
-import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

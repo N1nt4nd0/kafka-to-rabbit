@@ -17,6 +17,13 @@ public class HobbyDtoInTests {
     }
 
     @Test
+    void testValidateHobbyDtoInWhenHobbyNameIsValid() {
+        final var violations = validator.validate(new HobbyDtoIn("Hobby"));
+
+        Assertions.assertEquals(0, violations.size());
+    }
+
+    @Test
     void testValidateHobbyDtoInWhenHobbyNameIsEmpty() {
         final var expectedMessage = "Hobby name is required";
 
@@ -24,13 +31,6 @@ public class HobbyDtoInTests {
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
-    }
-
-    @Test
-    void testValidateHobbyDtoInWhenHobbyNameIsValid() {
-        final var violations = validator.validate(new HobbyDtoIn("Hobby"));
-
-        Assertions.assertEquals(0, violations.size());
     }
 
 }

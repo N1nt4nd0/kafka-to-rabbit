@@ -1,6 +1,7 @@
 package org.kafka.practice.kafkademo.domain.service;
 
 import net.datafaker.Faker;
+import net.datafaker.providers.base.Hobby;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -27,13 +28,31 @@ public class HobbyServiceTests {
     private Faker dataFaker;
 
     @Test
+    void testSuccessfullyGenerateTenRandomHobbiesWhenInputHasTwentyActivityNames() {
+        final var fakerHobbyMock = Mockito.mock(Hobby.class);
+
+        Mockito.when(dataFaker.hobby()).thenReturn(fakerHobbyMock);
+        Mockito.when(fakerHobbyMock.activity()).thenReturn(
+                "Activity01", "Activity02", "Activity03", "Activity04", "Activity05",
+                "Activity06", "Activity07", "Activity08", "Activity09", "Activity10",
+                "Activity11", "Activity12", "Activity13", "Activity14", "Activity15",
+                "Activity16", "Activity17", "Activity18", "Activity19", "Activity20");
+
+        final var expectedTen = sut.generateNRandomHobbies(10);
+
+        Assertions.assertEquals(10, expectedTen);
+    }
+
+    @Test
     void testValidateGenerationCountThrowFillRandomExceptionWhenHobbyRepositoryAlreadyFilled() {
         final var expectedMessage = "Hobby database already filled";
 
         Mockito.when(hobbyRepository.count()).thenReturn(1L);
 
-        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(FillRandomDataException.class, () ->
-                sut.validateGenerationCount(50)).getMessage());
+        final var resultingException = Assertions.assertThrows(FillRandomDataException.class, () ->
+                sut.validateGenerationCount(50));
+
+        Assertions.assertEquals(expectedMessage, resultingException.getMessage());
     }
 
     @Test
@@ -42,8 +61,10 @@ public class HobbyServiceTests {
 
         Mockito.when(hobbyRepository.count()).thenReturn(0L);
 
-        Assertions.assertEquals(expectedMessage, Assertions.assertThrows(FillRandomDataException.class, () ->
-                sut.validateGenerationCount(10)).getMessage());
+        final var resultingException = Assertions.assertThrows(FillRandomDataException.class, () ->
+                sut.validateGenerationCount(10));
+
+        Assertions.assertEquals(expectedMessage, resultingException.getMessage());
     }
 
     @Test
@@ -52,17 +73,10 @@ public class HobbyServiceTests {
 
         Mockito.when(hobbyRepository.findByHobbyName(Mockito.anyString())).thenReturn(Optional.empty());
 
-        Assertions.assertTrue(Assertions.assertThrows(HobbyNotFoundByNameException.class, () ->
-                sut.getByHobbyName("Hobby")).getMessage().startsWith(expectedMessagePrefix));
-    }
+        final var resultingException = Assertions.assertThrows(HobbyNotFoundByNameException.class, () ->
+                sut.getByHobbyName("Hobby"));
 
-    @Test
-    void testGenerateNRandomHobbiesWithGreaterThanZeroResult() {
-        final var realFaker = new Faker();
-
-        Mockito.when(dataFaker.hobby()).thenReturn(realFaker.hobby());
-
-        Assertions.assertTrue(sut.generateNRandomHobbies(10) > 0);
+        Assertions.assertTrue(resultingException.getMessage().startsWith(expectedMessagePrefix));
     }
 
 }

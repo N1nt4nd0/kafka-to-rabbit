@@ -17,6 +17,13 @@ public class RemovePersonHobbyDtoInTests {
     }
 
     @Test
+    void testValidateRemovePersonHobbyDtoInWhenAllArgumentsAreValid() {
+        final var violations = validator.validate(new RemovePersonHobbyDtoIn("email@email", "FirstName"));
+
+        Assertions.assertEquals(0, violations.size());
+    }
+
+    @Test
     void testValidateRemovePersonHobbyDtoInWhenEmailIsInvalidFormat() {
         final var expectedMessage = "Invalid email format";
 
@@ -34,13 +41,6 @@ public class RemovePersonHobbyDtoInTests {
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
-    }
-
-    @Test
-    void testValidateRemovePersonHobbyDtoInWhenAllArgumentsAreValid() {
-        final var violations = validator.validate(new RemovePersonHobbyDtoIn("email@email", "FirstName"));
-
-        Assertions.assertEquals(0, violations.size());
     }
 
 }

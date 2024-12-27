@@ -17,6 +17,13 @@ public class PersonDtoInTests {
     }
 
     @Test
+    void testValidatePersonDtoInWhenAllArgumentsAreValid() {
+        final var violations = validator.validate(new PersonDtoIn("email@email", "FirstName", "LastName"));
+
+        Assertions.assertEquals(0, violations.size());
+    }
+
+    @Test
     void testValidatePersonDtoInWhenEmailHasInvalidFormat() {
         final var expectedMessage = "Invalid email format";
 
@@ -44,13 +51,6 @@ public class PersonDtoInTests {
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
-    }
-
-    @Test
-    void testValidatePersonDtoInWhenAllArgumentsAreValid() {
-        final var violations = validator.validate(new PersonDtoIn("email@email", "FirstName", "LastName"));
-
-        Assertions.assertEquals(0, violations.size());
     }
 
 }
