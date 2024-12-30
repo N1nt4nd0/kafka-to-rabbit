@@ -1,7 +1,6 @@
 package org.kafka.practice.kafkademo.domain.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import lombok.extern.slf4j.Slf4j;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -28,7 +27,6 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.stream.IntStream;
 
-@Slf4j
 @ExtendWith(MockitoExtension.class)
 public class CompanyRestControllerTests {
 
