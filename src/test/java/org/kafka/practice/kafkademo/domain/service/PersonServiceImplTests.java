@@ -24,12 +24,13 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class PersonServiceTests {
+public class PersonServiceImplTests {
 
     @InjectMocks
     private PersonServiceImpl sut;
@@ -75,6 +76,50 @@ public class PersonServiceTests {
     }
 
     @Test
+    void testValidateGenerationCountPassSuccessfully() {
+        Mockito.when(companyRepository.count()).thenReturn(1L);
+        Mockito.when(hobbyRepository.count()).thenReturn(1L);
+
+        Assertions.assertDoesNotThrow(() -> sut.validateGenerationCount(1, 1));
+    }
+
+    @Test
+    void testFindByPersonEmailSuccessfullyReturnsSpecifiedPerson() {
+        final var expectedPerson = Mockito.mock(Person.class);
+
+        Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString()))
+                .thenReturn(Optional.of(expectedPerson));
+
+        Assertions.assertEquals(expectedPerson, sut.getByEmail("email@email"));
+    }
+
+    @Test
+    void testGetPersonsSuccessfullyCalled() {
+        final var pageableMock = Mockito.mock(Pageable.class);
+
+        sut.getPersons(pageableMock);
+
+        Mockito.verify(personRepository).findAll(pageableMock);
+    }
+
+    @Test
+    void testTruncatePersonTableSuccessfullyCalled() {
+        sut.truncatePersonsTable();
+
+        Mockito.verify(personRepository).deleteAll();
+    }
+
+    @Test
+    void testCreatePersonSuccessfullyDone() {
+        Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString()))
+                .thenReturn(Optional.empty());
+
+        sut.createPerson("email@email", "FirstName", "LastName");
+
+        Mockito.verify(personRepository).save(Mockito.any(Person.class));
+    }
+
+    @Test
     void testValidateGenerationCountThrowNoAnyCompanyExceptionWhenCompanyRepositoryIsEmpty() {
         final var expectedMessage = "There is no any companies in database. Fill companies first";
 
@@ -84,6 +129,34 @@ public class PersonServiceTests {
                 sut.validateGenerationCount(1, 0));
 
         Assertions.assertEquals(expectedMessage, resultingException.getMessage());
+    }
+
+    @Test
+    void testDeletePersonSuccessfullyCalled() {
+        final var expectedPerson = Mockito.mock(Person.class);
+
+        sut.deletePerson(expectedPerson);
+
+        Mockito.verify(personRepository).delete(expectedPerson);
+    }
+
+    @Test
+    void testDeletePersonByEmailSuccessfullyCalled() {
+        final var expectedPerson = Mockito.mock(Person.class);
+
+        Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString()))
+                .thenReturn(Optional.of(expectedPerson));
+
+        sut.deleteByEmail("email@email");
+
+        Mockito.verify(personRepository).delete(expectedPerson);
+    }
+
+    @Test
+    void testGetPersonCountSuccessfullyCalled() {
+        sut.getPersonCount();
+
+        Mockito.verify(personRepository).count();
     }
 
     @Test

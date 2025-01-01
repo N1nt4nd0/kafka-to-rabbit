@@ -12,11 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class HobbyServiceTests {
+public class HobbyServiceImplTests {
 
     @InjectMocks
     private HobbyServiceImpl sut;
@@ -41,6 +42,39 @@ public class HobbyServiceTests {
         final var expectedTen = sut.generateNRandomHobbies(10);
 
         Assertions.assertEquals(10, expectedTen);
+    }
+
+    @Test
+    void testValidateGenerationCountPassSuccessfully() {
+        Mockito.when(hobbyRepository.count()).thenReturn(0L);
+
+        Assertions.assertDoesNotThrow(() -> sut.validateGenerationCount(11));
+    }
+
+    @Test
+    void testFindByHobbyNameSuccessfullyReturnsSpecifiedHobby() {
+        final var expectedHobby = Mockito.mock(org.kafka.practice.kafkademo.domain.entities.Hobby.class);
+
+        Mockito.when(hobbyRepository.findByHobbyName(Mockito.anyString()))
+                .thenReturn(Optional.of(expectedHobby));
+
+        Assertions.assertEquals(expectedHobby, sut.getByHobbyName("Hobby"));
+    }
+
+    @Test
+    void testGetHobbiesSuccessfullyCalled() {
+        final var pageableMock = Mockito.mock(Pageable.class);
+
+        sut.getHobbies(pageableMock);
+
+        Mockito.verify(hobbyRepository).findAll(pageableMock);
+    }
+
+    @Test
+    void testTruncateHobbyTableSuccessfullyCalled() {
+        sut.truncateHobbyTable();
+
+        Mockito.verify(hobbyRepository).deleteAll();
     }
 
     @Test

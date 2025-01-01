@@ -9,8 +9,11 @@ import org.kafka.practice.kafkademo.domain.business.service.CompanyUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.controller.rest.CompanyRestController;
+import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -88,6 +91,39 @@ public class CompanyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(10));
+    }
+
+    @Test
+    void testTruncateCompaniesSuccessfully() throws Exception {
+        final var expectedDtoOut = Mockito.mock(TruncateTableDtoOut.class);
+        final var expectedMessage = "Company table successfully truncated";
+
+        Mockito.when(expectedDtoOut.getTruncateMessage()).thenReturn(expectedMessage);
+        Mockito.when(companyUseCases.truncateCompanies()).thenReturn(expectedDtoOut);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/company/truncate"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.truncateMessage").value(expectedMessage));
+    }
+
+    @Test
+    void testFillRandomTenCompaniesSuccessfully() throws Exception {
+        final var expectedDtoOut = Mockito.mock(FillRandomDataDtoOut.class);
+        final var expectedMessage = "Random companies successfully filled";
+        final var expectedCount = 10;
+
+        Mockito.when(expectedDtoOut.getMessage()).thenReturn(expectedMessage);
+        Mockito.when(expectedDtoOut.getFilledCount()).thenReturn((long) expectedCount);
+        Mockito.when(companyUseCases.fillRandomCompanies(Mockito.any())).thenReturn(expectedDtoOut);
+
+        final var dtoIn = new FillRandomCompaniesDtoIn(expectedCount);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/company/fill")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.filledCount").value(expectedCount))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(expectedMessage));
     }
 
     @Test

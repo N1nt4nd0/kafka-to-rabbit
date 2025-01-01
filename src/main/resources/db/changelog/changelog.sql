@@ -1,7 +1,8 @@
 --liquibase formatted sql
 
 --changeset viacheslav.fedorov@syntegrico.by:create_uuid_generate_extension
-CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+CREATE
+EXTENSION IF NOT EXISTS "uuid-ossp";
 
 --changeset viacheslav.fedorov@syntegrico.by:create_companies_table
 CREATE TABLE company

@@ -9,6 +9,9 @@ import org.kafka.practice.kafkademo.domain.business.service.PersonUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.controller.rest.PersonRestController;
+import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
 import org.mockito.InjectMocks;
@@ -91,14 +94,47 @@ public class PersonRestControllerTests {
     }
 
     @Test
+    void testTruncatePersonsSuccessfully() throws Exception {
+        final var expectedDtoOut = Mockito.mock(TruncateTableDtoOut.class);
+        final var expectedMessage = "Person table successfully truncated";
+
+        Mockito.when(expectedDtoOut.getTruncateMessage()).thenReturn(expectedMessage);
+        Mockito.when(personUseCases.truncatePersons()).thenReturn(expectedDtoOut);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/truncate"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.truncateMessage").value(expectedMessage));
+    }
+
+    @Test
+    void testFillRandomTenPersonsSuccessfully() throws Exception {
+        final var expectedDtoOut = Mockito.mock(FillRandomDataDtoOut.class);
+        final var expectedMessage = "Random persons successfully filled";
+        final var expectedCount = 10;
+
+        Mockito.when(expectedDtoOut.getMessage()).thenReturn(expectedMessage);
+        Mockito.when(expectedDtoOut.getFilledCount()).thenReturn((long) expectedCount);
+        Mockito.when(personUseCases.fillRandomPersons(Mockito.any())).thenReturn(expectedDtoOut);
+
+        final var dtoIn = new FillRandomPersonsDtoIn(expectedCount, 3);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/person/fill")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.filledCount").value(expectedCount))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(expectedMessage));
+    }
+
+    @Test
     void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenEmailIsInvalid() throws Exception {
         final var expectedMessagePrefix = "Validation failed";
 
-        final var personDtoIn = new PersonDtoIn("invalid_email", "FirstName", "LastName");
+        final var dtoIn = new PersonDtoIn("invalid_email", "FirstName", "LastName");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(personDtoIn)))
+                        .content(new ObjectMapper().writeValueAsString(dtoIn)))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));
@@ -110,11 +146,11 @@ public class PersonRestControllerTests {
     void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenFirstNameIsEmpty() throws Exception {
         final var expectedMessagePrefix = "Validation failed";
 
-        final var personDtoIn = new PersonDtoIn("test@email.com", "     ", "LastName");
+        final var dtoIn = new PersonDtoIn("test@email.com", "     ", "LastName");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(personDtoIn)))
+                        .content(new ObjectMapper().writeValueAsString(dtoIn)))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));
@@ -126,11 +162,11 @@ public class PersonRestControllerTests {
     void testCreateNewPersonThrowMethodArgumentNotValidExceptionWhenLastNameIsEmpty() throws Exception {
         final var expectedMessagePrefix = "Validation failed";
 
-        final var personDtoIn = new PersonDtoIn("test@email.com", "FirstName", "     ");
+        final var dtoIn = new PersonDtoIn("test@email.com", "FirstName", "     ");
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/person/create")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new ObjectMapper().writeValueAsString(personDtoIn)))
+                        .content(new ObjectMapper().writeValueAsString(dtoIn)))
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));

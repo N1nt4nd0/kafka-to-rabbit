@@ -3,7 +3,6 @@ package org.kafka.practice.kafkademo.domain.entities.value;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 import lombok.ToString;
 
@@ -19,9 +18,9 @@ public class PersonDTOResponse {
     private final String lastName;
 
     @JsonCreator
-    public PersonDTOResponse(@JsonProperty("email") @NonNull final String email,
-                             @JsonProperty("firstName") @NonNull final String firstName,
-                             @JsonProperty("lastName") @NonNull final String lastName) {
+    public PersonDTOResponse(@JsonProperty("email") String email,
+                             @JsonProperty("firstName") final String firstName,
+                             @JsonProperty("lastName") final String lastName) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;

@@ -9,14 +9,20 @@ import java.util.stream.IntStream;
 
 public class ExceptionGeneratorTests {
 
-    private final ExceptionGenerator sut = new ExceptionGenerator(100);
-
     @Test
     void testExceptionGeneratorWithOneHundredProbabilityThrowRandomGeneratorExceptionOneHundredTimes() {
+        final var sut = new ExceptionGenerator(100);
         Assertions.assertAll("RandomGeneratorException throw 100 times",
                 IntStream.range(0, 100).mapToObj(i -> () ->
-                        Assertions.assertThrows(RandomGeneratorException.class, sut::generateRandomException))
-        );
+                        Assertions.assertThrows(RandomGeneratorException.class, sut::generateRandomException)));
+    }
+
+    @Test
+    void testExceptionGeneratorWithZeroProbabilityNotThrowRandomGeneratorExceptionOneHundredTimes() {
+        final var sut = new ExceptionGenerator(0);
+        Assertions.assertAll("RandomGeneratorException not even thrown 100 times",
+                IntStream.range(0, 100).mapToObj(i -> () ->
+                        Assertions.assertDoesNotThrow(sut::generateRandomException)));
     }
 
 }

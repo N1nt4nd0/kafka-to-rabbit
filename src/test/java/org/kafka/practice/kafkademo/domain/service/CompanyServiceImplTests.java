@@ -12,11 +12,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Optional;
 
 @ExtendWith(MockitoExtension.class)
-public class CompanyServiceTests {
+public class CompanyServiceImplTests {
 
     @InjectMocks
     private CompanyServiceImpl sut;
@@ -44,6 +45,39 @@ public class CompanyServiceTests {
     }
 
     @Test
+    void testValidateGenerationCountPassSuccessfully() {
+        Mockito.when(companyRepository.count()).thenReturn(0L);
+
+        Assertions.assertDoesNotThrow(() -> sut.validateGenerationCount(11));
+    }
+
+    @Test
+    void testFindByCompanyNameSuccessfullyReturnsSpecifiedCompany() {
+        final var expectedCompany = Mockito.mock(org.kafka.practice.kafkademo.domain.entities.Company.class);
+
+        Mockito.when(companyRepository.findByCompanyName(Mockito.anyString()))
+                .thenReturn(Optional.of(expectedCompany));
+
+        Assertions.assertEquals(expectedCompany, sut.getByCompanyName("Company"));
+    }
+
+    @Test
+    void testGetCompaniesSuccessfullyCalled() {
+        final var pageableMock = Mockito.mock(Pageable.class);
+
+        sut.getCompanies(pageableMock);
+
+        Mockito.verify(companyRepository).findAll(pageableMock);
+    }
+
+    @Test
+    void testTruncateCompanyTableSuccessfullyCalled() {
+        sut.truncateCompanyTable();
+
+        Mockito.verify(companyRepository).deleteAll();
+    }
+
+    @Test
     void testValidateGenerationCountThrowFillRandomExceptionWhenCompanyRepositoryAlreadyFilled() {
         final var expectedMessage = "Company database already filled";
 
@@ -68,7 +102,7 @@ public class CompanyServiceTests {
     }
 
     @Test
-    void testThrowCompanyNotFoundByNameExceptionWhenRepositoryHaveNoSpecifiedCompany() {
+    void testFindByCompanyNameThrowCompanyNotFoundByNameExceptionWhenRepositoryHaveNoSpecifiedCompany() {
         final var expectedMessagePrefix = "Can't find company by name";
 
         Mockito.when(companyRepository.findByCompanyName(Mockito.anyString())).thenReturn(Optional.empty());

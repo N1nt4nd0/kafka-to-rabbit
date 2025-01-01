@@ -9,6 +9,9 @@ import org.kafka.practice.kafkademo.domain.business.service.HobbyUseCases;
 import org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler;
 import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.controller.rest.HobbyRestController;
+import org.kafka.practice.kafkademo.domain.dto.FillRandomDataDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.TruncateTableDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.hobby.FillRandomHobbiesDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.mockito.InjectMocks;
@@ -88,6 +91,39 @@ public class HobbyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalPages").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.size").value(10))
                 .andExpect(MockMvcResultMatchers.jsonPath("$.totalElements").value(10));
+    }
+
+    @Test
+    void testTruncateHobbiesSuccessfully() throws Exception {
+        final var expectedDtoOut = Mockito.mock(TruncateTableDtoOut.class);
+        final var expectedMessage = "Hobby table successfully truncated";
+
+        Mockito.when(expectedDtoOut.getTruncateMessage()).thenReturn(expectedMessage);
+        Mockito.when(hobbyUseCases.truncateHobbies()).thenReturn(expectedDtoOut);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/hobby/truncate"))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.truncateMessage").value(expectedMessage));
+    }
+
+    @Test
+    void testFillRandomTenHobbiesSuccessfully() throws Exception {
+        final var expectedDtoOut = Mockito.mock(FillRandomDataDtoOut.class);
+        final var expectedMessage = "Random hobbies successfully filled";
+        final var expectedCount = 10;
+
+        Mockito.when(expectedDtoOut.getMessage()).thenReturn(expectedMessage);
+        Mockito.when(expectedDtoOut.getFilledCount()).thenReturn((long) expectedCount);
+        Mockito.when(hobbyUseCases.fillRandomHobbies(Mockito.any())).thenReturn(expectedDtoOut);
+
+        final var dtoIn = new FillRandomHobbiesDtoIn(expectedCount);
+
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/hobby/fill")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new ObjectMapper().writeValueAsString(dtoIn)))
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.filledCount").value(expectedCount))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.message").value(expectedMessage));
     }
 
     @Test
