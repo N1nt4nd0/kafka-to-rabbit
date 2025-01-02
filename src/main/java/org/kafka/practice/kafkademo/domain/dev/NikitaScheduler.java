@@ -18,8 +18,6 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class NikitaScheduler {
 
-    private final PersonDTOMessageMapper personDTOMessageMapper;
-
     private final KafkaTemplate<String, Object> kafkaTemplate;
     private final String personDtoKafkaReceiveTopic;
 
