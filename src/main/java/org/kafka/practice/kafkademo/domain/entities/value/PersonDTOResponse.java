@@ -20,10 +20,12 @@ public class PersonDTOResponse {
     @JsonCreator
     public PersonDTOResponse(@JsonProperty("email") String email,
                              @JsonProperty("firstName") final String firstName,
-                             @JsonProperty("lastName") final String lastName) {
+                             @JsonProperty("lastName") final String lastName,
+                             @JsonProperty("fail") final boolean fail) {
         this.email = email;
         this.firstName = firstName;
         this.lastName = lastName;
+        this.fail = fail;
     }
 
 }

@@ -63,7 +63,7 @@ public class PersonDtoRedirectServiceImplTests {
 
     @Test
     void testReceivePersonDtoResponseFromRabbitSuccessfully() {
-        final var expectedPersonDtoResponse = new PersonDTOResponse("email@email", "FirstName", "LastName");
+        final var expectedPersonDtoResponse = new PersonDTOResponse("email@email", "FirstName", "LastName", false);
 
         sut.receivePersonDtoResponseFromRabbit(expectedPersonDtoResponse);
 
@@ -72,7 +72,7 @@ public class PersonDtoRedirectServiceImplTests {
 
     @Test
     void testSendPersonDtoResponseToKafkaSuccessfully() {
-        final var expectedPersonDtoResponse = new PersonDTOResponse("email@email", "FirstName", "LastName");
+        final var expectedPersonDtoResponse = new PersonDTOResponse("email@email", "FirstName", "LastName", false);
 
         sut.sendPersonDtoResponseToKafka(expectedPersonDtoResponse);
 
@@ -82,7 +82,7 @@ public class PersonDtoRedirectServiceImplTests {
     @Test
     void testReceivePersonDtoResponseFromRabbitWhenResponseIsFailed() {
         final var expectedEmail = "email@email";
-        final var expectedPersonDtoResponse = new PersonDTOResponse(expectedEmail, "FirstName", "LastName");
+        final var expectedPersonDtoResponse = new PersonDTOResponse(expectedEmail, "FirstName", "LastName", false);
         expectedPersonDtoResponse.setFail(true);
 
         sut.receivePersonDtoResponseFromRabbit(expectedPersonDtoResponse);

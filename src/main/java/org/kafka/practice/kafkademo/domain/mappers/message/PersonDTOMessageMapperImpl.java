@@ -9,7 +9,7 @@ public class PersonDTOMessageMapperImpl implements PersonDTOMessageMapper {
 
     @Override
     public PersonDTOResponse personDtoRequestToPersonDtoResponse(final PersonDTORequest request) {
-        return new PersonDTOResponse(request.getEmail(), request.getFirstName(), request.getLastName());
+        return new PersonDTOResponse(request.getEmail(), request.getFirstName(), request.getLastName(), false);
     }
 
     @Override
@@ -19,7 +19,8 @@ public class PersonDTOMessageMapperImpl implements PersonDTOMessageMapper {
 
     @Override
     public PersonDTOResponse clonePersonDtoResponse(final PersonDTOResponse response) {
-        return new PersonDTOResponse(response.getEmail(), response.getFirstName(), response.getLastName());
+        return new PersonDTOResponse(response.getEmail(), response.getFirstName(),
+                response.getLastName(), response.isFail());
     }
 
 }
