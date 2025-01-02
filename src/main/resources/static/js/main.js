@@ -19,17 +19,17 @@ function updateData() {
                 throw {message: 'Bad response. Status: ' + response.status, details: data};
             });
         })
-        .then(data => {
-            pageButtonsDisableState(data.first, data.last);
+        .then(page => {
+            pageButtonsDisableState(page.first, page.last);
             fillDataContainerDisableState(false);
             listButtonsDisableState(false);
-            lastPage = data.totalPages > 0 ? data.totalPages - 1 : 0;
+            lastPage = page.totalPages > 0 ? page.totalPages - 1 : 0;
             document.getElementById('info-label').innerHTML = `
-                Page: ${data.number} / ${lastPage}. 
-                Page content: ${data.numberOfElements} / ${data.size}. 
-                Total elements: ${data.totalElements}.
+                Page: ${page.number} / ${lastPage}. 
+                Page content: ${page.numberOfElements} / ${page.size}. 
+                Total elements: ${page.totalElements}.
             `;
-            document.getElementById('content-tbody').innerHTML = data.content
+            document.getElementById('content-tbody').innerHTML = page.content
                 .map(content => fillTbodyFunction(content))
                 .join('');
         })

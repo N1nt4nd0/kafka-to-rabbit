@@ -90,7 +90,9 @@ public class PersonServiceImplTests {
         Mockito.when(personRepository.findByEmailIgnoreCase(Mockito.anyString()))
                 .thenReturn(Optional.of(expectedPerson));
 
-        Assertions.assertEquals(expectedPerson, sut.getByEmail("email@email"));
+        final var resultingPerson = sut.getByEmail("email@email");
+        
+        Assertions.assertEquals(expectedPerson, resultingPerson);
     }
 
     @Test
