@@ -64,7 +64,7 @@ public class CompanyRestControllerTests {
         final var expectedCompanyName = "Company";
 
         Mockito.when(expectedDtoOut.getCompanyName()).thenReturn(expectedCompanyName);
-        Mockito.when(companyUseCases.createCompany(Mockito.any(CompanyDtoIn.class))).thenReturn(expectedDtoOut);
+        Mockito.when(companyUseCases.createCompany(Mockito.any())).thenReturn(expectedDtoOut);
 
         final var companyDtoIn = new CompanyDtoIn(expectedCompanyName);
 
@@ -81,7 +81,7 @@ public class CompanyRestControllerTests {
                 .mapToObj(i -> Mockito.mock(CompanyDtoOut.class)).toList(), PageRequest.of(0, 10), 10);
 
         Mockito.when(webPagesConfig.getPageMaxElementsSize()).thenReturn(10);
-        Mockito.when(companyUseCases.getCompanies(Mockito.any(Pageable.class))).thenReturn(expectedPage);
+        Mockito.when(companyUseCases.getCompanies(Mockito.any())).thenReturn(expectedPage);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/company/list").param("size", "10"))
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -139,7 +139,7 @@ public class CompanyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage")
                         .value(Matchers.startsWith(expectedMessagePrefix)));
 
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+        Mockito.verify(exceptionHandler).handleException(Mockito.any());
     }
 
     @Test
@@ -152,7 +152,7 @@ public class CompanyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
 
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+        Mockito.verify(exceptionHandler).handleException(Mockito.any());
     }
 
     @Test
@@ -165,7 +165,7 @@ public class CompanyRestControllerTests {
                 .andExpect(MockMvcResultMatchers.status().isInternalServerError())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.errorMessage").value(expectedMessage));
 
-        Mockito.verify(exceptionHandler).handleException(Mockito.any(Exception.class));
+        Mockito.verify(exceptionHandler).handleException(Mockito.any());
     }
 
     @Test

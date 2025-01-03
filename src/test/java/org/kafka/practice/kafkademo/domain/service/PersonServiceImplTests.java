@@ -118,7 +118,7 @@ public class PersonServiceImplTests {
 
         sut.createPerson("email@email", "FirstName", "LastName");
 
-        Mockito.verify(personRepository).save(Mockito.any(Person.class));
+        Mockito.verify(personRepository).save(Mockito.any());
     }
 
     @Test
