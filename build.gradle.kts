@@ -69,9 +69,24 @@ jacoco {
 
 tasks.jacocoTestReport {
     dependsOn(tasks.test)
-
     reports {
         xml.required.set(true)
         html.required.set(true)
     }
+    val excludedClasses = listOf(
+        "**/domain/config/**",
+        "**/domain/dev/**",
+        "**/domain/dto/**",
+        "**/domain/entities/**",
+        "**/domain/listeners/**",
+        "**/domain/utils/**",
+        "**/domain/KafkaRabbitApplication.class"
+    )
+    classDirectories.setFrom(
+        files(classDirectories.files.map {
+            fileTree(it) {
+                exclude(excludedClasses)
+            }
+        })
+    )
 }
