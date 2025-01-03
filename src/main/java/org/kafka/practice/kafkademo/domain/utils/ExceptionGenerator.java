@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.generation;
+package org.kafka.practice.kafkademo.domain.utils;
 
 import org.kafka.practice.kafkademo.domain.exception.RandomGeneratorException;
 

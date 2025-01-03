@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.generation;
+package org.kafka.practice.kafkademo.domain.config;
 
 import net.datafaker.Faker;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DataFakerGeneration {
+public class DataFakerConfig {
 
     @Bean
     @Scope(ConfigurableBeanFactory.SCOPE_PROTOTYPE)

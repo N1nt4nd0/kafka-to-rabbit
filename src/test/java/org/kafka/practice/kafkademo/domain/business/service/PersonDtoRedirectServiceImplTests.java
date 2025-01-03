@@ -6,7 +6,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 import org.kafka.practice.kafkademo.domain.exception.RandomGeneratorException;
-import org.kafka.practice.kafkademo.domain.generation.ExceptionGenerator;
+import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
 import org.kafka.practice.kafkademo.domain.mappers.message.PersonDTOMessageMapper;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
 import org.mockito.InjectMocks;
