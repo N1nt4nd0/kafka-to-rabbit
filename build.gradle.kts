@@ -76,11 +76,7 @@ tasks.jacocoTestReport {
     val excludedClasses = listOf(
         "**/domain/config/**",
         "**/domain/dev/**",
-        "**/domain/dto/**",
         "**/domain/entities/**",
-        "**/domain/listeners/**",
-        "**/domain/utils/**",
-        "**/domain/KafkaRabbitApplication.class"
     )
     classDirectories.setFrom(
         files(classDirectories.files.map {
