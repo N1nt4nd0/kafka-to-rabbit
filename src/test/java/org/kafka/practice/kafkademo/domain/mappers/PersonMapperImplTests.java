@@ -1,5 +1,6 @@
 package org.kafka.practice.kafkademo.domain.mappers;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,7 +14,6 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
-import java.util.UUID;
 
 @ExtendWith(MockitoExtension.class)
 public class PersonMapperImplTests {
@@ -29,13 +29,13 @@ public class PersonMapperImplTests {
         final var person = Mockito.mock(Person.class);
         final var personCompany = Mockito.mock(Company.class);
         final var personHobby = Mockito.mock(Hobby.class);
-        final var personId = UUID.randomUUID();
+        final var personId = "64b7f4698a2b4e7e8b5732e4";
         final var personEmail = "email@email.com";
         final var personFirstName = "FirstName";
         final var personLastName = "LastName";
         final var personCompanyName = "Company";
 
-        Mockito.when(person.getId()).thenReturn(personId);
+        Mockito.when(person.getId()).thenReturn(new ObjectId(personId));
         Mockito.when(person.getEmail()).thenReturn(personEmail);
         Mockito.when(person.getFirstName()).thenReturn(personFirstName);
         Mockito.when(person.getLastName()).thenReturn(personLastName);
@@ -68,13 +68,13 @@ public class PersonMapperImplTests {
     @Test
     void testMapPersonWithoutJobAndHobbiesSuccessfully() {
         final var person = Mockito.mock(Person.class);
-        final var personId = UUID.randomUUID();
+        final var personId = "64b7f4698a2b4e7e8b5732e4";
         final var personEmail = "email@email.com";
         final var personFirstName = "FirstName";
         final var personLastName = "LastName";
         final var personCompanyName = "";
 
-        Mockito.when(person.getId()).thenReturn(personId);
+        Mockito.when(person.getId()).thenReturn(new ObjectId(personId));
         Mockito.when(person.getEmail()).thenReturn(personEmail);
         Mockito.when(person.getFirstName()).thenReturn(personFirstName);
         Mockito.when(person.getLastName()).thenReturn(personLastName);

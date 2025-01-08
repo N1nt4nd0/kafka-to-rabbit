@@ -1,5 +1,6 @@
 package org.kafka.practice.kafkademo.domain.mappers;
 
+import org.bson.types.ObjectId;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
@@ -12,10 +13,10 @@ public class HobbyMapperImplTests {
     @Test
     void testMapHobbySuccessfully() {
         final var hobby = Mockito.mock(Hobby.class);
-        final var hobbyId = 1L;
+        final var hobbyId = "64b7f4698a2b4e7e8b5732e4";
         final var hobbyName = "Hobby";
 
-        Mockito.when(hobby.getId()).thenReturn(hobbyId);
+        Mockito.when(hobby.getId()).thenReturn(new ObjectId(hobbyId));
         Mockito.when(hobby.getHobbyName()).thenReturn(hobbyName);
 
         final var resultingResponse = sut.toHobbyDtoOut(hobby);
