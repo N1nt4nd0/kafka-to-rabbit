@@ -9,7 +9,7 @@ public class HobbyMapperImpl implements HobbyMapper {
 
     @Override
     public HobbyDtoOut toHobbyDtoOut(final Hobby hobby) {
-        return new HobbyDtoOut(hobby.getId(), hobby.getHobbyName());
+        return new HobbyDtoOut(hobby.getId().toHexString(), hobby.getHobbyName());
     }
 
 }

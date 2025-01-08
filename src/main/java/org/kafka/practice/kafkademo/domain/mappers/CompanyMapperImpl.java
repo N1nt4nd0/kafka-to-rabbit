@@ -9,7 +9,7 @@ public class CompanyMapperImpl implements CompanyMapper {
 
     @Override
     public CompanyDtoOut toCompanyDtoOut(final Company company) {
-        return new CompanyDtoOut(company.getId(), company.getCompanyName());
+        return new CompanyDtoOut(company.getId().toHexString(), company.getCompanyName());
     }
 
 }

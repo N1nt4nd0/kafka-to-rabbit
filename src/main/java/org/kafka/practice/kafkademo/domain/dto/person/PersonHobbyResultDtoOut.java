@@ -8,7 +8,7 @@ import lombok.ToString;
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class PersonHobbyDtoOut {
+public class PersonHobbyResultDtoOut {
 
     @NonNull
     private final String message;

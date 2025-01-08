@@ -16,7 +16,7 @@ public class PersonMapperImpl implements PersonMapper {
 
     @Override
     public PersonDtoOut toPersonDtoOut(final Person person) {
-        return new PersonDtoOut(person.getId(), person.getEmail(), person.getFirstName(),
+        return new PersonDtoOut(person.getId().toHexString(), person.getEmail(), person.getFirstName(),
                 person.getLastName(), getCompanyName(person), getHobbyDtoList(person));
     }
 

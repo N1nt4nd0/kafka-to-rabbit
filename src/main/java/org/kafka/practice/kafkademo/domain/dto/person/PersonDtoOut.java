@@ -15,7 +15,7 @@ import java.util.UUID;
 public class PersonDtoOut {
 
     @NonNull
-    private final UUID id;
+    private final String id;
     @NonNull
     private final String email;
     @NonNull

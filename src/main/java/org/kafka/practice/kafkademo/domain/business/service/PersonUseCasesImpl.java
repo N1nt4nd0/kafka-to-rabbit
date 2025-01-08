@@ -10,7 +10,7 @@ import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.person.PersonHobbyDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonHobbyResultDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.entities.Person;
@@ -94,24 +94,24 @@ public class PersonUseCasesImpl implements PersonUseCases {
 
     @Override
     @Transactional
-    public PersonHobbyDtoOut addHobby(final AddPersonHobbyDtoIn addPersonHobbyDto) {
+    public PersonHobbyResultDtoOut addHobby(final AddPersonHobbyDtoIn addPersonHobbyDto) {
         final var personByEmail = personService.getByEmail(addPersonHobbyDto.getEmail());
         final var hobby = hobbyService.getByHobbyName(addPersonHobbyDto.getHobbyName());
         if (personByEmail.hasHobby(hobby)) {
             throw new PersonAlreadyHasHobbyException(personByEmail.getEmail(), hobby.getHobbyName());
         }
         personService.savePerson(personByEmail.withAddedHobby(hobby));
-        return new PersonHobbyDtoOut("Hobby added successfully");
+        return new PersonHobbyResultDtoOut("Hobby added successfully");
     }
 
     @Override
     @Transactional
-    public PersonHobbyDtoOut removeHobby(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
+    public PersonHobbyResultDtoOut removeHobby(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
         final var personByEmail = personService.getByEmail(removePersonHobbyDto.getEmail());
         final var hobbyByName = hobbyService.getByHobbyName(removePersonHobbyDto.getHobbyName());
         if (personByEmail.hasHobby(hobbyByName)) {
             personService.savePerson(personByEmail.withRemovedHobby(hobbyByName));
-            return new PersonHobbyDtoOut("Hobby removed successfully");
+            return new PersonHobbyResultDtoOut("Hobby removed successfully");
         }
         throw new PersonHaveNoHobbyException(personByEmail.getEmail(), hobbyByName.getHobbyName());
     }

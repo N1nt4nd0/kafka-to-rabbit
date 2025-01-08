@@ -11,7 +11,7 @@ import lombok.ToString;
 public class HobbyDtoOut {
 
     @NonNull
-    private final Long id;
+    private final String id;
     @NonNull
     private final String hobbyName;
 

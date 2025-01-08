@@ -8,7 +8,7 @@ import org.kafka.practice.kafkademo.domain.dto.person.CompanyManagementDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.FillRandomPersonsDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoOut;
-import org.kafka.practice.kafkademo.domain.dto.person.PersonHobbyDtoOut;
+import org.kafka.practice.kafkademo.domain.dto.person.PersonHobbyResultDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.person.RemovePersonHobbyDtoIn;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,9 +21,9 @@ public interface PersonUseCases {
 
     CompanyManagementDtoOut manageCompany(CompanyManagementDtoIn companyManagementDtoIn);
 
-    PersonHobbyDtoOut addHobby(AddPersonHobbyDtoIn addPersonHobbyDtoIn);
+    PersonHobbyResultDtoOut addHobby(AddPersonHobbyDtoIn addPersonHobbyDtoIn);
 
-    PersonHobbyDtoOut removeHobby(RemovePersonHobbyDtoIn removePersonHobbyDtoIn);
+    PersonHobbyResultDtoOut removeHobby(RemovePersonHobbyDtoIn removePersonHobbyDtoIn);
 
     Page<PersonDtoOut> getPersons(Pageable pageable);
 

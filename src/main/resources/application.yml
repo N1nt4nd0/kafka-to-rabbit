@@ -89,7 +89,7 @@ logging:
     org.kafka.practice.kafkademo.domain.dev: DEBUG
 
 random-exception-generator:
-  person-dto-receive-exception-probability-percent: 20
+  person-dto-receive-exception-probability-percent: 100
 
 dev:
   vlad-exception-generator-probability-percent: 10

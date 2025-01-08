@@ -10,7 +10,8 @@ import lombok.ToString;
 @RequiredArgsConstructor
 public class CompanyDtoOut {
 
-    private final long id;
+    @NonNull
+    private final String id;
     @NonNull
     private final String companyName;
 
