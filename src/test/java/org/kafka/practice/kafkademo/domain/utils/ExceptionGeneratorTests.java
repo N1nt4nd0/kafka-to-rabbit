@@ -1,9 +1,8 @@
-package org.kafka.practice.kafkademo.domain.generation;
+package org.kafka.practice.kafkademo.domain.utils;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.kafka.practice.kafkademo.domain.exception.RandomGeneratorException;
-import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
 
 import java.util.stream.IntStream;
 
