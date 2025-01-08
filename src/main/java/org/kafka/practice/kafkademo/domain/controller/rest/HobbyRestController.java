@@ -40,7 +40,7 @@ public class HobbyRestController {
     @Operation(summary = "Fill random hobbies")
     @PostMapping("${web.rest-api.endpoints.hobby-fill}")
     public ResponseEntity<FillRandomDataDtoOut> fillRandomHobbies(
-            @RequestBody final FillRandomHobbiesDtoIn fillRandomCompaniesDtoIn) {
+            @Valid @RequestBody final FillRandomHobbiesDtoIn fillRandomCompaniesDtoIn) {
         return ResponseEntity.ok(hobbyUseCases.fillRandomHobbies(fillRandomCompaniesDtoIn));
     }
 

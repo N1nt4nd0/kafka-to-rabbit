@@ -40,7 +40,7 @@ public class CompanyRestController {
     @Operation(summary = "Fill random companies")
     @PostMapping("${web.rest-api.endpoints.company-fill}")
     public ResponseEntity<FillRandomDataDtoOut> fillRandomCompanies(
-            @RequestBody final FillRandomCompaniesDtoIn fillRandomCompaniesDtoIn) {
+            @Valid @RequestBody final FillRandomCompaniesDtoIn fillRandomCompaniesDtoIn) {
         return ResponseEntity.ok(companyUseCases.fillRandomCompanies(fillRandomCompaniesDtoIn));
     }
 

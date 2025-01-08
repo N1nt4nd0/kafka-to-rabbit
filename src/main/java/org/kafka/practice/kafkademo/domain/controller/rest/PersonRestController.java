@@ -40,7 +40,7 @@ public class PersonRestController {
     @Operation(summary = "Fill random persons")
     @PostMapping("${web.rest-api.endpoints.person-fill}")
     public ResponseEntity<FillRandomDataDtoOut> fillRandomPersons(
-            @RequestBody final FillRandomPersonsDtoIn fillRandomPersonsDtoIn) {
+            @Valid @RequestBody final FillRandomPersonsDtoIn fillRandomPersonsDtoIn) {
         return ResponseEntity.ok(personUseCases.fillRandomPersons(fillRandomPersonsDtoIn));
     }
 
