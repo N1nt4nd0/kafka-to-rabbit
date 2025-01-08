@@ -83,14 +83,14 @@ logging:
     # Listeners log level
     org.kafka.practice.kafkademo.domain.listeners: DEBUG
     # Transaction logging
-    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
-    org.springframework.transaction: TRACE
-    org.hibernate.transaction: TRACE
+    org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
+    org.springframework.transaction: DEBUG
+    org.hibernate.transaction: DEBUG
     # Dev profiles logging
     org.kafka.practice.kafkademo.domain.dev: DEBUG
 
 random-exception-generator:
-  person-dto-receive-exception-probability-percent: 100
+  person-dto-receive-exception-probability-percent: 20
 
 dev:
   vlad-exception-generator-probability-percent: 10

@@ -1,4 +1,4 @@
-function sendRestApiRequest({
+function restApiRequest({
                                 url,
                                 method = 'GET',
                                 body = null,
@@ -34,7 +34,7 @@ function sendRestApiRequest({
             }
         })
         .catch(error => {
-            console.error('Error sending REST API request: ', error.message, error.details || 'No details');
+            console.error('Error sending API request: ', error.message, error.details || 'No details');
             if (errorMessage) {
                 alert(`${errorMessage}${error.details ? ` ${JSON.stringify(error.details)}` : ''}`);
             }

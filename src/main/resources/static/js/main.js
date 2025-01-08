@@ -46,7 +46,7 @@ function updateError(error) {
     listButtonsDisableState(true);
     document.getElementById('info-label').innerHTML = `
         <span style="color: red;">
-        ${error.message}${error.details ? ` ${JSON.stringify(error.details)}` : ''}
+        ${error.message}. Details in console.
         </span>`;
     document.getElementById('content-thead').innerHTML = '';
     document.getElementById('content-tbody').innerHTML = '';
@@ -186,7 +186,7 @@ function buildFillHobbiesRequest() {
 }
 
 document.getElementById('fill-persons-button').onclick = () => {
-    sendRestApiRequest({
+    restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-person-fill-api-path'),
         method: 'POST',
         body: buildFillPersonsRequest(),
@@ -196,7 +196,7 @@ document.getElementById('fill-persons-button').onclick = () => {
 }
 
 document.getElementById('truncate-persons-button').onclick = () => {
-    sendRestApiRequest({
+    restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-person-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear persons error occurred',
@@ -205,17 +205,18 @@ document.getElementById('truncate-persons-button').onclick = () => {
 }
 
 document.getElementById('fill-companies-button').onclick = () => {
-    sendRestApiRequest({
+    restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-company-fill-api-path'),
         method: 'POST',
         body: buildFillCompaniesRequest(),
-        errorMessage: 'Fill persons error occurred',
+        successMessage: 'Companies filled successfully',
+        errorMessage: 'Fill companies error occurred',
         callbackFunction: updateData
     });
 }
 
 document.getElementById('truncate-companies-button').onclick = () => {
-    sendRestApiRequest({
+    restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-company-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear companies error occurred',
@@ -224,17 +225,18 @@ document.getElementById('truncate-companies-button').onclick = () => {
 }
 
 document.getElementById('fill-hobbies-button').onclick = () => {
-    sendRestApiRequest({
+    restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-fill-api-path'),
         method: 'POST',
         body: buildFillHobbiesRequest(),
-        errorMessage: 'Fill persons error occurred',
+        successMessage: 'Hobbies filled successfully',
+        errorMessage: 'Fill hobbies error occurred',
         callbackFunction: updateData
     });
 }
 
 document.getElementById('truncate-hobbies-button').onclick = () => {
-    sendRestApiRequest({
+    restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear hobbies error occurred',
