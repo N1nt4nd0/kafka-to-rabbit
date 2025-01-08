@@ -7,7 +7,6 @@ import lombok.ToString;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 
 import java.util.List;
-import java.util.UUID;
 
 @Getter
 @ToString
