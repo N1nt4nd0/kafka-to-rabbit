@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
-import org.kafka.practice.kafkademo.domain.mappers.message.PersonDTOMessageMapper;
 import org.springframework.context.annotation.Profile;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;

@@ -91,7 +91,7 @@ public class PersonServiceImplTests {
                 .thenReturn(Optional.of(expectedPerson));
 
         final var resultingPerson = sut.getByEmail("email@email");
-        
+
         Assertions.assertEquals(expectedPerson, resultingPerson);
     }
 
