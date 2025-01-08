@@ -1,21 +1,18 @@
 package org.kafka.practice.kafkademo.domain.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.util.Objects;
 
-@Entity
-@Table(name = "company")
+@Document(collation = "company")
 @Getter
 @ToString
 @AllArgsConstructor
@@ -23,11 +20,9 @@ import java.util.Objects;
 public class Company {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    private ObjectId id;
 
-    @Column(name = "company_name", nullable = false, unique = true)
+    @Indexed(unique = true)
     private String companyName;
 
     @Override

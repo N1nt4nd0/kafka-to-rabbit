@@ -3,20 +3,9 @@ spring:
     name: SyntegricoKafkaToRabbit
   profiles:
     active: ${K2R_ACTIVE_PROFILE}
-  datasource:
-    url: ${K2R_DB_URL}
-    username: ${K2R_DB_USERNAME}
-    password: ${K2R_DB_PASSWORD}
-  liquibase:
-    change-log: classpath:db/changelog/changelog.sql
-  jpa:
-    show-sql: false
-    properties:
-      hibernate:
-        dialect: org.hibernate.dialect.PostgreSQLDialect
-        format_sql: true
-    hibernate:
-      ddl-auto: validate
+  data:
+    mongodb:
+      uri: ${K2R_DB_URL}
   kafka:
     bootstrap-servers: ${K2R_KAFKA_BOOTSTRAP_SERVERS}
     producer:

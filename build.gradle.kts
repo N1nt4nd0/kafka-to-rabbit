@@ -38,9 +38,7 @@ dependencies {
     implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
 
     // Database dependencies
-    implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-    implementation("org.postgresql:postgresql:42.7.3")
-    implementation("org.liquibase:liquibase-core")
+    implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
 
     // Messaging dependencies
     implementation("org.springframework.boot:spring-boot-starter-amqp")
