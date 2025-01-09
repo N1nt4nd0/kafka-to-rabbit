@@ -36,7 +36,7 @@ public class Person {
     private Company company;
 
     @DBRef
-    private List<Hobby> hobbies;
+    private List<Hobby> hobbies = new ArrayList<>();
 
     public Person withAddedHobby(final Hobby hobby) {
         final var newHobbies = new ArrayList<>(hobbies);

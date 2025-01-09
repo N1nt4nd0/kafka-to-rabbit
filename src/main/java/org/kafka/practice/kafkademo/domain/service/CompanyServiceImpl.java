@@ -4,11 +4,15 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
 import org.kafka.practice.kafkademo.domain.entities.Company;
+import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.exception.CompanyNotFoundByNameException;
 import org.kafka.practice.kafkademo.domain.exception.FillRandomDataException;
 import org.kafka.practice.kafkademo.domain.repository.CompanyRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,6 +24,7 @@ import java.util.stream.Stream;
 public class CompanyServiceImpl implements CompanyService {
 
     private final CompanyRepository companyRepository;
+    private final MongoTemplate mongoTemplate;
     private final Faker dataFaker;
 
     @Override
@@ -73,6 +78,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     public void truncateCompanyTable() {
         companyRepository.deleteAll();
+        mongoTemplate.updateMulti(new Query(), new Update().unset("company"), Person.class);
     }
 
     @Override
