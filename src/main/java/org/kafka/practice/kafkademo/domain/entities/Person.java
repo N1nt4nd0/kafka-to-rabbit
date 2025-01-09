@@ -32,10 +32,10 @@ public class Person {
 
     private String lastName;
 
-    @DBRef
+    @DBRef(lazy = true)
     private Company company;
 
-    @DBRef
+    @DBRef(lazy = true)
     private List<Hobby> hobbies = new ArrayList<>();
 
     public Person withAddedHobby(final Hobby hobby) {
