@@ -1,12 +1,12 @@
 function restApiRequest({
-                                url,
-                                method = 'GET',
-                                body = null,
-                                headers = {},
-                                successMessage = '',
-                                errorMessage = '',
-                                callbackFunction = null
-                            }) {
+                            url,
+                            method = 'GET',
+                            body = null,
+                            headers = {},
+                            successMessage = '',
+                            errorMessage = '',
+                            callbackFunction = null
+                        }) {
     const defaultHeaders = {
         'Content-Type': 'application/json'
     };
