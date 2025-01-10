@@ -33,7 +33,7 @@ public class CompanyRestController {
     @GetMapping("${web.rest-api.endpoints.company-list}")
     public ResponseEntity<Page<CompanyDtoOut>> companyPage(@RequestParam(defaultValue = "0") final int page,
                                                            @RequestParam(defaultValue = "50") final int size) {
-        ValidationHelper.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        ValidationHelper.checkPageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
         return ResponseEntity.ok(companyUseCases.getCompanies(PageRequest.of(page, size)));
     }
 

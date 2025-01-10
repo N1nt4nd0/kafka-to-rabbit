@@ -4,8 +4,10 @@ import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.NonNull;
 import lombok.ToString;
 import org.bson.types.ObjectId;
+import org.kafka.practice.kafkademo.domain.utils.ValidationHelper;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -38,13 +40,13 @@ public class Person {
     @DBRef(lazy = true)
     private List<Hobby> hobbies = new ArrayList<>();
 
-    public Person withAddedHobby(final Hobby hobby) {
+    public Person withAddedHobby(@NonNull final Hobby hobby) {
         final var newHobbies = new ArrayList<>(hobbies);
         newHobbies.add(hobby);
         return new Person(id, email, firstName, lastName, company, newHobbies);
     }
 
-    public Person withRemovedHobby(final Hobby hobby) {
+    public Person withRemovedHobby(@NonNull final Hobby hobby) {
         final var newHobbies = new ArrayList<>(hobbies);
         newHobbies.remove(hobby);
         return new Person(id, email, firstName, lastName, company, newHobbies);
@@ -58,13 +60,14 @@ public class Person {
         return withCompany(null);
     }
 
-    public Person withAddedHobbies(final List<Hobby> addedHobbies) {
+    public Person withAddedHobbies(@NonNull final List<Hobby> addedHobbies) {
+        ValidationHelper.checkListForNullElements(addedHobbies);
         final var newHobbies = new ArrayList<>(hobbies);
         newHobbies.addAll(addedHobbies);
         return new Person(id, email, firstName, lastName, company, newHobbies);
     }
 
-    public boolean isCompanyEmployee(final Company company) {
+    public boolean isCompanyEmployee(@NonNull final Company company) {
         return hasJob() && this.company.equals(company);
     }
 
@@ -76,12 +79,12 @@ public class Person {
         return !hobbies.isEmpty();
     }
 
-    public boolean hasHobby(final Hobby hobby) {
+    public boolean hasHobby(@NonNull final Hobby hobby) {
         return hasHobbies() && hobbies.contains(hobby);
     }
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         if (object instanceof Person person) {
             return Objects.equals(email, person.email);
         }

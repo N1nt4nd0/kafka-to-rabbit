@@ -33,7 +33,7 @@ public class PersonRestController {
     @GetMapping("${web.rest-api.endpoints.person-list}")
     public ResponseEntity<Page<PersonDtoOut>> personPage(@RequestParam(defaultValue = "0") final int page,
                                                          @RequestParam(defaultValue = "50") final int size) {
-        ValidationHelper.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        ValidationHelper.checkPageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
         return ResponseEntity.ok(personUseCases.getPersons(PageRequest.of(page, size)));
     }
 

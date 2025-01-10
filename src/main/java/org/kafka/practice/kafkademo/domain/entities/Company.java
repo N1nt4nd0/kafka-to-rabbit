@@ -26,7 +26,7 @@ public class Company {
     private String companyName;
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         if (object instanceof Company company) {
             return Objects.equals(companyName, company.companyName);
         }

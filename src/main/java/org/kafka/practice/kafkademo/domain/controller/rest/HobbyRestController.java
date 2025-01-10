@@ -33,7 +33,7 @@ public class HobbyRestController {
     @GetMapping("${web.rest-api.endpoints.hobby-list}")
     public ResponseEntity<Page<HobbyDtoOut>> hobbyPage(@RequestParam(defaultValue = "0") final int page,
                                                        @RequestParam(defaultValue = "50") final int size) {
-        ValidationHelper.validatePageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
+        ValidationHelper.checkPageSizeRange(size, webPagesConfig.getPageMaxElementsSize());
         return ResponseEntity.ok(hobbyUseCases.getHobbies(PageRequest.of(page, size)));
     }
 

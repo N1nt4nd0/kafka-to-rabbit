@@ -26,7 +26,7 @@ public class Hobby {
     private String hobbyName;
 
     @Override
-    public boolean equals(Object object) {
+    public boolean equals(final Object object) {
         if (object instanceof Hobby hobby) {
             return Objects.equals(hobbyName, hobby.hobbyName);
         }
