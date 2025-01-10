@@ -25,4 +25,8 @@ public class MongoDbConfig extends AbstractMongoClientConfiguration {
         return databaseName;
     }
 
+    @Override
+    protected boolean autoIndexCreation() {
+        return true;
+    }
 }
