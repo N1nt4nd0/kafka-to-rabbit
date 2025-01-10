@@ -29,7 +29,7 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Override
     @Transactional
-    public long generateNRandomHobbies(int hobbyCount) {
+    public long generateNRandomHobbies(final int hobbyCount) {
         return Stream.generate(() -> dataFaker.hobby().activity())
                 .limit(hobbyCount)
                 .distinct()
@@ -40,7 +40,7 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Override
     @Transactional
-    public void validateGenerationCount(int requestedCount) {
+    public void validateGenerationCount(final int requestedCount) {
         if (getHobbyCount() > 0) {
             throw new FillRandomDataException("Hobby database already filled");
         }

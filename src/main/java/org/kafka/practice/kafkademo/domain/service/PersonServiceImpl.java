@@ -37,7 +37,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    public long generateNRandomPersons(int personCount, int personMaxHobbyCount) {
+    public long generateNRandomPersons(final int personCount, final int personMaxHobbyCount) {
         final var pageable = PageRequest.of(0, webPagesConfig.getPageMaxElementsSize());
         final var companyList = companyRepository.findAll(pageable).getContent();
         final var hobbyList = hobbyRepository.findAll(pageable).getContent();
@@ -67,7 +67,7 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    public void validateGenerationCount(int requestedCount, int requestedHobbyCount) {
+    public void validateGenerationCount(final int requestedCount, final int requestedHobbyCount) {
         if (companyRepository.count() == 0) {
             throw new NoAnyCompanyException();
         }
