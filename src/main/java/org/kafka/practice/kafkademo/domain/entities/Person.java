@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 import lombok.ToString;
+import lombok.experimental.FieldNameConstants;
 import org.bson.types.ObjectId;
 import org.kafka.practice.kafkademo.domain.utils.ValidationHelper;
 import org.springframework.data.annotation.Id;
@@ -20,6 +21,7 @@ import java.util.Objects;
 @Document("person")
 @Getter
 @ToString
+@FieldNameConstants
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Person {

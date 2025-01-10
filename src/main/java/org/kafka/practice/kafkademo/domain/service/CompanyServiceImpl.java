@@ -78,7 +78,7 @@ public class CompanyServiceImpl implements CompanyService {
     @Transactional
     public void truncateCompanyTable() {
         companyRepository.deleteAll();
-        mongoTemplate.updateMulti(new Query(), new Update().unset("company"), Person.class);
+        mongoTemplate.updateMulti(new Query(), new Update().unset(Person.Fields.company), Person.class);
     }
 
     @Override

@@ -78,7 +78,7 @@ public class HobbyServiceImpl implements HobbyService {
     @Transactional
     public void truncateHobbyTable() {
         hobbyRepository.deleteAll();
-        mongoTemplate.updateMulti(new Query(), new Update().unset("hobbies"), Person.class);
+        mongoTemplate.updateMulti(new Query(), new Update().unset(Person.Fields.hobbies), Person.class);
     }
 
     @Override
