@@ -22,7 +22,7 @@ public class Hobby {
     @Id
     private ObjectId id;
 
-    @Indexed(unique = true)
+    @Indexed(name = "hobby_name_index", unique = true, collation = "{locale: 'en', strength: 2}")
     private String hobbyName;
 
     @Override

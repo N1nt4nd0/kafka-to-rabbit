@@ -25,7 +25,7 @@ public class Person {
     @Id
     private ObjectId id;
 
-    @Indexed(unique = true)
+    @Indexed(name = "email_index", unique = true, collation = "{locale: 'en', strength: 2}")
     private String email;
 
     private String firstName;

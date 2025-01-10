@@ -22,7 +22,7 @@ public class Company {
     @Id
     private ObjectId id;
 
-    @Indexed(unique = true)
+    @Indexed(name = "company_name_index", unique = true, collation = "{locale: 'en', strength: 2}")
     private String companyName;
 
     @Override
