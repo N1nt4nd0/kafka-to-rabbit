@@ -1,9 +1,8 @@
-package org.kafka.practice.kafkademo.domain.controller;
+package org.kafka.practice.kafkademo.domain.controller.mvc;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kafka.practice.kafkademo.domain.controller.mvc.IndexController;
 import org.mockito.InjectMocks;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.test.web.servlet.MockMvc;
