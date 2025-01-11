@@ -57,7 +57,7 @@ public class VelocityConfig {
             }
 
             @Override
-            public void render(@NonNull final Map<String, ?> model,
+            public void render(final Map<String, ?> model,
                                @NonNull final HttpServletRequest request,
                                @NonNull final HttpServletResponse response) throws Exception {
                 final var context = new VelocityContext(new HashMap<>(model));
