@@ -48,6 +48,10 @@ function updateError(error) {
         <span style="color: red;">
         ${error.message}. Details in console.
         </span>`;
+    clearTableData();
+}
+
+function clearTableData() {
     document.getElementById('content-thead').innerHTML = '';
     document.getElementById('content-tbody').innerHTML = '';
 }
@@ -91,6 +95,7 @@ function fillDataContainerDisableState(state) {
 }
 
 function loadPersonListTable() {
+    clearTableData();
     document.title = 'Persons';
     document.getElementById('content-thead').innerHTML = `
         <tr>
@@ -121,6 +126,7 @@ function loadPersonListTable() {
 }
 
 function loadCompanyListTable() {
+    clearTableData();
     document.title = 'Companies';
     document.getElementById('content-thead').innerHTML = `
         <tr>
@@ -142,6 +148,7 @@ function loadCompanyListTable() {
 }
 
 function loadHobbyListTable() {
+    clearTableData();
     document.title = 'Hobbies';
     document.getElementById('content-thead').innerHTML = `
         <tr>
