@@ -5,8 +5,8 @@ spring:
     active: ${K2R_ACTIVE_PROFILE}
   data:
     mongodb:
-      db-name: ${K2R_DB_NAME}
       uri: ${K2R_DB_URL}
+      database: ${K2R_DB_NAME}
   kafka:
     bootstrap-servers: ${K2R_KAFKA_BOOTSTRAP_SERVERS}
     producer:
