@@ -1,16 +1,19 @@
 let pageSize = parseInt(document.getElementById('page-size-input').value, 10);
 let pageContentRequestUrl = '';
-let isUpdating = false;
+let updateAbortController;
 let fillTbodyFunction;
 let currentPage = 0;
 let lastPage = 0;
 
 function updateData() {
-    if (isUpdating || pageContentRequestUrl === '' || !fillTbodyFunction) {
+    if (pageContentRequestUrl === '' || !fillTbodyFunction) {
         return;
     }
-    isUpdating = true;
-    fetch(`${pageContentRequestUrl}?page=${currentPage}&size=${pageSize}`)
+    if (updateAbortController) {
+        updateAbortController.abort();
+    }
+    updateAbortController = new AbortController();
+    fetch(`${pageContentRequestUrl}?page=${currentPage}&size=${pageSize}`, {signal: updateAbortController.signal})
         .then(response => {
             return response.json().then(data => {
                 if (response.ok) {
@@ -20,7 +23,7 @@ function updateData() {
             });
         })
         .then(page => {
-            pageButtonsDisableState(page.first, page.last);
+            pageButtonsDisableState(page.first, page.last, false);
             fillDataContainerDisableState(false);
             listButtonsDisableState(false);
             lastPage = page.totalPages > 0 ? page.totalPages - 1 : 0;
@@ -34,21 +37,32 @@ function updateData() {
                 .join('');
         })
         .catch(error => {
+            if (error.name === 'AbortError') {
+                return;
+            }
             console.error('Error updating content: ', error);
             updateError(error);
         })
-        .finally(() => isUpdating = false);
 }
 
 function updateError(error) {
-    fillDataContainerDisableState(true);
-    pageButtonsDisableState(true, true);
-    listButtonsDisableState(true);
+    disableUi();
+    clearTableData();
     document.getElementById('info-label').innerHTML = `
         <span style="color: red;">
         ${error.message}. Details in console.
         </span>`;
-    clearTableData();
+}
+
+function showLoading(loadingMessage) {
+    disableUi();
+    document.getElementById('info-label').innerHTML = `${loadingMessage}`
+}
+
+function disableUi() {
+    pageButtonsDisableState(true, true, true);
+    fillDataContainerDisableState(true);
+    listButtonsDisableState(true);
 }
 
 function clearTableData() {
@@ -56,7 +70,7 @@ function clearTableData() {
     document.getElementById('content-tbody').innerHTML = '';
 }
 
-function pageButtonsDisableState(firstState, lastState) {
+function pageButtonsDisableState(firstState, lastState, sizeState) {
     [
         document.getElementById('prev-page-button'),
         document.getElementById('first-page-button')
@@ -67,6 +81,9 @@ function pageButtonsDisableState(firstState, lastState) {
         document.getElementById('last-page-button')
     ]
         .forEach(btn => btn.disabled = lastState);
+
+    document.getElementById('set-page-size-button').disabled = sizeState;
+    document.getElementById('page-size-input').disabled = sizeState;
 }
 
 function listButtonsDisableState(state) {
@@ -95,6 +112,7 @@ function fillDataContainerDisableState(state) {
 }
 
 function loadPersonListTable() {
+    showLoading("Loading person list...");
     clearTableData();
     document.title = 'Persons';
     document.getElementById('content-thead').innerHTML = `
@@ -123,9 +141,11 @@ function loadPersonListTable() {
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-person-list-api-path');
     currentPage = 0;
+    updateData();
 }
 
 function loadCompanyListTable() {
+    showLoading("Loading company list...");
     clearTableData();
     document.title = 'Companies';
     document.getElementById('content-thead').innerHTML = `
@@ -145,9 +165,11 @@ function loadCompanyListTable() {
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-company-list-api-path');
     currentPage = 0;
+    updateData();
 }
 
 function loadHobbyListTable() {
+    showLoading("Loading hobby list...");
     clearTableData();
     document.title = 'Hobbies';
     document.getElementById('content-thead').innerHTML = `
@@ -167,6 +189,7 @@ function loadHobbyListTable() {
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-hobby-list-api-path');
     currentPage = 0;
+    updateData();
 }
 
 function buildFillPersonsRequest() {
@@ -193,6 +216,7 @@ function buildFillHobbiesRequest() {
 }
 
 document.getElementById('fill-persons-button').onclick = () => {
+    showLoading("Filling persons...");
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-person-fill-api-path'),
         method: 'POST',
@@ -203,6 +227,7 @@ document.getElementById('fill-persons-button').onclick = () => {
 }
 
 document.getElementById('truncate-persons-button').onclick = () => {
+    showLoading("Truncating persons...");
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-person-truncate-api-path'),
         method: 'POST',
@@ -212,6 +237,7 @@ document.getElementById('truncate-persons-button').onclick = () => {
 }
 
 document.getElementById('fill-companies-button').onclick = () => {
+    showLoading("Filling companies...");
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-company-fill-api-path'),
         method: 'POST',
@@ -223,6 +249,7 @@ document.getElementById('fill-companies-button').onclick = () => {
 }
 
 document.getElementById('truncate-companies-button').onclick = () => {
+    showLoading("Truncating companies...");
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-company-truncate-api-path'),
         method: 'POST',
@@ -232,6 +259,7 @@ document.getElementById('truncate-companies-button').onclick = () => {
 }
 
 document.getElementById('fill-hobbies-button').onclick = () => {
+    showLoading("Filling hobbies...");
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-fill-api-path'),
         method: 'POST',
@@ -243,6 +271,7 @@ document.getElementById('fill-hobbies-button').onclick = () => {
 }
 
 document.getElementById('truncate-hobbies-button').onclick = () => {
+    showLoading("Truncating hobbies...");
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-truncate-api-path'),
         method: 'POST',
@@ -251,45 +280,43 @@ document.getElementById('truncate-hobbies-button').onclick = () => {
     });
 }
 
-document.getElementById('prev-page-button').onclick = () => {
-    currentPage--;
+function changePage(pageNumber) {
+    showLoading("Changing page...");
+    currentPage = pageNumber;
     updateData();
+}
+
+document.getElementById('prev-page-button').onclick = () => {
+    changePage(currentPage - 1);
 };
 
 document.getElementById('next-page-button').onclick = () => {
-    currentPage++;
-    updateData();
+    changePage(currentPage + 1);
 };
 
 document.getElementById('last-page-button').onclick = () => {
-    currentPage = lastPage;
-    updateData();
+    changePage(lastPage);
 };
 
 document.getElementById('first-page-button').onclick = () => {
-    currentPage = 0;
-    updateData();
+    changePage(0);
 };
 
 document.getElementById('set-page-size-button').onclick = () => {
     pageSize = parseInt(document.getElementById('page-size-input').value, 10);
-    currentPage = 0;
-    updateData();
+    changePage(0);
 };
 
 document.getElementById('person-list-button').onclick = () => {
     loadPersonListTable();
-    updateData();
 };
 
 document.getElementById('company-list-button').onclick = () => {
     loadCompanyListTable();
-    updateData();
 };
 
 document.getElementById('hobby-list-button').onclick = () => {
     loadHobbyListTable();
-    updateData();
 };
 
 setInterval(updateData, parseInt(document.getElementById('web-config-container').getAttribute('data-page-update-interval'), 10));

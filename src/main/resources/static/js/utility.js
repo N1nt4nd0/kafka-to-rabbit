@@ -16,6 +16,7 @@ function restApiRequest({
         headers: combinedHeaders,
         body: body ? JSON.stringify(body) : null
     };
+    let callbackResult = null;
     fetch(url, options)
         .then(response => {
             return response.json().then(data => {
@@ -26,11 +27,9 @@ function restApiRequest({
             });
         })
         .then(data => {
+            callbackResult = data;
             if (successMessage) {
                 alert(`${successMessage}. Response: ${JSON.stringify(data)}`);
-            }
-            if (callbackFunction) {
-                callbackFunction(data);
             }
         })
         .catch(error => {
@@ -38,5 +37,10 @@ function restApiRequest({
             if (errorMessage) {
                 alert(`${errorMessage}${error.details ? ` ${JSON.stringify(error.details)}` : ''}`);
             }
-        });
+        })
+        .finally(() => {
+            if (callbackFunction) {
+                callbackFunction(callbackResult);
+            }
+    });
 }

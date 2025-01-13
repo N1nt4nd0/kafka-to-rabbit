@@ -14,8 +14,9 @@
     <button id="last-page-button" disabled="disabled">Last page</button>
     <span>|</span>
     <label for="page-size-input">Page size</label>
-    <input id="page-size-input" type="number" value="${webConfig.pageDefaultElementsSize}" class="number-input-field">
-    <button id="set-page-size-button">Set</button>
+    <input id="page-size-input" type="number" value="${webConfig.pageDefaultElementsSize}"
+           class="number-input-field" disabled="disabled">
+    <button id="set-page-size-button" disabled="disabled">Set</button>
     <span>|</span>
     <div id="info-label">
         <span>Select list to show:</span>
@@ -31,10 +32,11 @@
 
 <div class="flex-container">
     <button id="fill-persons-button" disabled="disabled">Fill</button>
-    <input id="fill-person-count-input" type="number" value="10" class="number-input-field" disabled="disabled">
+    <input id="fill-person-count-input" type="number" value="10"
+           class="number-input-field" disabled="disabled">
     <span> random persons with </span>
-    <input id="fill-person-hobby-max-count-input" type="number" value="5" class="number-input-field"
-           disabled="disabled">
+    <input id="fill-person-hobby-max-count-input" type="number" value="5"
+           class="number-input-field" disabled="disabled">
     <span> max hobbies. Or </span>
     <button id="truncate-persons-button" disabled="disabled">Clear</button>
     <span> all persons.</span>
@@ -42,8 +44,8 @@
 
 <div class="flex-container">
     <button id="fill-companies-button" disabled="disabled">Fill</button>
-    <input id="fill-company-count-input" type="number" value="50" class="number-input-field"
-           disabled="disabled">
+    <input id="fill-company-count-input" type="number" value="50"
+           class="number-input-field" disabled="disabled">
     <span> random companies. Or </span>
     <button id="truncate-companies-button" disabled="disabled">Clear</button>
     <span> all companies.</span>
@@ -51,8 +53,8 @@
 
 <div class="flex-container">
     <button id="fill-hobbies-button" disabled="disabled">Fill</button>
-    <input id="fill-hobby-count-input" type="number" value="50" class="number-input-field"
-           disabled="disabled">
+    <input id="fill-hobby-count-input" type="number" value="50"
+           class="number-input-field" disabled="disabled">
     <span> random hobbies. Or </span>
     <button id="truncate-hobbies-button" disabled="disabled">Clear</button>
     <span> all hobbies.</span>
