@@ -7,6 +7,11 @@ spring:
     mongodb:
       uri: ${K2R_DB_URL}
       database: ${K2R_DB_NAME}
+    redis:
+      host: ${K2R_REDIS_HOST}
+      port: ${K2R_REDIS_PORT}
+  cache:
+    type: redis
   kafka:
     bootstrap-servers: ${K2R_KAFKA_BOOTSTRAP_SERVERS}
     producer:
@@ -86,6 +91,9 @@ logging:
     org.hibernate.type.descriptor.sql.BasicBinder: DEBUG
     org.springframework.transaction: DEBUG
     org.hibernate.transaction: DEBUG
+    # Cache logging
+    org.springframework.data.redis: DEBUG
+    org.springframework.cache: DEBUG
     # Dev profiles logging
     org.kafka.practice.kafkademo.domain.dev: DEBUG
 

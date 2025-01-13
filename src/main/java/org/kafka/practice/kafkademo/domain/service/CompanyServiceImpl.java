@@ -29,6 +29,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
+//    @CacheEvict(value = "companies", allEntries = true)
     public long generateNRandomCompanies(final int companyCount) {
         return Stream.generate(() -> dataFaker.company().name())
                 .limit(companyCount)
@@ -51,6 +52,7 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
+//    @Cacheable(value = "companies", key = "'page_' + #pageable.pageNumber + '_size_' + #pageable.pageSize")
     public Page<Company> getCompanies(final Pageable pageable) {
         return companyRepository.findAll(pageable);
     }
@@ -64,18 +66,21 @@ public class CompanyServiceImpl implements CompanyService {
 
     @Override
     @Transactional
+//    @CacheEvict(value = "companies", allEntries = true)
     public Company createNewCompany(final String companyName) {
         return saveCompany(new Company(null, companyName));
     }
 
     @Override
     @Transactional
+//    @CacheEvict(value = "companies", allEntries = true)
     public Company saveCompany(final Company company) {
         return companyRepository.save(company);
     }
 
     @Override
     @Transactional
+//    @CacheEvict(value = "companies", allEntries = true)
     public void truncateCompanyTable() {
         companyRepository.deleteAll();
         mongoTemplate.updateMulti(new Query(), new Update().unset(Person.Fields.company), Person.class);
