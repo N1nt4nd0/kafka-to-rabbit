@@ -34,6 +34,7 @@ public class MongoDbConfig extends AbstractMongoClientConfiguration {
         return new MongoTransactionManager(dbFactory);
     }
 
+    @NonNull
     @Override
     public String getDatabaseName() {
         return databaseName;

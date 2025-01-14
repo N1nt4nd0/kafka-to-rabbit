@@ -134,7 +134,7 @@ function loadPersonListTable() {
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-person-list-api-path');
     currentPage = 0;
-    updateData();
+    startAutoUpdate();
 }
 
 function loadCompanyListTable() {
@@ -158,7 +158,7 @@ function loadCompanyListTable() {
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-company-list-api-path');
     currentPage = 0;
-    updateData();
+    startAutoUpdate();
 }
 
 function loadHobbyListTable() {
@@ -182,7 +182,7 @@ function loadHobbyListTable() {
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-hobby-list-api-path');
     currentPage = 0;
-    updateData();
+    startAutoUpdate();
 }
 
 function buildFillPersonsRequest() {
@@ -282,7 +282,7 @@ document.getElementById('truncate-hobbies-button').onclick = () => {
 function changePage(pageNumber) {
     showLoading("Changing page...");
     currentPage = pageNumber;
-    updateData();
+    startAutoUpdate();
 }
 
 document.getElementById('prev-page-button').onclick = () => {
@@ -319,8 +319,8 @@ document.getElementById('hobby-list-button').onclick = () => {
 };
 
 function startAutoUpdate() {
+    updateData();
     if (!updateIntervalId) {
-        updateData();
         updateIntervalId = setInterval(updateData, parseInt(document.getElementById('web-config-container')
             .getAttribute('data-page-update-interval'), 10));
     }
