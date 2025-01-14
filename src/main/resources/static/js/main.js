@@ -1,7 +1,7 @@
 let pageSize = parseInt(document.getElementById('page-size-input').value, 10);
 let pageContentRequestUrl = '';
-let updateAbortController;
 let fillTbodyFunction;
+let updateIntervalId;
 let currentPage = 0;
 let lastPage = 0;
 
@@ -9,11 +9,7 @@ function updateData() {
     if (pageContentRequestUrl === '' || !fillTbodyFunction) {
         return;
     }
-    if (updateAbortController) {
-        updateAbortController.abort();
-    }
-    updateAbortController = new AbortController();
-    fetch(`${pageContentRequestUrl}?page=${currentPage}&size=${pageSize}`, {signal: updateAbortController.signal})
+    fetch(`${pageContentRequestUrl}?page=${currentPage}&size=${pageSize}`)
         .then(response => {
             return response.json().then(data => {
                 if (response.ok) {
@@ -37,9 +33,6 @@ function updateData() {
                 .join('');
         })
         .catch(error => {
-            if (error.name === 'AbortError') {
-                return;
-            }
             console.error('Error updating content: ', error);
             updateError(error);
         })
@@ -217,66 +210,72 @@ function buildFillHobbiesRequest() {
 
 document.getElementById('fill-persons-button').onclick = () => {
     showLoading("Filling persons...");
+    stopAutoUpdate();
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-person-fill-api-path'),
         method: 'POST',
         body: buildFillPersonsRequest(),
         errorMessage: 'Fill persons error occurred',
-        callbackFunction: updateData
+        callbackFunction: startAutoUpdate
     });
 }
 
 document.getElementById('truncate-persons-button').onclick = () => {
     showLoading("Truncating persons...");
+    stopAutoUpdate();
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-person-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear persons error occurred',
-        callbackFunction: updateData
+        callbackFunction: startAutoUpdate
     });
 }
 
 document.getElementById('fill-companies-button').onclick = () => {
     showLoading("Filling companies...");
+    stopAutoUpdate();
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-company-fill-api-path'),
         method: 'POST',
         body: buildFillCompaniesRequest(),
         successMessage: 'Companies filled successfully',
         errorMessage: 'Fill companies error occurred',
-        callbackFunction: updateData
+        callbackFunction: startAutoUpdate
     });
 }
 
 document.getElementById('truncate-companies-button').onclick = () => {
     showLoading("Truncating companies...");
+    stopAutoUpdate();
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-company-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear companies error occurred',
-        callbackFunction: updateData
+        callbackFunction: startAutoUpdate
     });
 }
 
 document.getElementById('fill-hobbies-button').onclick = () => {
     showLoading("Filling hobbies...");
+    stopAutoUpdate();
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-fill-api-path'),
         method: 'POST',
         body: buildFillHobbiesRequest(),
         successMessage: 'Hobbies filled successfully',
         errorMessage: 'Fill hobbies error occurred',
-        callbackFunction: updateData
+        callbackFunction: startAutoUpdate
     });
 }
 
 document.getElementById('truncate-hobbies-button').onclick = () => {
     showLoading("Truncating hobbies...");
+    stopAutoUpdate();
     restApiRequest({
         url: document.getElementById('endpoints-container').getAttribute('data-hobby-truncate-api-path'),
         method: 'POST',
         errorMessage: 'Clear hobbies error occurred',
-        callbackFunction: updateData
+        callbackFunction: startAutoUpdate
     });
 }
 
@@ -319,6 +318,19 @@ document.getElementById('hobby-list-button').onclick = () => {
     loadHobbyListTable();
 };
 
-setInterval(updateData, parseInt(document.getElementById('web-config-container').getAttribute('data-page-update-interval'), 10));
+function startAutoUpdate() {
+    if (!updateIntervalId) {
+        updateData();
+        updateIntervalId = setInterval(updateData, parseInt(document.getElementById('web-config-container')
+            .getAttribute('data-page-update-interval'), 10));
+    }
+}
 
-updateData();
+function stopAutoUpdate() {
+    if (updateIntervalId) {
+        clearInterval(updateIntervalId);
+        updateIntervalId = null;
+    }
+}
+
+startAutoUpdate();

@@ -42,5 +42,5 @@ function restApiRequest({
             if (callbackFunction) {
                 callbackFunction(callbackResult);
             }
-    });
+        });
 }
