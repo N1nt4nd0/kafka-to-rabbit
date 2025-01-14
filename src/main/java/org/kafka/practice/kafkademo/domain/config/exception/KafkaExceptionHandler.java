@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.config;
+package org.kafka.practice.kafkademo.domain.config.exception;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

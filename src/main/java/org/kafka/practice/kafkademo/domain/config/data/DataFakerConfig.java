@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.config;
+package org.kafka.practice.kafkademo.domain.config.data;
 
 import net.datafaker.Faker;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;

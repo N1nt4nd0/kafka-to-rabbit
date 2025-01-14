@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.config;
+package org.kafka.practice.kafkademo.domain.config.data;
 
 import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;

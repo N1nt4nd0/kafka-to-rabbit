@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.config;
+package org.kafka.practice.kafkademo.domain.config.exception;
 
 import lombok.extern.slf4j.Slf4j;
 import org.kafka.practice.kafkademo.domain.controller.mvc.MvcControllerPackageMarker;

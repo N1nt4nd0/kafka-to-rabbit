@@ -1,4 +1,4 @@
-package org.kafka.practice.kafkademo.domain.config;
+package org.kafka.practice.kafkademo.domain.config.web;
 
 import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;

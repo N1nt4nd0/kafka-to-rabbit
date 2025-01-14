@@ -6,7 +6,7 @@ import net.datafaker.providers.base.Name;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.kafka.practice.kafkademo.domain.config.WebPagesConfig;
+import org.kafka.practice.kafkademo.domain.config.web.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
 import org.kafka.practice.kafkademo.domain.entities.Person;
