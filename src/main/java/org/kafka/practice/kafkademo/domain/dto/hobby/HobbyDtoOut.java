@@ -5,10 +5,12 @@ import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+import java.io.Serializable;
+
 @Getter
 @ToString
 @RequiredArgsConstructor
-public class HobbyDtoOut {
+public class HobbyDtoOut implements Serializable {
 
     @NonNull
     private final String id;

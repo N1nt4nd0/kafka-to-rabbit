@@ -10,8 +10,6 @@ spring:
     redis:
       host: ${K2R_REDIS_HOST}
       port: ${K2R_REDIS_PORT}
-  cache:
-    type: redis
   kafka:
     bootstrap-servers: ${K2R_KAFKA_BOOTSTRAP_SERVERS}
     producer:
@@ -78,10 +76,10 @@ messaging:
 logging:
   level:
     # Exception handlers log level
-    org.kafka.practice.kafkademo.domain.config.RestControllerExceptionHandler: TRACE
-    org.kafka.practice.kafkademo.domain.config.MvcControllerExceptionHandler: DEBUG
-    org.kafka.practice.kafkademo.domain.config.RabbitExceptionHandler: DEBUG
-    org.kafka.practice.kafkademo.domain.config.KafkaExceptionHandler: DEBUG
+    org.kafka.practice.kafkademo.domain.config.exception.RestControllerExceptionHandler: TRACE
+    org.kafka.practice.kafkademo.domain.config.exception.MvcControllerExceptionHandler: DEBUG
+    org.kafka.practice.kafkademo.domain.config.exception.RabbitExceptionHandler: DEBUG
+    org.kafka.practice.kafkademo.domain.config.exception.KafkaExceptionHandler: DEBUG
     # Services log level
     org.kafka.practice.kafkademo.domain.business.service: DEBUG
     org.kafka.practice.kafkademo.domain.service: DEBUG
