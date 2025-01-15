@@ -27,6 +27,16 @@ spring:
     username: ${K2R_RABBIT_USERNAME}
     password: ${K2R_RABBIT_PASSWORD}
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  prometheus:
+    metrics:
+      export:
+        enabled: true
+
 web:
   pages:
     update-interval-ms: 4000

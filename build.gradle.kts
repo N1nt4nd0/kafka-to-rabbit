@@ -28,6 +28,7 @@ dependencies {
     // Web dependencies
     implementation("org.springframework.boot:spring-boot-starter-web")
     implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springframework.boot:spring-boot-starter-actuator")
 
     // Apache Velocity
     implementation("org.apache.velocity:velocity-engine-core:2.4.1")
@@ -49,6 +50,7 @@ dependencies {
     compileOnly("org.projectlombok:lombok")
     annotationProcessor("org.projectlombok:lombok")
     implementation("net.datafaker:datafaker:2.4.2")
+    implementation("io.micrometer:micrometer-registry-prometheus")
 
     // Test dependencies
     testImplementation("org.springframework.boot:spring-boot-starter-test")
