@@ -29,11 +29,6 @@ public class MongoDbConfig extends AbstractMongoClientConfiguration {
                 .build());
     }
 
-    @Bean
-    public MongoTransactionManager transactionManager(final MongoDatabaseFactory dbFactory) {
-        return new MongoTransactionManager(dbFactory);
-    }
-
     @NonNull
     @Override
     public String getDatabaseName() {
@@ -43,6 +38,11 @@ public class MongoDbConfig extends AbstractMongoClientConfiguration {
     @Override
     protected boolean autoIndexCreation() {
         return true;
+    }
+
+    @Bean
+    public MongoTransactionManager transactionManager(final MongoDatabaseFactory dbFactory) {
+        return new MongoTransactionManager(dbFactory);
     }
 
 }

@@ -10,7 +10,7 @@ public class CacheKeyBuilder {
     public static final String PERSON_PAGE_CACHE_NAME = "person_page_cache";
     public static final String HOBBY_PAGE_CACHE_NAME = "hobby_page_cache";
 
-    public String buildPageKey(Pageable pageable) {
+    public String buildPageKey(final Pageable pageable) {
         return String.format("page_%s_size_%s_sort_%s",
                 pageable.getPageNumber(), pageable.getPageSize(), pageable.getSort());
     }
