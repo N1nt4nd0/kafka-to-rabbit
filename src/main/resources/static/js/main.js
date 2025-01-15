@@ -47,6 +47,11 @@ function updateError(error) {
         </span>`;
 }
 
+function changePage(pageNumber) {
+    currentPage = pageNumber;
+    startAutoUpdate();
+}
+
 function showLoading(loadingMessage) {
     disableUi();
     document.getElementById('info-label').innerHTML = `${loadingMessage}`
@@ -133,8 +138,7 @@ function loadPersonListTable() {
     };
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-person-list-api-path');
-    currentPage = 0;
-    startAutoUpdate();
+    changePage(0);
 }
 
 function loadCompanyListTable() {
@@ -157,8 +161,7 @@ function loadCompanyListTable() {
     };
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-company-list-api-path');
-    currentPage = 0;
-    startAutoUpdate();
+    changePage(0);
 }
 
 function loadHobbyListTable() {
@@ -181,8 +184,7 @@ function loadHobbyListTable() {
     };
     pageContentRequestUrl = document.getElementById('endpoints-container')
         .getAttribute('data-hobby-list-api-path');
-    currentPage = 0;
-    startAutoUpdate();
+    changePage(0);
 }
 
 function buildFillPersonsRequest() {
@@ -277,12 +279,6 @@ document.getElementById('truncate-hobbies-button').onclick = () => {
         errorMessage: 'Clear hobbies error occurred',
         callbackFunction: startAutoUpdate
     });
-}
-
-function changePage(pageNumber) {
-    showLoading("Changing page...");
-    currentPage = pageNumber;
-    startAutoUpdate();
 }
 
 document.getElementById('prev-page-button').onclick = () => {
