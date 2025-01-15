@@ -48,6 +48,7 @@ function updateError(error) {
 }
 
 function changePage(pageNumber) {
+    disableUi();
     currentPage = pageNumber;
     startAutoUpdate();
 }

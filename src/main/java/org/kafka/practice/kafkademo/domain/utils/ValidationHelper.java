@@ -1,6 +1,5 @@
 package org.kafka.practice.kafkademo.domain.utils;
 
-import lombok.NonNull;
 import org.kafka.practice.kafkademo.domain.exception.PageSizeLimitException;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public class ValidationHelper {
         }
     }
 
-    public static <E> void checkListForNullElements(@NonNull final List<E> list) {
+    public static <E> void checkListForNullElements(final List<E> list) {
         list.forEach(Objects::requireNonNull);
     }
 

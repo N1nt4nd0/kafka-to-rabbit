@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.mongodb.core.MongoTemplate;
 
 import java.util.Optional;
 
@@ -24,6 +25,9 @@ public class CompanyServiceImplTests {
 
     @Mock
     private CompanyRepository companyRepository;
+
+    @Mock
+    private MongoTemplate mongoTemplate;
 
     @Mock
     private Faker dataFaker;
