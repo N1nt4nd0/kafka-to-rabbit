@@ -31,7 +31,7 @@ public class VladRabbitListener {
         final var response = personDTOMessageMapper.personDtoRequestToPersonDtoResponse(request);
         try {
             vladExceptionGenerator.generateRandomException();
-        } catch (RandomGeneratorException randomGeneratorException) {
+        } catch (final RandomGeneratorException randomGeneratorException) {
             response.setFail(true);
             log.debug("[DEV] Random exception occurred at Vlad side");
         }

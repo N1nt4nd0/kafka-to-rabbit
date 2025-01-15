@@ -18,7 +18,7 @@ public class PersonDTOResponse {
     private final String lastName;
 
     @JsonCreator
-    public PersonDTOResponse(@JsonProperty("email") String email,
+    public PersonDTOResponse(@JsonProperty("email") final String email,
                              @JsonProperty("firstName") final String firstName,
                              @JsonProperty("lastName") final String lastName,
                              @JsonProperty("fail") final boolean fail) {
