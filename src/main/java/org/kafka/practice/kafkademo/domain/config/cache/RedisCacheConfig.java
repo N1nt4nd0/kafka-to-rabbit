@@ -14,8 +14,21 @@ public class RedisCacheConfig {
     private final RedisConnectionFactory connectionFactory;
 
     @PostConstruct
-    protected void clearCacheOnInit() {
+    protected void init() {
+        checkConnection();
+        clearCache();
+    }
+
+    public void clearCache() {
         connectionFactory.getConnection().commands().flushAll();
+    }
+
+    public void checkConnection() {
+        try {
+            connectionFactory.getConnection().commands().ping();
+        } catch (final Exception exception) {
+            throw new IllegalStateException("Can't connect to redis", exception);
+        }
     }
 
 }
