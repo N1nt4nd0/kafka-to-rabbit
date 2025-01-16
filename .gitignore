@@ -19,3 +19,6 @@ build/
 *.iws
 *.iml
 *.ipr
+
+### Docker bin scripts ###
+docker/bin/
