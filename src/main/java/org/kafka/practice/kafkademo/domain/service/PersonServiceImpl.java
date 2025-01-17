@@ -3,7 +3,6 @@ package org.kafka.practice.kafkademo.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
-import org.kafka.practice.kafkademo.domain.config.cache.CacheKeyBuilder;
 import org.kafka.practice.kafkademo.domain.config.web.WebPagesConfig;
 import org.kafka.practice.kafkademo.domain.entities.Company;
 import org.kafka.practice.kafkademo.domain.entities.Person;
@@ -15,7 +14,6 @@ import org.kafka.practice.kafkademo.domain.exception.PersonNotFoundByEmailExcept
 import org.kafka.practice.kafkademo.domain.repository.CompanyRepository;
 import org.kafka.practice.kafkademo.domain.repository.HobbyRepository;
 import org.kafka.practice.kafkademo.domain.repository.PersonRepository;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -39,7 +37,6 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public long generateNRandomPersons(final int personCount, final int personMaxHobbyCount) {
         final var pageable = PageRequest.of(0, webPagesConfig.getPageMaxElementsSize());
         final var companyList = companyRepository.findAll(pageable).getContent();
@@ -90,7 +87,6 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public Person createPerson(final String email, final String firstName, final String lastName) {
         final var personByEmailOptional = personRepository.findByEmailIgnoreCase(email);
         if (personByEmailOptional.isPresent()) {
@@ -114,28 +110,24 @@ public class PersonServiceImpl implements PersonService {
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public Person savePerson(final Person person) {
         return personRepository.save(person);
     }
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public void deletePerson(final Person person) {
         personRepository.delete(person);
     }
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public void deleteByEmail(final String email) {
         deletePerson(getByEmail(email));
     }
 
     @Override
     @Transactional
-    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public void truncatePersonsTable() {
         personRepository.deleteAll();
     }

@@ -10,6 +10,7 @@ import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.mappers.HobbyMapper;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public FillRandomDataDtoOut fillRandomHobbies(final FillRandomHobbiesDtoIn fillRandomHobbiesDtoIn) {
         hobbyService.validateGenerationCount(fillRandomHobbiesDtoIn.getHobbyCount());
         return new FillRandomDataDtoOut("Random hobbies successfully filled",
@@ -34,6 +36,7 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public HobbyDtoOut createHobby(final HobbyDtoIn hobbyDtoIn) {
         return hobbyMapper.toHobbyDtoOut(hobbyService.createNewHobby(hobbyDtoIn.getHobbyName()));
     }
@@ -47,6 +50,7 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public TruncateTableDtoOut truncateHobbies() {
         hobbyService.truncateHobbyTable();
         return new TruncateTableDtoOut("Hobby table successfully truncated");

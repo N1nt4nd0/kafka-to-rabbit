@@ -10,6 +10,7 @@ import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
 import org.kafka.practice.kafkademo.domain.mappers.CompanyMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -26,6 +27,7 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.COMPANY_PAGE_CACHE_NAME, allEntries = true)
     public FillRandomDataDtoOut fillRandomCompanies(final FillRandomCompaniesDtoIn fillRandomCompaniesDtoIn) {
         companyService.validateGenerationCount(fillRandomCompaniesDtoIn.getCompanyCount());
         return new FillRandomDataDtoOut("Random companies successfully filled",
@@ -34,6 +36,7 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.COMPANY_PAGE_CACHE_NAME, allEntries = true)
     public CompanyDtoOut createCompany(final CompanyDtoIn companyDtoIn) {
         return companyMapper.toCompanyDtoOut(companyService.createNewCompany(companyDtoIn.getCompanyName()));
     }
@@ -47,6 +50,7 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.COMPANY_PAGE_CACHE_NAME, allEntries = true)
     public TruncateTableDtoOut truncateCompanies() {
         companyService.truncateCompanyTable();
         return new TruncateTableDtoOut("Company table successfully truncated");

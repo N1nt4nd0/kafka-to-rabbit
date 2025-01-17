@@ -22,6 +22,7 @@ import org.kafka.practice.kafkademo.domain.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -40,6 +41,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public FillRandomDataDtoOut fillRandomPersons(final FillRandomPersonsDtoIn fillRandomPersonsDtoIn) {
         personService.validateGenerationCount(fillRandomPersonsDtoIn.getPersonCount(),
                 fillRandomPersonsDtoIn.getHobbyMaxCount());
@@ -50,6 +52,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public PersonDtoOut createPerson(final PersonDtoIn personDtoIn) {
         return personMapper.toPersonDtoOut(personService.createPerson(personDtoIn.getEmail(),
                 personDtoIn.getFirstName(), personDtoIn.getLastName()));
@@ -57,6 +60,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public CompanyManagementDtoOut manageCompany(final CompanyManagementDtoIn companyManagementDtoIn) {
         final var personByEmail = personService.getByEmail(companyManagementDtoIn.getPersonEmail());
         final var companyByName = companyService.getByCompanyName(companyManagementDtoIn.getCompanyName());
@@ -96,6 +100,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public PersonHobbyResultDtoOut addHobby(final AddPersonHobbyDtoIn addPersonHobbyDto) {
         final var personByEmail = personService.getByEmail(addPersonHobbyDto.getEmail());
         final var hobby = hobbyService.getByHobbyName(addPersonHobbyDto.getHobbyName());
@@ -108,6 +113,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public PersonHobbyResultDtoOut removeHobby(final RemovePersonHobbyDtoIn removePersonHobbyDto) {
         final var personByEmail = personService.getByEmail(removePersonHobbyDto.getEmail());
         final var hobbyByName = hobbyService.getByHobbyName(removePersonHobbyDto.getHobbyName());
@@ -127,6 +133,7 @@ public class PersonUseCasesImpl implements PersonUseCases {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public TruncateTableDtoOut truncatePersons() {
         personService.truncatePersonsTable();
         return new TruncateTableDtoOut("Persons table successfully truncated");

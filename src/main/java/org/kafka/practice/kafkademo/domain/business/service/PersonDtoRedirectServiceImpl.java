@@ -2,12 +2,14 @@ package org.kafka.practice.kafkademo.domain.business.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.kafka.practice.kafkademo.domain.config.cache.CacheKeyBuilder;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTORequest;
 import org.kafka.practice.kafkademo.domain.entities.value.PersonDTOResponse;
 import org.kafka.practice.kafkademo.domain.mappers.message.PersonDTOMessageMapper;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
 import org.kafka.practice.kafkademo.domain.utils.ExceptionGenerator;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -31,6 +33,7 @@ public class PersonDtoRedirectServiceImpl implements PersonDtoRedirectService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME, allEntries = true)
     public void receivePersonDtoRequestFromKafka(final PersonDTORequest request) {
         final var person = personService.createPerson(request.getEmail(),
                 request.getFirstName(), request.getLastName());
@@ -47,13 +50,17 @@ public class PersonDtoRedirectServiceImpl implements PersonDtoRedirectService {
     }
 
     @Override
+    @CacheEvict(
+            cacheNames = CacheKeyBuilder.PERSON_PAGE_CACHE_NAME,
+            condition = "#response.isFail()",
+            allEntries = true)
     public void receivePersonDtoResponseFromRabbit(final PersonDTOResponse response) {
+        final var clonedResponse = personDTOMessageMapper.clonePersonDtoResponse(response);
+        sendPersonDtoResponseToKafka(clonedResponse);
         if (response.isFail()) {
             log.debug("PersonDtoResponse failed. Deleting person from database");
             personService.deleteByEmail(response.getEmail());
         }
-        final var clonedResponse = personDTOMessageMapper.clonePersonDtoResponse(response);
-        sendPersonDtoResponseToKafka(clonedResponse);
     }
 
     @Override
