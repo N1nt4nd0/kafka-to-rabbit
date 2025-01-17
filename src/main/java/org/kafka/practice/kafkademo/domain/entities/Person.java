@@ -36,9 +36,11 @@ public class Person {
 
     private String lastName;
 
+    @ToString.Exclude
     @DBRef(lazy = true)
     private Company company;
 
+    @ToString.Exclude
     @DBRef(lazy = true)
     private List<Hobby> hobbies = new ArrayList<>();
 
