@@ -18,7 +18,7 @@ public class AddPersonHobbyDtoInTests {
 
     @Test
     void testValidateAddPersonHobbyDtoInWhenAllArgumentsAreValid() {
-        final var violations = validator.validate(new AddPersonHobbyDtoIn("email@email", "FirstName"));
+        final var violations = validator.validate(new AddPersonHobbyDtoIn("email@email", "Hobby"));
 
         Assertions.assertEquals(0, violations.size());
     }
@@ -38,6 +38,16 @@ public class AddPersonHobbyDtoInTests {
         final var expectedMessage = "Hobby name is required";
 
         final var violations = validator.validate(new AddPersonHobbyDtoIn("email@email", "     "));
+
+        Assertions.assertEquals(1, violations.size());
+        Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
+    }
+
+    @Test
+    void testValidateAddPersonHobbyDtoInWhenHobbyNameSizeOutOfRange() {
+        final var expectedMessage = "Invalid hobby name length";
+
+        final var violations = validator.validate(new AddPersonHobbyDtoIn("email@email", "AB"));
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());

@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
+import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 
 public class HobbyDtoInTests {
 
@@ -28,6 +29,16 @@ public class HobbyDtoInTests {
         final var expectedMessage = "Hobby name is required";
 
         final var violations = validator.validate(new HobbyDtoIn("     "));
+
+        Assertions.assertEquals(1, violations.size());
+        Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
+    }
+
+    @Test
+    void testValidateHobbyDtoInWhenHobbyNameSizeOutOfRange() {
+        final var expectedMessage = "Invalid hobby name length";
+
+        final var violations = validator.validate(new HobbyDtoIn("AB"));
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());

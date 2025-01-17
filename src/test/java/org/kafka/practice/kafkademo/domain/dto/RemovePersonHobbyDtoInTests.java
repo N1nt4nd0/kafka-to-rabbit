@@ -43,4 +43,14 @@ public class RemovePersonHobbyDtoInTests {
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
     }
 
+    @Test
+    void testValidateRemovePersonHobbyDtoInWhenHobbyNameSizeOutOfRange() {
+        final var expectedMessage = "Invalid hobby name length";
+
+        final var violations = validator.validate(new RemovePersonHobbyDtoIn("email@email", "AB"));
+
+        Assertions.assertEquals(1, violations.size());
+        Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
+    }
+
 }

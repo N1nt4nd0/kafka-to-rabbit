@@ -2,6 +2,7 @@ package org.kafka.practice.kafkademo.domain.dto.person;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.NonNull;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ public class CompanyManagementDtoIn {
     private final String personEmail;
 
     @NotBlank(message = "Company name is required")
+    @Size(min = 2, max = 50, message = "Invalid company name length")
     private final String companyName;
 
     @NonNull

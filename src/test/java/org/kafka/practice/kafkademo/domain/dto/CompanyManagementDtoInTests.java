@@ -47,4 +47,15 @@ public class CompanyManagementDtoInTests {
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
     }
 
+    @Test
+    void testValidateCompanyManagementDtoInWhenCompanyNameSizeOutOfRange() {
+        final var expectedMessage = "Invalid company name length";
+
+        final var violations = validator.validate(new CompanyManagementDtoIn("email@email", "A",
+                CompanyManagementType.HIRE));
+
+        Assertions.assertEquals(1, violations.size());
+        Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
+    }
+
 }

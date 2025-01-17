@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice(basePackageClasses = RestControllerPackageMarker.class)
 public class RestControllerExceptionHandler {
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler
     public ResponseEntity<ExceptionDtoOut> handleException(final Exception exception) {
         LogHelper.logError("RestController error occurred", exception, log);
         return ResponseEntity.internalServerError().body(new ExceptionDtoOut(exception.getMessage()));

@@ -5,6 +5,7 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
 
 public class PersonDtoInTests {
@@ -48,6 +49,26 @@ public class PersonDtoInTests {
         final var expectedMessage = "Last name is required";
 
         final var violations = validator.validate(new PersonDtoIn("email@email", "FirstName", "     "));
+
+        Assertions.assertEquals(1, violations.size());
+        Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
+    }
+
+    @Test
+    void testValidatePersonDtoInWhenFirstNameSizeOutOfRange() {
+        final var expectedMessage = "Invalid first name length";
+
+        final var violations = validator.validate(new PersonDtoIn("email@email", "A", "LastName"));
+
+        Assertions.assertEquals(1, violations.size());
+        Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
+    }
+
+    @Test
+    void testValidatePersonDtoInWhenLastNameSizeOutOfRange() {
+        final var expectedMessage = "Invalid last name length";
+
+        final var violations = validator.validate(new PersonDtoIn("email@email", "FirstName", "A"));
 
         Assertions.assertEquals(1, violations.size());
         Assertions.assertEquals(expectedMessage, violations.iterator().next().getMessage());
