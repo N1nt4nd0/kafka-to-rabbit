@@ -10,7 +10,6 @@ import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoOut;
 import org.kafka.practice.kafkademo.domain.mappers.HobbyMapper;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

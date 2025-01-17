@@ -10,7 +10,6 @@ import org.kafka.practice.kafkademo.domain.dto.company.CompanyDtoOut;
 import org.kafka.practice.kafkademo.domain.dto.company.FillRandomCompaniesDtoIn;
 import org.kafka.practice.kafkademo.domain.mappers.CompanyMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

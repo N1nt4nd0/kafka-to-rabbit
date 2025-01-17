@@ -22,7 +22,6 @@ import org.kafka.practice.kafkademo.domain.mappers.PersonMapper;
 import org.kafka.practice.kafkademo.domain.service.CompanyService;
 import org.kafka.practice.kafkademo.domain.service.HobbyService;
 import org.kafka.practice.kafkademo.domain.service.PersonService;
-import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
