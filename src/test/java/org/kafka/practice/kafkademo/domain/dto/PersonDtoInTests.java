@@ -5,7 +5,6 @@ import jakarta.validation.Validator;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
 import org.kafka.practice.kafkademo.domain.dto.person.PersonDtoIn;
 
 public class PersonDtoInTests {

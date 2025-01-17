@@ -6,7 +6,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.kafka.practice.kafkademo.domain.dto.hobby.HobbyDtoIn;
-import org.kafka.practice.kafkademo.domain.dto.person.AddPersonHobbyDtoIn;
 
 public class HobbyDtoInTests {
 
