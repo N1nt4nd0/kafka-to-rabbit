@@ -3,11 +3,13 @@ package org.kafka.practice.kafkademo.domain.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import net.datafaker.Faker;
+import org.kafka.practice.kafkademo.domain.config.cache.CacheKeyBuilder;
 import org.kafka.practice.kafkademo.domain.entities.Hobby;
 import org.kafka.practice.kafkademo.domain.entities.Person;
 import org.kafka.practice.kafkademo.domain.exception.FillRandomDataException;
 import org.kafka.practice.kafkademo.domain.exception.HobbyNotFoundByNameException;
 import org.kafka.practice.kafkademo.domain.repository.HobbyRepository;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -29,6 +31,7 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public long generateNRandomHobbies(final int hobbyCount) {
         return Stream.generate(() -> dataFaker.hobby().activity())
                 .limit(hobbyCount)
@@ -64,18 +67,21 @@ public class HobbyServiceImpl implements HobbyService {
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public Hobby createNewHobby(final String hobbyName) {
         return saveHobby(new Hobby(null, hobbyName));
     }
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public Hobby saveHobby(final Hobby hobby) {
         return hobbyRepository.save(hobby);
     }
 
     @Override
     @Transactional
+    @CacheEvict(cacheNames = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public void truncateHobbyTable() {
         hobbyRepository.deleteAll();
         mongoTemplate.updateMulti(new Query(), new Update().unset(Person.Fields.hobbies), Person.class);

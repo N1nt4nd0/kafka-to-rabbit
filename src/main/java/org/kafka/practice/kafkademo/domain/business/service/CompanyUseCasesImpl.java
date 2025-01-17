@@ -27,7 +27,6 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
 
     @Override
     @Transactional
-    @CacheEvict(value = CacheKeyBuilder.COMPANY_PAGE_CACHE_NAME, allEntries = true)
     public FillRandomDataDtoOut fillRandomCompanies(final FillRandomCompaniesDtoIn fillRandomCompaniesDtoIn) {
         companyService.validateGenerationCount(fillRandomCompaniesDtoIn.getCompanyCount());
         return new FillRandomDataDtoOut("Random companies successfully filled",
@@ -36,7 +35,6 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
 
     @Override
     @Transactional
-    @CacheEvict(value = CacheKeyBuilder.COMPANY_PAGE_CACHE_NAME, allEntries = true)
     public CompanyDtoOut createCompany(final CompanyDtoIn companyDtoIn) {
         return companyMapper.toCompanyDtoOut(companyService.createNewCompany(companyDtoIn.getCompanyName()));
     }
@@ -50,7 +48,6 @@ public class CompanyUseCasesImpl implements CompanyUseCases {
 
     @Override
     @Transactional
-    @CacheEvict(value = CacheKeyBuilder.COMPANY_PAGE_CACHE_NAME, allEntries = true)
     public TruncateTableDtoOut truncateCompanies() {
         companyService.truncateCompanyTable();
         return new TruncateTableDtoOut("Company table successfully truncated");

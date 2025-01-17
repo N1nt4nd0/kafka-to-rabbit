@@ -27,7 +27,6 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
 
     @Override
     @Transactional
-    @CacheEvict(value = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public FillRandomDataDtoOut fillRandomHobbies(final FillRandomHobbiesDtoIn fillRandomHobbiesDtoIn) {
         hobbyService.validateGenerationCount(fillRandomHobbiesDtoIn.getHobbyCount());
         return new FillRandomDataDtoOut("Random hobbies successfully filled",
@@ -36,7 +35,6 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
 
     @Override
     @Transactional
-    @CacheEvict(value = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public HobbyDtoOut createHobby(final HobbyDtoIn hobbyDtoIn) {
         return hobbyMapper.toHobbyDtoOut(hobbyService.createNewHobby(hobbyDtoIn.getHobbyName()));
     }
@@ -50,7 +48,6 @@ public class HobbyUseCasesImpl implements HobbyUseCases {
 
     @Override
     @Transactional
-    @CacheEvict(value = CacheKeyBuilder.HOBBY_PAGE_CACHE_NAME, allEntries = true)
     public TruncateTableDtoOut truncateHobbies() {
         hobbyService.truncateHobbyTable();
         return new TruncateTableDtoOut("Hobby table successfully truncated");
