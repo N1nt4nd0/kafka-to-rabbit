@@ -40,7 +40,7 @@ jobs:
           java-version: '17'
 
       - name: Build with Gradle
-        run: ./gradlew build -x test
+        run: ./gradlew build
 
       - name: Run Docker Compose
         run: docker-compose -p k2r-docker up -d --build
@@ -63,7 +63,7 @@ jobs:
       - name: Fetch Docker container logs
         run: docker logs k2r-spring-boot-app
 
-      - name: Test Spring Application
+      - name: Testing Spring Application via api request
         run: |
           response=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:8080/api/company/list)
           if [ "$response" -ne 200 ]; then
