@@ -63,6 +63,23 @@ jobs:
       - name: Run Spring Application in Docker
         run: docker run -d -p 8080:8080 --name k2r-app k2r-app:latest
 
-      - name: Fetch Docker container logs
+      - name: Wait for Spring app to start
         run: |
-          docker logs k2r-app
+          echo "Waiting for Spring app to start..."
+          sleep 30
+
+      - name: Check container status
+        run: docker ps -a
+
+      - name: Fetch Docker container logs
+        run: docker logs k2r-app
+
+      - name: Test Spring Application
+        run: |
+          response=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:8080/api/company/list)
+          if [ "$response" -ne 200 ]; then
+            echo "Application failed to start or returned non-200 status code: $response"
+            exit 1
+          else
+            echo "Application started successfully with response code: $response"
+          fi
