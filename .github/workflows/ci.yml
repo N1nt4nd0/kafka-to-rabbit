@@ -49,7 +49,25 @@ jobs:
         run: docker-compose -p k2r-docker up -d --build
 
       - name: Run Spring Application in Docker
-        run: docker run -d -p 8080:8080 --name k2r-app k2r-app:latest
+        run: |
+          docker run -d -p 8080:8080 --name k2r-app -e K2R_ACTIVE_PROFILE="prod" \
+            -e K2R_KAFKA_BOOTSTRAP_SERVERS="${{ secrets.K2R_KAFKA_BOOTSTRAP_SERVERS }}" \
+            -e K2R_RABBIT_HOST="${{ secrets.K2R_RABBIT_HOST }}" \
+            -e K2R_RABBIT_PORT="${{ secrets.K2R_RABBIT_PORT }}" \
+            -e K2R_RABBIT_USERNAME="${{ secrets.K2R_RABBIT_USERNAME }}" \
+            -e K2R_RABBIT_PASSWORD="${{ secrets.K2R_RABBIT_PASSWORD }}" \
+            -e K2R_DB_URL="${{ secrets.K2R_DB_URL }}" \
+            -e K2R_DB_NAME="${{ secrets.K2R_DB_NAME }}" \
+            -e K2R_REDIS_HOST="${{ secrets.K2R_REDIS_HOST }}" \
+            -e K2R_REDIS_PORT="${{ secrets.K2R_REDIS_PORT }}" \
+            k2r-app:latest
+          
+          sleep 5
+
+          docker exec k2r-app printenv
+          
+          docker exec k2r-app sh -c 'echo $K2R_DB_URL'
+          docker exec k2r-app sh -c 'echo $K2R_KAFKA_BOOTSTRAP_SERVERS'
         env:
           K2R_ACTIVE_PROFILE: "prod"
           K2R_KAFKA_BOOTSTRAP_SERVERS: ${{ secrets.K2R_KAFKA_BOOTSTRAP_SERVERS }}
