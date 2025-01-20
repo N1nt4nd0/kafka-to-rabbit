@@ -45,15 +45,10 @@ jobs:
       - name: Run Docker Compose
         run: docker-compose -p k2r-docker up -d --build
         env:
-          K2R_KAFKA_BOOTSTRAP_SERVERS: ${{ secrets.K2R_KAFKA_BOOTSTRAP_SERVERS }}
-          K2R_RABBIT_HOST: ${{ secrets.K2R_RABBIT_HOST }}
-          K2R_RABBIT_PORT: ${{ secrets.K2R_RABBIT_PORT }}
           K2R_RABBIT_USERNAME: ${{ secrets.K2R_RABBIT_USERNAME }}
           K2R_RABBIT_PASSWORD: ${{ secrets.K2R_RABBIT_PASSWORD }}
           K2R_DB_URL: ${{ secrets.K2R_DB_URL }}
           K2R_DB_NAME: ${{ secrets.K2R_DB_NAME }}
-          K2R_REDIS_HOST: ${{ secrets.K2R_REDIS_HOST }}
-          K2R_REDIS_PORT: ${{ secrets.K2R_REDIS_PORT }}
           GRAFANA_USERNAME: ${{ secrets.GRAFANA_USERNAME }}
           GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
 
