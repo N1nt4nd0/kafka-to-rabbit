@@ -27,16 +27,11 @@ repositories {
 dependencies {
     // Web dependencies
     implementation("org.springframework.boot:spring-boot-starter-web")
-    implementation("org.springframework.boot:spring-boot-starter-validation")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
-
-    // Apache Velocity
+    implementation("org.springframework.boot:spring-boot-starter-validation")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
     implementation("org.apache.velocity:velocity-engine-core:2.4.1")
     implementation("org.apache.velocity.tools:velocity-tools-generic:3.1")
-
-    // OpenAPI
-    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.7.0")
-    implementation("org.springdoc:springdoc-openapi-ui:1.8.0")
 
     // Database dependencies
     implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
