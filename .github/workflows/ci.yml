@@ -68,7 +68,7 @@ jobs:
 
       - name: Test Spring Application
         run: |
-          response=$(curl --write-out "%{http_code}" --silent --output /dev/null http://k2r-spring-boot-app:8080/api/company/list)
+          response=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:8080/api/company/list)
           if [ "$response" -ne 200 ]; then
             echo "Application failed to start or returned non-200 status code: $response"
             exit 1
