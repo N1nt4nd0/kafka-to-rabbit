@@ -54,6 +54,8 @@ jobs:
           K2R_DB_NAME: ${{ secrets.K2R_DB_NAME }}
           K2R_REDIS_HOST: ${{ secrets.K2R_REDIS_HOST }}
           K2R_REDIS_PORT: ${{ secrets.K2R_REDIS_PORT }}
+          GRAFANA_USERNAME: ${{ secrets.GRAFANA_USERNAME }}
+          GRAFANA_PASSWORD: ${{ secrets.GRAFANA_PASSWORD }}
 
       - name: Wait for Spring app to start
         run: |

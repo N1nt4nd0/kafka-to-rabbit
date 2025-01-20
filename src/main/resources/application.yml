@@ -61,8 +61,7 @@ web:
       hobby-fill: /api/hobby/fill
 
 server:
-  address: localhost
-  port: 8080
+  port: ${K2R_SERVER_PORT}
   servlet:
     encoding:
       force-response: true
