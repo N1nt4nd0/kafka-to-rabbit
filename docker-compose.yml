@@ -4,6 +4,16 @@ networks:
         driver: bridge
 
 services:
+    redis:
+        container_name: k2r-redis
+        image: redis:latest
+        networks:
+            - k2r-network
+        ports:
+            - "6379:6379"
+        volumes:
+            - redis_data:/data
+
     spring-app:
         container_name: k2r-spring-boot-app
         image: k2r-app
@@ -25,16 +35,6 @@ services:
             K2R_DB_NAME: ${K2R_DB_NAME}
             K2R_REDIS_HOST: ${K2R_REDIS_HOST}
             K2R_REDIS_PORT: ${K2R_REDIS_PORT}
-
-    redis:
-        container_name: k2r-redis
-        image: redis:latest
-        networks:
-            - k2r-network
-        ports:
-            - "6379:6379"
-        volumes:
-            - redis_data:/data
 
 volumes:
     redis_data:
