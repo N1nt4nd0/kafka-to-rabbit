@@ -42,55 +42,18 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build -x test
 
-#      - name: Build Docker image
-#        run: docker build -t k2r-app:latest .
-
       - name: Run Docker Compose
-        run: docker-compose -p k2r-docker up \
-          -e K2R_ACTIVE_PROFILE="prod" \
-          -e K2R_KAFKA_BOOTSTRAP_SERVERS="${{ secrets.K2R_KAFKA_BOOTSTRAP_SERVERS }}" \
-          -e K2R_RABBIT_HOST="${{ secrets.K2R_RABBIT_HOST }}" \
-          -e K2R_RABBIT_PORT="${{ secrets.K2R_RABBIT_PORT }}" \
-          -e K2R_RABBIT_USERNAME="${{ secrets.K2R_RABBIT_USERNAME }}" \
-          -e K2R_RABBIT_PASSWORD="${{ secrets.K2R_RABBIT_PASSWORD }}" \
-          -e K2R_DB_URL="${{ secrets.K2R_DB_URL }}" \
-          -e K2R_DB_NAME="${{ secrets.K2R_DB_NAME }}" \
-          -e K2R_REDIS_HOST="${{ secrets.K2R_REDIS_HOST }}" \
-          -e K2R_REDIS_PORT="${{ secrets.K2R_REDIS_PORT }}" \
-          -d \
-          --build
-
-#      - name: Run Spring Application in Docker
-#        run: |
-#          docker run -d -p 8080:8080 --name k2r-app -e K2R_ACTIVE_PROFILE="prod" \
-#            -e K2R_KAFKA_BOOTSTRAP_SERVERS="${{ secrets.K2R_KAFKA_BOOTSTRAP_SERVERS }}" \
-#            -e K2R_RABBIT_HOST="${{ secrets.K2R_RABBIT_HOST }}" \
-#            -e K2R_RABBIT_PORT="${{ secrets.K2R_RABBIT_PORT }}" \
-#            -e K2R_RABBIT_USERNAME="${{ secrets.K2R_RABBIT_USERNAME }}" \
-#            -e K2R_RABBIT_PASSWORD="${{ secrets.K2R_RABBIT_PASSWORD }}" \
-#            -e K2R_DB_URL="${{ secrets.K2R_DB_URL }}" \
-#            -e K2R_DB_NAME="${{ secrets.K2R_DB_NAME }}" \
-#            -e K2R_REDIS_HOST="${{ secrets.K2R_REDIS_HOST }}" \
-#            -e K2R_REDIS_PORT="${{ secrets.K2R_REDIS_PORT }}" \
-#            k2r-app:latest
-#
-#          sleep 5
-#
-#          docker exec k2r-app printenv
-#
-#          docker exec k2r-app sh -c 'echo $K2R_DB_URL'
-#          docker exec k2r-app sh -c 'echo $K2R_KAFKA_BOOTSTRAP_SERVERS'
-#        env:
-#          K2R_ACTIVE_PROFILE: "prod"
-#          K2R_KAFKA_BOOTSTRAP_SERVERS: ${{ secrets.K2R_KAFKA_BOOTSTRAP_SERVERS }}
-#          K2R_RABBIT_HOST: ${{ secrets.K2R_RABBIT_HOST }}
-#          K2R_RABBIT_PORT: ${{ secrets.K2R_RABBIT_PORT }}
-#          K2R_RABBIT_USERNAME: ${{ secrets.K2R_RABBIT_USERNAME }}
-#          K2R_RABBIT_PASSWORD: ${{ secrets.K2R_RABBIT_PASSWORD }}
-#          K2R_DB_URL: ${{ secrets.K2R_DB_URL }}
-#          K2R_DB_NAME: ${{ secrets.K2R_DB_NAME }}
-#          K2R_REDIS_HOST: ${{ secrets.K2R_REDIS_HOST }}
-#          K2R_REDIS_PORT: ${{ secrets.K2R_REDIS_PORT }}
+        run: docker-compose -p k2r-docker up -d --build
+        env:
+          K2R_KAFKA_BOOTSTRAP_SERVERS: ${{ secrets.K2R_KAFKA_BOOTSTRAP_SERVERS }}
+          K2R_RABBIT_HOST: ${{ secrets.K2R_RABBIT_HOST }}
+          K2R_RABBIT_PORT: ${{ secrets.K2R_RABBIT_PORT }}
+          K2R_RABBIT_USERNAME: ${{ secrets.K2R_RABBIT_USERNAME }}
+          K2R_RABBIT_PASSWORD: ${{ secrets.K2R_RABBIT_PASSWORD }}
+          K2R_DB_URL: ${{ secrets.K2R_DB_URL }}
+          K2R_DB_NAME: ${{ secrets.K2R_DB_NAME }}
+          K2R_REDIS_HOST: ${{ secrets.K2R_REDIS_HOST }}
+          K2R_REDIS_PORT: ${{ secrets.K2R_REDIS_PORT }}
 
       - name: Wait for Spring app to start
         run: |
@@ -102,13 +65,3 @@ jobs:
 
       - name: Fetch Docker container logs
         run: docker logs k2r-app
-
-#      - name: Test Spring Application
-#        run: |
-#          response=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:8080/api/company/list)
-#          if [ "$response" -ne 200 ]; then
-#            echo "Application failed to start or returned non-200 status code: $response"
-#            exit 1
-#          else
-#            echo "Application started successfully with response code: $response"
-#          fi

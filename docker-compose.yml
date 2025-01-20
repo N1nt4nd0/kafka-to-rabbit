@@ -14,6 +14,17 @@ services:
         build:
             context: .
             dockerfile: Dockerfile
+        environment:
+            K2R_ACTIVE_PROFILE: "prod"
+            K2R_KAFKA_BOOTSTRAP_SERVERS: ${K2R_KAFKA_BOOTSTRAP_SERVERS}
+            K2R_RABBIT_HOST: ${K2R_RABBIT_HOST}
+            K2R_RABBIT_PORT: ${K2R_RABBIT_PORT}
+            K2R_RABBIT_USERNAME: ${K2R_RABBIT_USERNAME}
+            K2R_RABBIT_PASSWORD: ${K2R_RABBIT_PASSWORD}
+            K2R_DB_URL: ${K2R_DB_URL}
+            K2R_DB_NAME: ${K2R_DB_NAME}
+            K2R_REDIS_HOST: ${K2R_REDIS_HOST}
+            K2R_REDIS_PORT: ${K2R_REDIS_PORT}
 
     redis:
         container_name: k2r-redis
