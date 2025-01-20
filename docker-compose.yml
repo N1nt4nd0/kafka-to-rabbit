@@ -1,0 +1,19 @@
+networks:
+    k2r-network:
+        name: k2r-network
+        driver: bridge
+
+services:
+    redis:
+        image: redis:latest
+        container_name: k2r-redis
+        ports:
+            - "6379:6379"
+        networks:
+            - k2r-network
+        volumes:
+            - redis_data:/data
+
+volumes:
+    redis_data:
+        driver: local
