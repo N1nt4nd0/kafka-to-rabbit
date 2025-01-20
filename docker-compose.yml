@@ -4,6 +4,15 @@ networks:
         driver: bridge
 
 services:
+    spring-app:
+        container_name: k2r-spring-boot-app
+        image: k2r-app
+        build:
+            context: .
+            dockerfile: Dockerfile
+        ports:
+            - "8080:8080"
+
     redis:
         image: redis:latest
         container_name: k2r-redis
