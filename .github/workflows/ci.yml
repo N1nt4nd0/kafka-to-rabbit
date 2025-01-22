@@ -18,14 +18,19 @@ jobs:
         options: --privileged
 
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Get Branch and Commit info
+        id: git-info
+        run: |
+          echo "GIT_INFO=Branch: ${{ github.ref_name }}, Commit: $(git rev-parse --short HEAD), Message: $(git log -1 --pretty=%B), Author: $(git log -1 --pretty=%an)" >> $GITHUB_ENV
+
       - name: Sending Build start to Telegram
         run: |
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
-            -d text="⚙️ [kafka-to-rabbit] build started... Branch: ${{ github.ref_name }}"
-
-      - name: Checkout code
-        uses: actions/checkout@v3
+            -d text="⚙️ [kafka-to-rabbit] build started... ${{ env.GIT_INFO }}"
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
@@ -78,7 +83,7 @@ jobs:
       - name: Fetch Docker container logs
         run: docker logs k2r-spring-boot-app
 
-      - name: Testing Spring Application with api requests
+      - name: Testing Spring Application with API requests
         run: |
           response=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:8080/api/company/list)
           if [ "$response" -ne 200 ]; then
@@ -89,13 +94,13 @@ jobs:
           fi
 
       - name: Sending Build result to Telegram
-        if: success() || failure()
+        if: always()
         run: |
           if [ "${{ job.status }}" == "success" ]; then
-            MESSAGE="✅ [kafka-to-rabbit] build succeeded! Branch: ${{ github.ref_name }}"
+            STATUS="✅ Build succeeded"
           else
-            MESSAGE="❌ [kafka-to-rabbit] build failed! Branch: ${{ github.ref_name }}"
+            STATUS="❌ Build failed"
           fi
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
-            -d text="$MESSAGE"
+            -d text="$STATUS... ${{ env.GIT_INFO }}"
