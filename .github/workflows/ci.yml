@@ -22,7 +22,7 @@ jobs:
         run: |
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
-            -d text="[kafka-to-rabbit] Build started"
+            -d text="⚙️ [kafka-to-rabbit] build started... Branch: ${{ github.ref_name }}"
 
       - name: Checkout code
         uses: actions/checkout@v3
@@ -92,9 +92,9 @@ jobs:
         if: success() || failure()
         run: |
           if [ "${{ job.status }}" == "success" ]; then
-            MESSAGE="✅ [kafka-to-rabbit] Build succeeded! Branch: ${{ github.ref_name }}."
+            MESSAGE="✅ [kafka-to-rabbit] build succeeded! Branch: ${{ github.ref_name }}"
           else
-            MESSAGE="❌ [kafka-to-rabbit] Build succeeded! Branch: ${{ github.ref_name }}."
+            MESSAGE="❌ [kafka-to-rabbit] build failed! Branch: ${{ github.ref_name }}"
           fi
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
