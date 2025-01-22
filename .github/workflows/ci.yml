@@ -46,8 +46,7 @@ jobs:
             ~/.gradle/caches
             ~/.gradle/wrapper
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-          restore-keys: |
-            ${{ runner.os }}-gradle-
+          restore-keys: ${{ runner.os }}-gradle-
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -73,7 +72,7 @@ jobs:
       - name: Fetch Docker container logs
         run: docker logs k2r-spring-boot-app
 
-      - name: Testing Spring Application via api request
+      - name: Testing Spring Application with api requests
         run: |
           response=$(curl --write-out "%{http_code}" --silent --output /dev/null http://localhost:8080/api/company/list)
           if [ "$response" -ne 200 ]; then
