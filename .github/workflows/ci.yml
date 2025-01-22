@@ -24,13 +24,13 @@ jobs:
       - name: Get Branch and Commit info
         id: git-info
         run: |
-          echo "GIT_INFO=Branch: ${{ github.ref_name }}, Commit: $(git rev-parse --short HEAD), Message: $(git log -1 --pretty=%B), Author: $(git log -1 --pretty=%an)" >> $GITHUB_ENV
+          echo "GIT_INFO=Branch: ${{ github.ref_name }}. Commit: $(git rev-parse --short HEAD) ($(git log -1 --pretty=%an) - $(git log -1 --pretty=%B))" >> $GITHUB_ENV
 
       - name: Sending Build start to Telegram
         run: |
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
-            -d text="⚙️ [kafka-to-rabbit] build started... ${{ env.GIT_INFO }}"
+            -d text="⚙️ [kafka-to-rabbit] build started! ${{ env.GIT_INFO }}"
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
@@ -103,4 +103,4 @@ jobs:
           fi
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
-            -d text="$STATUS... ${{ env.GIT_INFO }}"
+            -d text="$STATUS! ${{ env.GIT_INFO }}"
