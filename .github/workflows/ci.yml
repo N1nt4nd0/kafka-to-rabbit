@@ -93,8 +93,8 @@ jobs:
             echo "Application started successfully with response code: $response"
           fi
 
-    post:
       - name: Sending Build result to Telegram
+        if: always()
         run: |
           if [ "${{ job.status }}" == "success" ]; then
             MESSAGE="✅ Build succeeded!"
