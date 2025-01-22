@@ -23,7 +23,7 @@ jobs:
 
       - name: Setting environment variables
         run: |
-          echo "PROJECT_PREFIX=**[kafka-to-rabbit]**" >> $GITHUB_ENV
+          echo "PROJECT_PREFIX=[kafka-to-rabbit]" >> $GITHUB_ENV
           echo "GIT_INFO=Branch: ${{ github.ref_name }}. Commit: $(git rev-parse --short HEAD) ($(git log -1 --pretty=%an) - $(git log -1 --pretty=%B))" >> $GITHUB_ENV
 
       - name: Sending Build start to Telegram
@@ -31,7 +31,7 @@ jobs:
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
             -d parse_mode="Markdown" \
-            -d text="${{ env.PROJECT_PREFIX }} ⚙️ Build started... ${{ env.GIT_INFO }}"
+            -d text="**${{ env.PROJECT_PREFIX }}** ⚙️ Build started... ${{ env.GIT_INFO }}"
 
       - name: Set up Docker
         uses: docker/setup-buildx-action@v2
@@ -105,4 +105,4 @@ jobs:
           curl -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
             -d chat_id="${{ secrets.TELEGRAM_BOT_CHAT_ID }}" \
             -d parse_mode="Markdown" \
-            -d text="${{ env.PROJECT_PREFIX }} $MESSAGE ${{ env.GIT_INFO }}"
+            -d text="**${{ env.PROJECT_PREFIX }}** $MESSAGE ${{ env.GIT_INFO }}"
